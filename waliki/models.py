@@ -18,22 +18,25 @@ class Page(models.Model):
     def __unicode__(self):
         return self.path
 
-    def _get_part(self, part):
-        if not hasattr(self, '_markup'):
-            filename = os.path.join(settings.WALIKI_DATA_DIR, self.path)
-            if not os.path.exists(filename):
-                try:
-                    os.makedirs(os.path.dirname(filename))
-                except FileExistsError:
-                    pass
-                with open(filename, "w") as f:
-                    f.write("")
+    @property
+    def raw_text(self):
+        filename = os.path.join(settings.WALIKI_DATA_DIR, self.path)
+        if not os.path.exists(filename):
+            try:
+                os.makedirs(os.path.dirname(filename))
+            except FileExistsError:
+                pass
+            with open(filename, "w") as f:
+                f.write("")
+        return open(filename, "r").read()
 
-            with open(filename, "r") as f:
-                self._text = f.read()
-            markup_settings = settings.WALIKI_MARKUPS_SETTINGS.get(self.markup, None)
-            self._markup = markups.find_markup_class_by_name(self.markup)(settings_overrides=markup_settings)
-        return getattr(self._markup, part)(self._text)
+    @property
+    def _markup(self):
+        markup_settings = settings.WALIKI_MARKUPS_SETTINGS.get(self.markup, None)
+        return markups.find_markup_class_by_name(self.markup)(settings_overrides=markup_settings)
+
+    def _get_part(self, part):
+        return getattr(self._markup, part)(self.raw_text)
 
     @property
     def body(self):
