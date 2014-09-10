@@ -1,0 +1,84 @@
+{% extends "site_base.html" %}
+
+{% block extra_style %}
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+{% endblock extra_style %}
+
+{% block header %}
+
+<div class="pull-right">
+{% block actions %}
+    <div class="btn-group">
+        <a href="./edit" class="btn">Edit</a>
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <!-- dropdown menu links -->
+
+            <li><a id="confirmDelete" class="text-error">Delete</a></li>
+            {% if extra_actions %}
+            <li class="divider"></li>
+            {% for action, url in extra_actions %}
+                <li><a href="{{ url }}">{{ action }}</a></li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+{% endblock actions %}
+</div>
+
+{% block title %}<h1>{{ page.title }}</h1>{% endblock title %}
+
+{% endblock %}
+
+
+{% block content %}
+
+    {% if page %}
+        {{ page.body|safe }}
+    {% else %}
+        <p>This page doesn't exist yet. </p>
+        <p><a href="./edit" class="btn btn-success">Create it</a></p>
+    {% endif %}
+
+ {% if page.footer %}
+   <div id="footer">
+   <hr>
+   <div class="pull-right"><em><small>{{ page.footer|safe }}</small></em></div>
+</div>
+ {% endif %}
+{% endblock content %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#confirmDelete').on('click', function() {
+
+    bootbox.dialog("Are you sure you want to delete {{ page.title }}?",
+                   [{"label": "Cancel"},
+                    {"label": "Yes, delete",
+                     "callback": function(){
+                        $('<form method=\"post\" action=\"./delete">').appendTo('body').submit()  },
+                     "class":"btn-danger"}]);
+});
+
+
+function bootstrap_rst(){
+
+   $('.note').prepend('<i class="icon-info-sign icon-2x"></i>');
+   $('.tip').prepend('<i class="icon-ok icon-2x"></i>');
+   $('.warning, .caution').prepend('<i class="icon-warning-sign icon-2x"></i>');
+   $('.attention, .important').prepend('<i class="icon-exclamation icon-2x"></i>');
+   $('.error').prepend('<i class="icon-remove-sign icon-2x"></i>');
+   $('.danger').prepend('<i class="icon-bolt icon-2x"></i>');
+   $('.hint').prepend('<i class="icon-magic icon-2x"></i>');
+
+   $('div.container table').addClass('table table-bordered table-striped');
+
+}
+
+$(function(){
+    bootstrap_rst()
+});
+</script>
+{% endblock %}

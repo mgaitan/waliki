@@ -1,0 +1,80 @@
+
+textarea#body {
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 14px;
+}
+
+.monospace {
+  padding: 0 3px 2px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 13px;
+}
+
+//diff
+
+span.ins, span.del {
+    padding: 3px;
+
+}
+
+span.ins {
+    font-weight: bold;
+    background:#B4E2B4;
+}
+
+span.del {
+    text-decoration: line-through;
+    background:#E9AEAE;
+}
+
+
+p.admonition-title { display: none;}
+
+
+.admonition > p:nth-child(3), .attention > p:nth-child(3), .caution > p:nth-child(3),
+.danger > p:nth-child(3), .error > p:nth-child(3), .hint > p:nth-child(3),
+.important > p:nth-child(3), .note > p:nth-child(3), .tip > p:nth-child(3),
+.warning > p:nth-child(3) {
+              margin-left: 3em; margin-top: -1.6em;
+}
+
+.admonition, .system-message, .attention, .caution,
+.danger, .error, .hint, .important,
+.note, .tip, .warning {
+  width: 850px;
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 20px;
+  margin-left: 40px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fcf8e3;
+  border: 2px solid #fbeed5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  color: #c09853;
+}
+
+p.system-message-title {
+ text-decoration: blink;
+}
+
+div.tip {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+}
+
+div.system-message,
+div.caution,
+div.error {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+}
+
+div.important, div.note, div.hint {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #3a87ad;
+}
+
