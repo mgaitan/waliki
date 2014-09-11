@@ -8,13 +8,13 @@
     <div class="pull-right">
     {% block actions %}
         <div class="btn-group">
-            <a href="./edit" class="btn">Edit</a>
+            <a href="{% url "waliki_edit" slug %}" class="btn">Edit</a>
             <button class="btn dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <!-- dropdown menu links -->
-
+            <!-- dropdown menu links -->
+            {% if page %}
                 <li><a id="confirmDelete" class="text-error">Delete</a></li>
                 {% if extra_actions %}
                 <li class="divider"></li>
@@ -22,6 +22,7 @@
                     <li><a href="{{ url }}">{{ action }}</a></li>
                 {% endfor %}
                 {% endif %}
+            {% endif %}
             </ul>
         </div>
     {% endblock actions %}
@@ -35,7 +36,7 @@
         {{ page.body|safe }}
     {% else %}
         <p>This page doesn't exist yet. </p>
-        <p><a href="./edit" class="btn btn-success">Create it</a></p>
+        <p><a href="{% url "waliki_edit" slug %}" class="btn btn-success">Create it</a></p>
     {% endif %}
 
  {% if page.footer %}

@@ -25,7 +25,7 @@ def edit(request, slug):
     if form.is_valid():
         form.save()
         return redirect('waliki_detail', slug=page.slug)
-    return render(request, 'waliki/edit.html', {'page': page, 'form': form})
+    return render(request, 'waliki/edit.html', {'page': page, 'form': form, 'slug': slug})
 
 
 def delete(request, slug):
