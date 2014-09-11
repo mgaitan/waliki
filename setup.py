@@ -35,11 +35,14 @@ setup(
         'waliki',
     ],
     include_package_data=True,
-    install_requires=[
+    install_requires=['django', 'markups',
     ],
+    extras_require = {
+        'rst':  ['docutils', 'rst2html5'],
+    }
     license="BSD",
     zip_safe=False,
-    keywords='django-waliki',
+    keywords='django wiki git waliki restructuredtext markdown',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Framework :: Django',

@@ -14,7 +14,7 @@ def detail(request, slug):
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
         page = None
-    return render(request, 'waliki/detail.html', {'page': page})
+    return render(request, 'waliki/detail.html', {'page': page, 'slug': slug})
 
 
 def edit(request, slug):
