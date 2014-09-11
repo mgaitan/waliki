@@ -5,33 +5,29 @@
 {% endblock extra_style %}
 
 {% block header %}
+    <div class="pull-right">
+    {% block actions %}
+        <div class="btn-group">
+            <a href="./edit" class="btn">Edit</a>
+            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <!-- dropdown menu links -->
 
-<div class="pull-right">
-{% block actions %}
-    <div class="btn-group">
-        <a href="./edit" class="btn">Edit</a>
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <!-- dropdown menu links -->
-
-            <li><a id="confirmDelete" class="text-error">Delete</a></li>
-            {% if extra_actions %}
-            <li class="divider"></li>
-            {% for action, url in extra_actions %}
-                <li><a href="{{ url }}">{{ action }}</a></li>
-            {% endfor %}
-            {% endif %}
-        </ul>
+                <li><a id="confirmDelete" class="text-error">Delete</a></li>
+                {% if extra_actions %}
+                <li class="divider"></li>
+                {% for action, url in extra_actions %}
+                    <li><a href="{{ url }}">{{ action }}</a></li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    {% endblock actions %}
     </div>
-{% endblock actions %}
-</div>
-
-{% block title %}<h1>{{ page.title }}</h1>{% endblock title %}
-
-{% endblock %}
-
+    {% block title %}<h1>{{ page.title }}</h1>{% endblock title %}
+{% endblock header %}
 
 {% block content %}
 

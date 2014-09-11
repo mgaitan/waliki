@@ -1,0 +1,57 @@
+{% extends "waliki/detail.html" %}
+
+{% block title %}<h1>Editing: {{ page.title }}</h1>{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+<div class="span10">
+<div class="tabbable tabs-left">
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#editor" data-toggle="tab">Editor</a></li>
+    <li><a href="#preview" data-toggle="tab" id="previewlink">Preview</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="editor">
+
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form }}
+            {% comment %}
+            {{ form.hidden_tag() }}
+            {{ input(form.title, placeholder="Title", class="span8") }}
+
+
+            {{ input(form.body, placeholder=markup.NAME|capitalize,
+                     class="span8", rows="15", id="code") }}
+
+            <div class="row">
+                <div class="span4">
+            {{ input(form.message, placeholder="Changes summary (optional)", class="span4") }}
+</div>
+                <div class="span4">{{ input(form.tags, placeholder="Tags (comma separated)", class="span4") }}
+            </div></div>
+            {% endcomment %}
+
+            <div class="row">
+                <div class="span8">
+                        <div class="form-actions">
+                    <div class="pull-left">
+                      <a class="btn" href="#preview" id="previewbtn">Preview</a>
+                    </div>
+                            <div class="pull-right">
+                      <a class="btn" href="{% url 'waliki_detail' page.slug %}">Cancel</a>
+                                <button class="btn btn-success" type="submit">Save</button>
+                            </div>
+                        </div>
+            </div></div>
+        </form>
+    </div>
+    <div class="tab-pane" id="preview"></div>
+</div>
+</div>
+
+</div>
+
+
+{% endblock content %}
