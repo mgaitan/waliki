@@ -1,3 +1,5 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Page
 from .forms import PageForm
@@ -28,5 +30,14 @@ def edit(request, slug):
     return render(request, 'waliki/edit.html', {'page': page, 'form': form, 'slug': slug})
 
 
+def preview(request):
+    data = {}
+    if request.is_ajax() and request.method == "POST":
+        data['html'] = Page.preview(request.POST['markup'], request.POST['text'])
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 def delete(request, slug):
     return render(request, 'waliki/detail.html', {})
+
+

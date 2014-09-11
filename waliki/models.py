@@ -21,7 +21,7 @@ class Page(models.Model):
     def save(self, *args, **kwargs):
         self.slug = self.slug.strip('/')
         if not self.path:
-            self.path = self.slug + self._markup_class.file_extensions[0]
+            self.path = self.slug + self._markup.file_extensions[0]
         super(Page, self).save(*args, **kwargs)
 
     @property
@@ -42,18 +42,24 @@ class Page(models.Model):
         with open(filename, "w") as f:
             f.write(value)
 
-    @property
-    def _markup(self):
-        markup_settings = settings.WALIKI_MARKUPS_SETTINGS.get(self.markup, None)
-        return self._markup_class(settings_overrides=markup_settings)
+    @staticmethod
+    def get_markup_instance(markup):
+        markup_settings = settings.WALIKI_MARKUPS_SETTINGS.get(markup, None)
+        markup_class = markups.find_markup_class_by_name(markup)
+        return markup_class(settings_overrides=markup_settings)
+
+    @staticmethod
+    def preview(markup, text):
+        return Page.get_markup_instance(markup).get_document_body(text)
 
     @property
-    def _markup_class(self):
-        return markups.find_markup_class_by_name(self.markup)
+    def _markup(self):
+        if not hasattr(self, '__markup_instance'):
+            self.__markup_instance = Page.get_markup_instance(self.markup)
+        return self.__markup_instance
 
     def _get_part(self, part):
         return getattr(self._markup, part)(self.raw)
-
 
     @property
     def body(self):
