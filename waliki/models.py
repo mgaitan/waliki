@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import os.path
 from django.db import models
-import markups
-from waliki import settings
+from waliki import markups, settings
 
 
 class Page(models.Model):
@@ -72,4 +71,3 @@ class Page(models.Model):
     @property
     def javascript(self):
         return self._get_part('get_javascript')
-
