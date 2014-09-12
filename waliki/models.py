@@ -45,7 +45,7 @@ class Page(models.Model):
     def get_markup_instance(markup):
         markup_settings = settings.WALIKI_MARKUPS_SETTINGS.get(markup, None)
         markup_class = markups.find_markup_class_by_name(markup)
-        return markup_class(settings_overrides=markup_settings)
+        return markup_class(**markup_settings)
 
     @staticmethod
     def preview(markup, text):

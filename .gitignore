@@ -3,8 +3,8 @@ site_media
 datasets
 backups
 local_settings.py
+waliki_data
 .nose*
-.wiki
 .noseids
 *.db
 *.sqlite3

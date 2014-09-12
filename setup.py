@@ -38,7 +38,8 @@ setup(
     install_requires=['django', 'markups',
     ],
     extras_require = {
-        'rst':  ['docutils', 'rst2html5'],
+        'restructuredtext':  ['docutils', 'rst2html5'],
+        'markdown': ['markdown']
     }
     license="BSD",
     zip_safe=False,
