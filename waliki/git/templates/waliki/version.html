@@ -1,0 +1,23 @@
+{% extends "waliki/history.html" %}
+
+{% block title %}
+    <h3 id="top"><a href="{{ page.get_absolute_url }}">/{{ page.slug }}</a> (@{{ version }})</h3>
+{% endblock title %}
+
+
+{% block content %}
+
+<form method="post" action="{% url 'waliki_edit' slug=page.slug %}">
+{% csrf_token %}
+{{ form }}
+
+
+<div class="control-group">
+    <button type="submit" class="btn btn-small btn-success">Restore this version</button>
+</div>
+</form>
+<h1>{{ page.title }} </h1>
+
+    {{ content|safe }}
+
+{% endblock content %}

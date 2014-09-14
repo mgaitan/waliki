@@ -22,6 +22,7 @@
 {% block content %}
 
 <form method="post">
+    {% csrf_token %}
 <div class="control-group">
     <button type="submit" class="btn btn-small disabled" disabled="disabled">Compare revisions</button>
 </div>
@@ -62,7 +63,7 @@
 {% endblock container %}
 
 
-{% block extra_scripts %}
+{% block extra_script %}
 <script type="text/javascript">
 var $commits = $("input:checkbox[name=commit]");
 $commits.on("change", function() {

@@ -37,11 +37,9 @@ class Git(object):
                 ("message", "%s")]
         format = "{%s}" % ','.join([""" \"%s\": \"%s\" """ % item for item in data])
         output = git.log('--format=%s' % format, '-z', '--shortstat', page.path)
-        output = output.replace('\x00', '').split('\n')
+        output = output.replace('\x00', '').split('\n')[:-1]
         history = []
         for line in output:
-            if not line:
-                continue
             if line.startswith('{'):
                 history.append(json.loads(line))
             else:
@@ -55,3 +53,9 @@ class Git(object):
             v.update({'insertion_relative': (v['insertion'] / max_changes) * 100,
                       'deletion_relative': (v['deletion'] / max_changes) * 100})
         return history
+
+    def version(self, page, version):
+        try:
+            return six.text_type(git.show('%s:%s' % (version, page.path)))
+        except:
+            return ''
