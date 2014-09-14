@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Page
 from .forms import PageForm
+from .signals import page_saved
 from . import settings
 
 
@@ -26,6 +27,10 @@ def edit(request, slug):
     form = PageForm(data, instance=page)
     if form.is_valid():
         form.save()
+        page_saved.send(sender=edit,
+                        page=page,
+                        author=request.user,
+                        message=form.cleaned_data["message"])
         return redirect('waliki_detail', slug=page.slug)
     return render(request, 'waliki/edit.html', {'page': page, 'form': form, 'slug': slug})
 

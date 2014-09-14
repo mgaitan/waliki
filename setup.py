@@ -35,7 +35,7 @@ setup(
         'waliki',
     ],
     include_package_data=True,
-    install_requires=['django', 'markups',
+    install_requires=['django', 'markups', 'sh'
     ],
     extras_require = {
         'restructuredtext':  ['docutils', 'rst2html5'],

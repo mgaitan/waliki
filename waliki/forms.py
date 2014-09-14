@@ -14,6 +14,7 @@ class PageForm(forms.ModelForm):
         instance = super(PageForm, self).save(commit)
         if commit:
             instance.raw = self.cleaned_data['raw']
+
         return instance
 
     class Meta:
