@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os.path
 from django.db import models
+from django.core.urlresolvers import reverse
 from waliki import markups, settings
 
 
@@ -16,6 +17,12 @@ class Page(models.Model):
 
     def __unicode__(self):
         return self.path
+
+    def get_absolute_url(self):
+        return reverse('waliki_detail', args=(self.slug,))
+
+    def get_edit_url(self):
+        return reverse('waliki_edit', args=(self.slug,))
 
     def save(self, *args, **kwargs):
         self.slug = self.slug.strip('/')

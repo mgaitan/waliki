@@ -1,7 +1,11 @@
 import os
+import re
+import json
 from django.contrib.auth.models import User
 from django.utils import six
 from sh import git
+
+git = git.bake("--no-pager")
 
 
 class Git(object):
@@ -23,5 +27,31 @@ class Git(object):
             kwargs['author'] = "% <%s>" % (author.get_full_name() or author.username)
         elif isinstance(author, six.string_types):
             kwargs['author'] = author
+        git.commit(m=message or 'Update', **kwargs)
 
-        git.commit(m=message or 'Update' , **kwargs)
+    def history(self, page):
+        data = [("commit", "%h"),
+                ("author", "%an"),
+                ("date", "%ad"),
+                ("date_relative", "%ar"),
+                ("message", "%s")]
+        format = "{%s}" % ','.join([""" \"%s\": \"%s\" """ % item for item in data])
+        output = git.log('--format=%s' % format, '-z', '--shortstat', page.path)
+        output = output.replace('\x00', '').split('\n')
+        history = []
+        for line in output:
+            if not line:
+                continue
+            if line.startswith('{'):
+                history.append(json.loads(line))
+            else:
+                insertion = re.match(r'.* (\d+) insertion', line)
+                deletion = re.match(r'.* (\d+) deletion', line)
+                history[-1]['insertion'] = int(insertion.group(1)) if insertion else 0
+                history[-1]['deletion'] = int(deletion.group(1)) if deletion else 0
+
+        max_changes = max([(v['insertion'] + v['deletion']) for v in history]) or 1
+        for v in history:
+            v.update({'insertion_relative': (v['insertion'] / max_changes) * 100,
+                      'deletion_relative': (v['deletion'] / max_changes) * 100})
+        return history
