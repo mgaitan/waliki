@@ -100,7 +100,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'pyramid'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -173,7 +173,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'django-walikidoc'
+htmlhelp_basename = 'walikidoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -192,7 +192,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-waliki.tex', u'waliki Documentation',
+  ('index', 'waliki.tex', u'waliki Documentation',
    u'Martín Gaitán', 'manual'),
 ]
 
@@ -222,7 +222,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-waliki', u'waliki Documentation',
+    ('index', 'waliki', u'Waliki Documentation',
      [u'Martín Gaitán'], 1)
 ]
 
@@ -236,8 +236,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'django-waliki', u'waliki Documentation',
-   u'Martín Gaitán', 'django-waliki', 'One line description of project.',
+  ('index', 'waliki', u'Waliki Documentation',
+   u'Martín Gaitán', 'waliki', 'One line description of project.',
    'Miscellaneous'),
 ]
 

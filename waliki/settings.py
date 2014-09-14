@@ -42,7 +42,14 @@ def _get_markup_settings(user_settings):
     return defaults
 
 
-WALIKI_DEFAULT_MARKUP = getattr(settings, 'WALIKI_DEFAULT_MARKUP', "reStructuredText")
-WALIKI_INDEX_SLUG = getattr(settings, 'WALIKI_INDEX_SLUG', "home")
+# your content folder. by default it's <project_root>/waliki_data
 WALIKI_DATA_DIR = getattr(settings, 'WALIKI_DATA_DIR', _get_default_data_dir())
+
+# options: reStructuredText, Markdown, Textile
+WALIKI_DEFAULT_MARKUP = getattr(settings, 'WALIKI_DEFAULT_MARKUP', "reStructuredText")
+
+# wich page is shown as the wiki index?
+WALIKI_INDEX_SLUG = getattr(settings, 'WALIKI_INDEX_SLUG', "home")
+
+# kwargs for each markup.
 WALIKI_MARKUPS_SETTINGS = _get_markup_settings(getattr(settings, 'WALIKI_MARKUPS_SETTINGS', {}))

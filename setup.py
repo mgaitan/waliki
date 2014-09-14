@@ -23,23 +23,31 @@ if sys.argv[-1] == 'publish':
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
+extras_require = {                                      # noqa
+        'restructuredtext': [],
+        'markdown': ['markdown']
+    }
+
+everything = set()
+for deps in extras_require.copy().values():
+    everything.update(deps)
+    extras_require['all'] = everything
+
+
 setup(
     name='waliki',
     version=version,
-    description="""A simple yet powerful wiki engine""",
+    description="""An extensible wiki app for Django with a Git backend""",
     long_description=readme + '\n\n' + history,
-    author='Martín Gaitán',
+    author=u'Martín Gaitán',
     author_email='gaitan@gmail.com',
-    url='https://github.com/mgaitan/django-waliki',
+    url='https://github.com/mgaitan/waliki',
     packages=[
         'waliki',
     ],
     include_package_data=True,
-    install_requires=['django', 'markups', 'sh'],
-    extras_require = {                                      # noqa
-        'restructuredtext': ['docutils', 'rst2html5'],
-        'markdown': ['markdown']
-    },
+    install_requires=['django', 'markups', 'sh', 'docutils', 'rst2html5'],
+    extras_require=extras_require,
     license="BSD",
     zip_safe=False,
     keywords='django wiki git waliki restructuredtext markdown',
