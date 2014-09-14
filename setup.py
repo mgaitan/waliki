@@ -35,12 +35,11 @@ setup(
         'waliki',
     ],
     include_package_data=True,
-    install_requires=['django', 'markups', 'sh'
-    ],
-    extras_require = {
-        'restructuredtext':  ['docutils', 'rst2html5'],
+    install_requires=['django', 'markups', 'sh'],
+    extras_require = {                                      # noqa
+        'restructuredtext': ['docutils', 'rst2html5'],
         'markdown': ['markdown']
-    }
+    },
     license="BSD",
     zip_safe=False,
     keywords='django wiki git waliki restructuredtext markdown',
