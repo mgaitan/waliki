@@ -1,4 +1,5 @@
 {% extends "site_base.html" %}
+{% load waliki_plugins %}
 
 {% block extra_style %}
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
@@ -16,12 +17,7 @@
             <!-- dropdown menu links -->
             {% if page %}
                 <li><a id="confirmDelete" class="text-error">Delete</a></li>
-                {% if extra_actions %}
-                <li class="divider"></li>
-                {% for action, url in extra_actions %}
-                    <li><a href="{{ url }}">{{ action }}</a></li>
-                {% endfor %}
-                {% endif %}
+                {% extra_page_actions page %}
             {% endif %}
             </ul>
         </div>
