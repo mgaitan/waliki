@@ -48,7 +48,7 @@ Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
         ...
     )
 
-Include the waliki urls in you project's ``urls.py``::
+Include the waliki urls in your project's ``urls.py``::
 
     urlpatterns = patterns('',
         ...
