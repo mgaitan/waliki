@@ -30,6 +30,8 @@ class Git(object):
         try:
             git.commit(m=message or 'Update', **kwargs)
         except:
+            # TODO: make this more robust!
+            # skip when stage is empty
             pass
 
     def history(self, page):
