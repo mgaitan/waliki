@@ -14,9 +14,11 @@
 
 :home: https://github.com/mgaitan/waliki/
 :documentation: http://waliki.rtfd.org (under development)
-:demo: http://waliki.nqnwebs.com
 :group: https://groups.google.com/forum/#!forum/waliki-devs
 :license: `BSD <https://github.com/mgaitan/waliki/blob/master/LICENSE>`_
+
+.. :demo: http://waliki.nqnwebs.com
+
 
 At a glance, Waliki has:
 
@@ -31,7 +33,7 @@ How to start
 
 Install with::
 
-    $ pip install waliki[restructuredtext]
+    $ pip install waliki
 
 Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
 
