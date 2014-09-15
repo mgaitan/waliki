@@ -27,7 +27,12 @@ class Git(object):
             kwargs['author'] = "% <%s>" % (author.get_full_name() or author.username)
         elif isinstance(author, six.string_types):
             kwargs['author'] = author
-        git.commit(m=message or 'Update', **kwargs)
+        try:
+            git.commit(m=message or 'Update', **kwargs)
+        except:
+            # TODO: make this more robust!
+            # skip when stage is empty
+            pass
 
     def history(self, page):
         data = [("commit", "%h"),
@@ -48,7 +53,7 @@ class Git(object):
                 history[-1]['insertion'] = int(insertion.group(1)) if insertion else 0
                 history[-1]['deletion'] = int(deletion.group(1)) if deletion else 0
 
-        max_changes = max([(v['insertion'] + v['deletion']) for v in history]) or 1
+        max_changes = float(max([(v['insertion'] + v['deletion']) for v in history])) or 1.0
         for v in history:
             v.update({'insertion_relative': (v['insertion'] / max_changes) * 100,
                       'deletion_relative': (v['deletion'] / max_changes) * 100})

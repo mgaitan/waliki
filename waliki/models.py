@@ -2,11 +2,11 @@
 import os.path
 from django.db import models
 from django.core.urlresolvers import reverse
-from waliki import markups, settings
+from waliki import _markups, settings
 
 
 class Page(models.Model):
-    MARKUP_CHOICES = [(m.name, m.name) for m in markups.get_all_markups()]
+    MARKUP_CHOICES = [(m.name, m.name) for m in _markups.get_all_markups()]
     title = models.CharField(max_length=200)
     slug = models.CharField(max_length=200, unique=True)
     path = models.CharField(max_length=200, unique=True)
@@ -43,7 +43,7 @@ class Page(models.Model):
         filename = os.path.join(settings.WALIKI_DATA_DIR, self.path)
         try:
             os.makedirs(os.path.dirname(filename))
-        except FileExistsError:
+        except OSError:
             pass
         with open(filename, "w") as f:
             f.write(value)
@@ -51,7 +51,7 @@ class Page(models.Model):
     @staticmethod
     def get_markup_instance(markup):
         markup_settings = settings.WALIKI_MARKUPS_SETTINGS.get(markup, None)
-        markup_class = markups.find_markup_class_by_name(markup)
+        markup_class = _markups.find_markup_class_by_name(markup)
         return markup_class(**markup_settings)
 
     @staticmethod
