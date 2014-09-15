@@ -1,0 +1,157 @@
+{% extends "waliki/detail.html" %}
+
+{% block title %}<h1>Editing: {{ page.title }}</h1>{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+<div class="span10">
+<div class="tabbable tabs-left">
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#editor" data-toggle="tab">Editor</a></li>
+    <li><a href="#preview" data-toggle="tab" id="previewlink">Preview</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="editor">
+
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form }}
+            {% comment %}
+            {{ form.hidden_tag() }}
+            {{ input(form.title, placeholder="Title", class="span8") }}
+
+
+            {{ input(form.body, placeholder=markup.NAME|capitalize,
+                     class="span8", rows="15", id="code") }}
+
+            <div class="row">
+                <div class="span4">
+            {{ input(form.message, placeholder="Changes summary (optional)", class="span4") }}
+</div>
+                <div class="span4">{{ input(form.tags, placeholder="Tags (comma separated)", class="span4") }}
+            </div></div>
+            {% endcomment %}
+
+            <div class="row">
+                <div class="span8">
+                        <div class="form-actions">
+                    <div class="pull-left">
+                      <a class="btn" href="#preview" id="previewbtn">Preview</a>
+                    </div>
+                            <div class="pull-right">
+                      <a class="btn" href="{% url 'waliki_detail' page.slug %}">Cancel</a>
+                                <button class="btn btn-success" type="submit">Save</button>
+                            </div>
+                        </div>
+            </div></div>
+        </form>
+    </div>
+    <div class="tab-pane" id="preview"></div>
+</div>
+</div>
+
+</div>
+
+
+{% endblock content %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#previewlink').on('click', function() {
+    var $form = $('.form');
+  var $inputs = $form.find('input, textarea, button');
+  var $pre = $('#preview');
+  var bodycontent = $('#id_raw').val();
+  $inputs.prop('disabled', true);
+  $pre.removeClass('alert').removeClass('alert-error').html("Loading...");
+  $.ajax({
+    url: "{% url 'waliki_preview' %}",
+    type: "POST",
+    data: { text: bodycontent, markup: '{{ page.markup }}' },
+    success: function(msg) {
+      $pre.html(msg.html);
+      // bootstrap_rst();
+    },
+    error: function() {
+            $pre.addClass('alert').addClass('alert-error');
+      $pre.html('There was a problem with the preview.');
+    },
+    complete: function() {
+      $inputs.prop('disabled', false);
+    }
+  });
+});
+$('#previewbtn').on('click', function(event) {
+    event.preventDefault();
+    $('#previewlink').click();
+});
+
+{% comment %}
+    $('#btn-attachments').click(function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $.get(url, function(data){
+                $('#attachments-body').html(data);
+                $('#attachments').modal('show');
+        });
+    });
+
+
+// Configurable Codemirror integration
+
+    function isFullScreen(cm) {
+      return /\bCodeMirror-fullscreen\b/.test(cm.getWrapperElement().className);
+    }
+    function winHeight() {
+      return window.innerHeight || (document.documentElement || document.body).clientHeight;
+    }
+    function setFullScreen(cm, full) {
+      var wrap = cm.getWrapperElement();
+      if (full) {
+        wrap.className += " CodeMirror-fullscreen";
+        wrap.style.height = winHeight() + "px";
+        document.documentElement.style.overflow = "hidden";
+      } else {
+        wrap.className = wrap.className.replace(" CodeMirror-fullscreen", "");
+        wrap.style.height = "";
+        document.documentElement.style.overflow = "";
+      }
+      cm.refresh();
+    }
+
+    CodeMirror.on(window, "resize", function() {
+      var showing = document.body.getElementsByClassName("CodeMirror-fullscreen")[0];
+      if (!showing) return;
+      showing.CodeMirror.getWrapperElement().style.height = winHeight() + "px";
+    });
+
+
+var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+  lineNumbers: true,
+  tabMode: "indent",
+  extraKeys: {
+        "F11": function(cm) {
+          setFullScreen(cm, !isFullScreen(cm));
+        },
+        "Esc": function(cm) {
+          if (isFullScreen(cm)) setFullScreen(cm, false);
+        }
+  }
+});
+
+var theme = '{{ config.THEME }}';
+editor.setOption("theme", theme);
+
+var markLang = '{{ page.markup }}';
+if (markLang == 'reStructuredText'){
+  editor.setOption("mode", 'rst');
+}
+else{
+  editor.setOption("mode", 'markdown');
+}
+{% endcomment %}
+</script>
+
+{% endblock extra_script %}

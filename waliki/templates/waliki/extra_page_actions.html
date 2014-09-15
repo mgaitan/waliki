@@ -1,0 +1,6 @@
+{% if extra_page_actions %}
+    <li class="divider"></li>
+    {% for url_name, action in extra_page_actions %}
+        <li><a href="{% url url_name 'hola' %}">{{ action }}</a></li>
+    {% endfor %}
+{% endif %}

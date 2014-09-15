@@ -1,0 +1,11 @@
+[
+{
+  "model": "waliki.page", 
+  "fields": {
+    "markup": "reStructuredText", 
+    "path": "home.rst", 
+    "slug": "home"
+  }, 
+  "pk": 1
+}
+]

@@ -1,0 +1,81 @@
+{% extends "waliki/detail.html" %}
+
+{% block container %}
+<div class="row">
+<div class="span10 offset1">
+
+    <div class="page-header">
+
+        <div class="pull-right">
+        {% block page_tools %}
+            <a href="{{ page.get_absolute_url }}" class="btn btn-small">Back to page</a>
+
+            <a href="{{ page.get_edit_url }}" class="btn btn-small">Edit</a>
+        {% endblock page_tools %}
+        </div>
+        {% block title %}
+            <h3 id="top">History: <a href="{{ page.get_absolute_url }}">/{{ page.slug }}</a></h3>
+        {% endblock title %}
+    </div>
+
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+<div class="control-group">
+    <button type="submit" class="btn btn-small disabled" disabled="disabled">Compare revisions</button>
+</div>
+
+<table class="table table-striped">
+        <tbody>
+            {% for version in history %}
+                <tr>
+                  <td class="span1"><input name="commit" type="checkbox" value="{{ version.commit }}" ></td>
+                  <td class="span1"><a href="{% url 'waliki_version' page.slug version.commit %}">{{ version.commit }}</a></td>
+                  <td class="span1">{{ version.author }}</td>
+                  <td class="span2" title="{{ version.date }}">{{ version.date_relative }}</td>
+                  <td class="span3">{{ version.message }}</td>
+                  <td class="span2">
+                    <div class="progress">
+                        <div class="bar bar-success" style="width: {{version.insertion_relative}}%;"></div>
+                        <div class="bar bar-danger" style="width: {{version.deletion_relative}}%;"></div>
+                    </div>
+                   </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% if history|length > 10 %}
+
+<div class="control-group">
+    <button type="submit" class="btn btn-small disabled" disabled="disabled">Compare revisions</button>
+    <a class="btn btn-small" href="#top"><i class="icon-chevron-up"></i>Back to top</a>
+</div>
+{% endif %}
+</form>
+</div>
+</div>
+{% endblock content %}
+
+
+{% endblock container %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+var $commits = $("input:checkbox[name=commit]");
+$commits.on("change", function() {
+    if($commits.filter(":checked").length >= 2) {
+        $('button[type="submit"]').removeAttr("disabled").removeClass('disabled');
+        $commits.not(":checked").attr("disabled","disabled").addClass("disabled");
+    }
+    else {
+        $('button[type="submit"]').attr("disabled","disabled").addClass("disabled");
+        $commits.removeAttr("disabled").removeClass('disabled');
+
+    }
+});
+</script>
+{% endblock %}

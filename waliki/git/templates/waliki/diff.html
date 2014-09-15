@@ -1,0 +1,37 @@
+{% extends "waliki/history.html" %}
+{% load static %}
+
+
+{% block page_tools %}
+    <a href="{% url 'waliki_history' page.slug %}" class="btn btn-small">History</a>
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="alert alert-info">
+        Comparing <strong>{{ new_commit }}</strong> vs <strong>{{ old_commit }}</strong>
+    </div>
+
+
+    <div id="diff" class="monospace"></div>
+
+
+{% endblock %}
+
+{% block extra_script %}
+<!-- Taken from http://neil.fraser.name/news/2006/03/19/ //-->
+<script src="{% static 'js/diff_match_patch.js' %}"></script>
+<script type="text/javascript">
+function diff() {
+  var dmp = new diff_match_patch();
+  var new_content = "{{ new_content|escapejs }}";
+  var old_content = "{{ old_content|escapejs }}";
+  var d = dmp.diff_main(old_content, new_content);
+  dmp.diff_cleanupSemantic(d);
+  var ds = dmp.diff_prettyHtml(d);
+  $('#diff').append(ds);;
+}
+diff();
+</script>
+{% endblock %}

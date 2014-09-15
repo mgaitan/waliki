@@ -1,0 +1,137 @@
+{% load staticfiles %}
+{% load url from future %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta charset="utf-8" />
+        {% block viewport %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+        <title>{% block head_title_base %}{% if page %} {{ page.title }} | {% endif %}{{ SITE_NAME|default:'Waliki' }}{% endblock %}</title>
+
+         {% block style_base %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css'%}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pygments.css'%}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/wiki.css'%}">
+        <link rel="stylesheet" type="text/css" href="{% static 'codemirror/lib/codemirror.css'%}">
+            {% block extra_style %}{% endblock %}
+        {% endblock %}
+        {% comment %}
+        <link rel="stylesheet" type="text/css" href="{% static 'codemirror/theme'%}/{{ config.THEME }}.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'codemirror/addon/display/placeholder.css'%}">
+        {% endcomment %}
+
+        {% block html5shim %}
+        <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <![endif]-->
+        {% endblock %}
+
+        {% block extra_head_base %}
+            {% block extra_head %}{% endblock %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            {% comment %}
+
+
+                            <a href="#" class="brand">{{ config.TITLE }}</a>
+                            <ul class="nav">
+                                <li><a href="{{ url_for('home') }}">Home</a></li>
+                                <li><a href="{{ url_for('index') }}">Index</a></li>
+                                <li><a href="{{ url_for('tags') }}">Tags</a></li>
+                                <li><a href="{{ url_for('search') }}">Search</a></li>
+                                <li class="divider-vertical"></li>
+                                <li><a href="{{ url_for('create') }}">New Page</a></li>
+                                <li class="divider-vertical"></li>
+                                <li></li>
+                            </ul>
+
+                            <ul class="nav pull-right">
+                                {% if current_user.is_anonymous() %}
+                                    <li><a href="{{ url_for('user_login') }}">Login</a></li>
+                                    <li><a href="{{ url_for('user_signup') }}">Signup</a></li>
+
+                                {% else %}
+                                    <li><a href="{{ url_for('user_logout') }}">Logout</a></li>
+                                {% endif %}
+                            </ul>
+                            {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+        {% block messages %}
+            <div class="row">
+                <div class="span8 offset2">
+                    {% include "_messages.html" %}
+                </div>
+            </div>
+        {% endblock messages %}
+
+          {% block body %}
+            <div class="row">
+
+                <div class="span10 offset1">
+                    <div class="page-header">
+                    {% block header %}
+                       <h1>{% block title %}{{ page.title }}{% endblock title %}</h1>
+                    {% endblock header %}
+                    </div>
+
+               {% block content %}
+               {% endblock content %}
+                </div>
+            </div>
+          {% endblock body%}
+        </div>
+
+
+        <footer>
+            {% block footer %}{% endblock %}
+        </footer>
+
+        {% block script_base %}
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js "></script>
+        <script type="text/javascript">
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='{% static 'js/jquery.min.js' %}' type='text/javascript'%3E%3C/script%3E"));
+            }
+
+            function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    }
+                }
+            });
+        </script>
+        <script src="{% static 'js/bootstrap.min.js'%}"></script>
+        <script src="{% static 'js/bootbox.min.js'%}"></script>
+        <script src="{% static 'codemirror/lib/codemirror.js'%}"></script>
+        <script src="{% static 'codemirror/addon/display/placeholder.js'%}"></script>
+        <script src="{% static 'codemirror/mode/markdown/markdown.js'%}"></script>
+        <script src="{% static 'codemirror/mode/rst/rst.js'%}"></script>
+        {% block extra_script %}{% endblock %}
+        {% endblock %}
+
+        {% block extra_body_base %}
+            {% block extra_body %}{% endblock %}
+        {% endblock %}
+    </body>
+</html>
