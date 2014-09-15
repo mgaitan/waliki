@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'waliki',
-    # 'waliki.git'
+    'waliki.git'
 )
 
 MIDDLEWARE_CLASSES = (

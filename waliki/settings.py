@@ -3,6 +3,7 @@ import importlib
 import collections
 from django.conf import settings
 from .utils import get_url
+from .rst2html5 import HTML5Writer
 
 
 def _get_default_data_dir():
@@ -12,13 +13,15 @@ def _get_default_data_dir():
 
 
 def _get_markup_settings(user_settings):
+
     defaults = {'reStructuredText': {
                     'settings_overrides': {              # noqa
                         'initial_header_level': 2,
                         'record_dependencies': True,
                         'stylesheet_path': None,
                         'link_stylesheet': True,
-                        'syntax_highlight': 'short'}
+                        'syntax_highlight': 'short'},
+                    'writer': HTML5Writer(),
                     },
                 'Markdown': {
                     'extensions': ['wikilinks', 'headerid'],
@@ -27,11 +30,6 @@ def _get_markup_settings(user_settings):
                         'headerid': [('level', 2)]},
                     }
                 }
-    try:
-        from rst2html5 import HTML5Writer
-        defaults['reStructuredText']['settings_overrides']['writer'] = HTML5Writer()
-    except ImportError:
-        pass
 
     for k, v in user_settings.items():
         if isinstance(v, collections.Mapping):

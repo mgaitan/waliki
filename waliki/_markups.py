@@ -48,6 +48,20 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
+    def __init__(self, filename=None, **kwargs):
+        settings_overrides = kwargs.pop('settings_overrides', None)
+        super(ReStructuredTextMarkup, self).__init__(filename, settings_overrides)
+        self.kwargs = kwargs
+
+    def publish_parts(self, text):
+        if 'rest_parts' in self._cache:
+            return self._cache['rest_parts']
+        parts = self._publish_parts(text, source_path=self.filename,
+            writer_name='html5', settings_overrides=self.overrides, **self.kwargs)
+        if self._enable_cache:
+            self._cache['rest_parts'] = parts
+        return parts
+
     def get_document_body(self, text):
         html = super(ReStructuredTextMarkup, self).get_document_body(text)
         # Convert unknow links to internal wiki links.
@@ -65,7 +79,7 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
 
 def get_all_markups():
-    return {ReStructuredTextMarkup, TextileMarkup, MarkdownMarkup}
+    return set([ReStructuredTextMarkup, TextileMarkup, MarkdownMarkup])
 
 
 def find_markup_class_by_name(name):
