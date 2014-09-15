@@ -85,7 +85,6 @@ Now you can make your changes locally.
 ..
 
     Pull Request Guidelines
-    -----------------------
 
     Before you submit a pull request, check that it meets these guidelines:
 
@@ -98,7 +97,6 @@ Now you can make your changes locally.
        and make sure that the tests pass for all supported Python versions.
 
     Tips
-    ----
 
     To run a subset of tests::
 
