@@ -5,11 +5,17 @@
 .. image:: https://badge.fury.io/py/waliki.png
     :target: https://badge.fury.io/py/waliki
 
-.. image:: https://travis-ci.org/mgaitan/waliki.png?branch=master
-    :target: https://travis-ci.org/mgaitan/django-waliki
+..
 
-.. image:: https://coveralls.io/repos/mgaitan/waliki/badge.png?branch=master
-    :target: https://coveralls.io/r/mgaitan/waliki?branch=master
+    .. image:: https://travis-ci.org/mgaitan/waliki.png?branch=master
+        :target: https://travis-ci.org/mgaitan/django-waliki
+
+    .. image:: https://coveralls.io/repos/mgaitan/waliki/badge.png?branch=master
+        :target: https://coveralls.io/r/mgaitan/waliki?branch=master
+
+.. image:: https://readthedocs.org/projects/waliki/badge/?version=latest
+   :target: https://readthedocs.org/projects/waliki/?badge=latest
+   :alt: Documentation Status
 
 
 :home: https://github.com/mgaitan/waliki/
@@ -26,7 +32,7 @@ At a glance, Waliki has:
 - Version control for your content using Git
 - Extensible architecture with plugins
 - Markdown, reStructuredText or textile markups. Easy to add more.
-- UI based on bootstrap
+- UI based on Twitter's Bootstrap
 
 How to start
 ------------
