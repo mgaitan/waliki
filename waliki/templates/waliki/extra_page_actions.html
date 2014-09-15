@@ -1,6 +1,11 @@
+{% load waliki_plugins %}
 {% if extra_page_actions %}
     <li class="divider"></li>
-    {% for url_name, action in extra_page_actions %}
+    {% for url_name, action in extra_page_actions.all %}
         <li><a href="{% url url_name page.slug %}">{{ action }}</a></li>
     {% endfor %}
+    {% for url_name, action in extra_page_actions|getattr:page.markup %}
+        <li><a href="{% url url_name page.slug %}">{{ action }}</a></li>
+    {% endfor %}
+
 {% endif %}

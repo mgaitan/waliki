@@ -32,9 +32,8 @@ class Page(models.Model):
 
     @property
     def raw(self):
-        filename = os.path.join(settings.WALIKI_DATA_DIR, self.path)
+        filename = self.abspath
         if not os.path.exists(filename):
-            self.raw = ""
             return ""
         return open(filename, "r").read()
 
@@ -47,6 +46,10 @@ class Page(models.Model):
             pass
         with open(filename, "w") as f:
             f.write(value)
+
+    @property
+    def abspath(self):
+        return os.path.abspath(os.path.join(settings.WALIKI_DATA_DIR, self.path))
 
     @staticmethod
     def get_markup_instance(markup):

@@ -10,7 +10,7 @@ from django.utils.importlib import import_module
 
 
 _cache = {}
-_extra_page_actions = []
+_extra_page_actions = {}
 
 
 class BasePlugin(object):
@@ -21,8 +21,9 @@ class BasePlugin(object):
     # Optional
     # settings_form = None    # A form class to add to the settings tab
     urls_root = []   # General urlpatterns that will reside in waliki root
-    urls_page =[]    # urlpatterns that receive page slug  .../page/slug/
-    extra_page_actions = None   # (_('Attachments'), "icon-file")
+    urls_page = []    # urlpatterns that receive page slug  .../page/slug/
+    extra_page_actions = {}   # {'all': (_('Attachments'), "icon-file")}
+
 
 
 def get_module(app, modname, verbose, failfast):
@@ -68,7 +69,11 @@ def register(PluginClass):
     _cache[PluginClass] = plugin
 
     if getattr(PluginClass, 'extra_page_actions', None):
-        _extra_page_actions.extend(plugin.extra_page_actions)
+        for key in plugin.extra_page_actions:
+            if key not in _extra_page_actions:
+                _extra_page_actions[key] = []
+            _extra_page_actions[key].extend(plugin.extra_page_actions[key])
+
 
 def page_urls():
     return [urlpattern for p in get_plugins() for urlpattern in p.urls_page]
