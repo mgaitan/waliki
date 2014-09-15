@@ -1,6 +1,6 @@
-=============================
-Waliki
-=============================
+
+**Waliki** is an extensible wiki app for Django with a Git backend.
+
 
 .. image:: https://badge.fury.io/py/waliki.png
     :target: https://badge.fury.io/py/waliki
@@ -10,8 +10,6 @@ Waliki
 
 .. image:: https://coveralls.io/repos/mgaitan/waliki/badge.png?branch=master
     :target: https://coveralls.io/r/mgaitan/waliki?branch=master
-
-**Waliki** is an extensible wiki app for Django with a Git backend.
 
 
 :home: https://github.com/mgaitan/waliki/

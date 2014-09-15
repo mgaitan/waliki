@@ -9,6 +9,7 @@ waliki_data
 *.db
 *.sqlite3
 *.swp
+docs/_build/*
 
 *.py[cod]
 
