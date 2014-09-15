@@ -27,7 +27,10 @@ class Git(object):
             kwargs['author'] = "% <%s>" % (author.get_full_name() or author.username)
         elif isinstance(author, six.string_types):
             kwargs['author'] = author
-        git.commit(m=message or 'Update', **kwargs)
+        try:
+            git.commit(m=message or 'Update', **kwargs)
+        except:
+            pass
 
     def history(self, page):
         data = [("commit", "%h"),
