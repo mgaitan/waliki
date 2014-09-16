@@ -20,15 +20,14 @@ class Git(object):
             git.init()
             self.commit('.', 'initial commit')
 
-    def commit(self, pathspec, message='', author=None):
-        git.add(pathspec)
+    def commit(self, path, message='', author=None):
         kwargs = {}
         if isinstance(author, User) and author.is_authenticated():
             kwargs['author'] = "% <%s>" % (author.get_full_name() or author.username)
         elif isinstance(author, six.string_types):
             kwargs['author'] = author
         try:
-            git.commit(m=message or 'Update', **kwargs)
+            git.commit(path, m=message or 'Update %s' % path, **kwargs)
         except:
             # TODO: make this more robust!
             # skip when stage is empty
