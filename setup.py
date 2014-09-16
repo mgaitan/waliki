@@ -25,10 +25,12 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 install_requires = ['django', 'markups', 'sh', 'docutils', 'rst2html5']
 
+
 try:
-    import importlib
+    import importlib        # noqa
 except ImportError:
-    install_requires.append('importlib')
+    # py2.6 support
+    install_requires.extend(['importlib', 'ordereddict'])
 
 
 extras_require = {                                      # noqa

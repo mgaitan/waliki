@@ -14,7 +14,10 @@ import re
 import sys
 from docutils import nodes, writers, frontend
 from docutils.transforms import Transform
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 try:
     # docutils >= 0.10
     from docutils.utils.math import pick_math_environment
