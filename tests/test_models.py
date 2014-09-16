@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 import os
 from django.test import TestCase
-from django.test.utils import override_settings
 from waliki.models import Page
-from waliki.conf import deep_update, settings
+from waliki.settings import deep_update
+from waliki import settings
 
 rst = """
 Title
@@ -52,16 +52,3 @@ class TestMarkupSettings(TestCase):
                 }, 'Markdown': ['...']
              }
         self.assertEqual(deep_update(d, u), expected)
-
-    @override_settings(WALIKI_MARKUPS_SETTINGS={'reStructuredText': {
-                    'settings_overrides': {              # noqa
-                        'initial_header_level': 1}}})
-    def test_initial_header_level(self):
-        so = settings.WALIKI_MARKUPS_SETTINGS['reStructuredText']['settings_overrides']
-        self.assertEqual(so['initial_header_level'], 1)     # default
-
-        """
-        page = Page(path='test1.rst')
-        page.raw = rst
-        self.assertEqual(page.body, "\n    <h1>Title</h1>\n    <p>some rst markup</p>\n")
-        """

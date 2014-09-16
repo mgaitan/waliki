@@ -1,0 +1,27 @@
+language: python
+matrix:
+  include:
+    - python: "2.6"
+      env: DJANGO=1.5.9
+      install: "pip install import"
+    - python: "2.6"
+      env: DJANGO=1.6.7
+    - python: "2.7"
+      env: DJANGO=1.5.9
+    - python: "2.7"
+      env: DJANGO=1.6.7
+    - python: "2.7"
+      env: DJANGO=1.7
+    - python: "3.3"
+      env: DJANGO=1.5.9
+    - python: "3.3"
+      env: DJANGO=1.6.7
+    - python: "3.3"
+      env: DJANGO=1.7
+before_install:
+  - sudo apt-get install -y git
+install:
+  - "pip install -r requirements-test.txt --use-mirrors"
+  - "pip install -q Django==$DJANGO --use-mirrors"
+  - "pip install . --use-mirrors"
+script: python runtests.py

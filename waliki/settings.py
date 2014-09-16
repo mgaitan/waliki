@@ -12,8 +12,20 @@ def _get_default_data_dir():
     return os.path.join(project_dir, 'waliki_data')
 
 
-def _get_markup_settings(user_settings):
+def deep_update(d, u):
+    """update nested dicts. if u is a dict and hasn't a key, the original is keeped
+    inspired in Alex Martelli's
+    http://stackoverflow.com/a/3233356"""
+    for k, v in u.items():
+        if isinstance(v, collections.Mapping):
+            r = deep_update(d.get(k, {}), v)
+            d[k] = r
+        else:
+            d[k] = u[k]
+    return d
 
+
+def _get_markup_settings(user_settings):
     defaults = {'reStructuredText': {
                     'settings_overrides': {              # noqa
                         'initial_header_level': 2,
@@ -32,17 +44,12 @@ def _get_markup_settings(user_settings):
                     }
                 }
 
-    for k, v in user_settings.items():
-        if isinstance(v, collections.Mapping):
-            r = user_settings(defaults.get(k, {}), v)
-            defaults[k] = r
-        else:
-            defaults[k] = user_settings[k]
+    deep_update(defaults, user_settings)
     return defaults
 
 
 # your content folder. by default it's <project_root>/waliki_data
-WALIKI_DATA_DIR = getattr(settings, 'WALIKI_DATA_DIR', _get_default_data_dir())
+WALIKI_DATA_DIR = getattr(settings, 'WALIKI_DATA_DIR', None) or _get_default_data_dir()
 
 # options: reStructuredText, Markdown, Textile
 WALIKI_DEFAULT_MARKUP = getattr(settings, 'WALIKI_DEFAULT_MARKUP', "reStructuredText")
