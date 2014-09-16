@@ -29,11 +29,11 @@ During those days, I started to take a lot of design decisions and commit a bunc
 Waliki reborn
 -------------
 
-I was happy the result but blocked to continue. As a newbie in Flask, each attempted step was a challenge, and I wasn't not sure to be faithful to the conventions: my brain was too *djangonized*.
+I was happy with the result but blocked to continue. As a newbie in Flask, each attempted step was a challenge, and I wasn't not sure to be faithful to the conventions: my brain was too *djangonized*.
 
 Moreover, the `Python Argentina web project <https://github.com/PyAr/pyarweb>`_ needed a wiki engine based on Django.
 
-So, I decided to redone it, taking us much code and ideas as possible. I took my time, but it's here :).
+So, I decided to redo it, taking us much code and ideas as possible. I took some time, but it's here :).
 
 
 .. include:: ../HISTORY.rst
