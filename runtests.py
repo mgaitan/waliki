@@ -1,4 +1,8 @@
 import sys
+import shutil
+import tempfile
+
+WALIKI_DATA_DIR = tempfile.mkdtemp()
 
 try:
     from django.conf import settings
@@ -20,6 +24,7 @@ try:
         ],
         SITE_ID=1,
         NOSE_ARGS=['-s'],
+        WALIKI_DATA_DIR=WALIKI_DATA_DIR,
     )
 
     try:
@@ -32,7 +37,8 @@ try:
 
     from django_nose import NoseTestSuiteRunner
 except ImportError:
-    raise ImportError("To fix this error, run: pip install -r requirements-test.txt")
+    raise ImportError(
+        "To fix this error, run: pip install -r requirements-test.txt")
 
 
 def run_tests(*test_args):
@@ -44,6 +50,7 @@ def run_tests(*test_args):
 
     failures = test_runner.run_tests(test_args)
 
+    shutil.rmtree(WALIKI_DATA_DIR)
     if failures:
         sys.exit(failures)
 
