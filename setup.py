@@ -23,6 +23,14 @@ if sys.argv[-1] == 'publish':
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
+install_requires = ['django', 'markups', 'sh', 'docutils', 'rst2html5']
+
+try:
+    import importlib
+except ImportError:
+    install_requires.append('importlib')
+
+
 extras_require = {                                      # noqa
         'restructuredtext': [],
         'markdown': ['markdown']
@@ -46,7 +54,7 @@ setup(
         'waliki',
     ],
     include_package_data=True,
-    install_requires=['django', 'markups', 'sh', 'docutils', 'rst2html5'],
+    install_requires=install_requires,
     extras_require=extras_require,
     license="BSD",
     zip_safe=False,
