@@ -2,7 +2,7 @@
 **Waliki** is an extensible wiki app for Django with a Git backend.
 
 
-.. attention:: It's usable but not production ready yet. I'll appreciate you feedback and help.
+.. attention:: It's usable but not production ready yet. I'll appreciate your feedback and help.
 
 
 .. image:: https://badge.fury.io/py/waliki.png
