@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-this is the module from https://bitbucket.org/andre_felipe_dias/rst2html5
-
-modified with to add python3 compatibility
+this is the module from
+https://bitbucket.org/andre_felipe_dias/rst2html5
 """
 
 
@@ -83,8 +82,7 @@ class HTML5Writer(writers.Writer):
          '(This option can be used multiple times)',
             ['--stylesheet'],
             {'metavar': '<URL or path>', 'default': None,
-             'action': 'append',
-             'validator': frontend.validate_comma_separated_list, }),
+             'action': 'append', }),
         ('Specify a script URL to be included in the output HTML file. '
          '(This option can be used multiple times)',
             ['--script'],
@@ -116,8 +114,7 @@ class HTML5Writer(writers.Writer):
             ['--html-tag-attr'],
             {'metavar': '<attribute>', 'default': None,
              'dest': 'html_tag_attr',
-             'action': 'append',
-             'validator': frontend.validate_comma_separated_list, }),
+             'action': 'append', }),
         ('Specify a filename or text to be used as the HTML5 output template. '
          'The template must have the {head} and {body} placeholders. '
          'The "<html{html_attr}>" placeholder is recommended.',
@@ -175,18 +172,16 @@ class ElemStack(object):
 
     def _indent_elem(self, element, indent):
         result = []
-        '''
-        Indentation schema:
-
-                current position
-                       |
-                       v
-                  <tag>|
-        |   indent   |<elem>
-        |indent-1|</tag>
-                 ^
-             ends here
-        '''
+        # Indentation schema:
+        #
+        #         current position
+        #                |
+        #                v
+        #           <tag>|
+        # |   indent   |<elem>
+        # |indent-1|</tag>
+        #          ^
+        #      ends here
         if self.indent_output and indent:
             indentation = '\n' + self.indent_width * self.indent_level * ' '
             result.append(indentation)
@@ -288,6 +283,7 @@ class HTML5Translator(nodes.NodeVisitor):
         'error': ('aside', 'visit_aside', 'depart_aside', True),
         'field': (None, 'visit_field', None),
         'field_body': (None, 'do_nothing', None),
+        'field_list': (None, 'do_nothing', None),
         'field_name': (None, 'do_nothing', None),
         'figure': (None, 'visit_figure', dp),
         'footer': (None, dv, dp),
@@ -350,6 +346,9 @@ class HTML5Translator(nodes.NodeVisitor):
         'warning': ('aside', 'visit_aside', 'depart_aside', True),
     }
 
+    default_template = '<!DOCTYPE html>\n<html{html_attr}>\n' \
+                       '<head>{head}</head>\n<body>{body}</body>\n</html>'
+
     def _map_terms_to_functions(self):
         '''
         Map terms to visit and departure functions
@@ -366,44 +365,38 @@ class HTML5Translator(nodes.NodeVisitor):
     def _get_template(self, document):
         template = document.settings.template
         if not template:
-            return None
+            return self.default_template
         import os
         if os.path.isfile(template):
-            import codecs
-            with codecs.open(template, 'r', 'utf-8') as template_file:
+            from io import open
+            with open(template, 'r', encoding='utf-8') as template_file:
                 return template_file.read()
         else:
             return template
 
     def __init__(self, document):
         nodes.NodeVisitor.__init__(self, document)
-        self.heading_level = 0
+        self.heading_level = int(getattr(self.document.settings, 'initial_header_level', 0))
         self.context = ElemStack(document.settings)
-        self.template = self._get_template(document) or \
-                        '<!DOCTYPE html>\n<html{html_attr}>\n' \
-                        '<head>{head}</head>\n<body>{body}</body>\n</html>'
-        self.head = []
-        self.head.append(
-            tag.meta(charset=self.document.settings.output_encoding))
+        self.template = self._get_template(document)
         self.docinfo = OrderedDict()
-        self.add_stylesheets()
-        self.add_scripts()
+        self._parse_params()
         self._map_terms_to_functions()
         return
 
-    def add_stylesheets(self):
+    def _parse_params(self):
+        self.metatags = [tag.meta(charset=self.document.settings.output_encoding)]
+        self.stylesheets = []
         stylesheets = self.document.settings.stylesheet or []
         for href in stylesheets:
-            self.head.append(tag.link(rel='stylesheet', href=href))
-        return
-
-    def add_scripts(self):
+            self.stylesheets.append(tag.link(rel='stylesheet', href=href))
+        self.scripts = []
         scripts = self.document.settings.script or []
-        for src, attr in scripts:
+        for src, attributes in scripts:
             script = tag.script(src=src)
-            if attr:
-                script = script(**{attr: attr})
-            self.head.append(script)
+            if attributes:
+                script = script(**{attributes: attributes})
+            self.scripts.append(script)
         return
 
     def indent_head(self):
@@ -416,16 +409,25 @@ class HTML5Translator(nodes.NodeVisitor):
             self.head = result
         return
 
-    @property
-    def output(self):
+    def _get_template_values(self):
+        html_attrs = self.document.settings.html_tag_attr
+        html_attrs = html_attrs and ' ' + ' '.join(html_attrs) or ''
+        self.head = self.metatags + self.stylesheets + self.scripts
         for key, value in self.docinfo.items():
             self.head.append(tag.meta(name=key, content=value))
         self.indent_head()
-        html_attrs = self.document.settings.html_tag_attr
-        html_attrs = html_attrs and ' ' + ' '.join(html_attrs) or ''
         self.head = ''.join(XHTMLSerializer()(tag(*self.head)))
         self.body = ''.join(XHTMLSerializer()(tag(*self.context.stack)))
-        return self.template.format(html_attr=html_attrs, head=self.head, body=self.body)
+        values = {}
+        values['html_attr'] = html_attrs
+        values['head'] = self.head
+        values['body'] = self.body
+        return values
+
+    @property
+    def output(self):
+        values = self._get_template_values()
+        return self.template.format(**values)
 
     def set_next_elem_attr(self, name, value):
         '''
@@ -441,13 +443,13 @@ class HTML5Translator(nodes.NodeVisitor):
         '''
         node_class_name = node.__class__.__name__
         spec = self.rst_terms[node_class_name]
-        name = spec[0] or node_class_name
+        tag_name = spec[0] or node_class_name
         use_name_in_class = len(spec) > 3 and spec[3]
         indent = spec[4] if len(spec) > 4 else True
         if use_name_in_class:
             node['classes'].insert(0, node_class_name)
 
-        attrs = {}
+        attributes = {}
         replacements = {
             'refuri': 'href', 'uri': 'src', 'refid': 'href',
             'morerows': 'rowspan', 'morecols': 'colspan', 'classes': 'class',
@@ -458,22 +460,18 @@ class HTML5Translator(nodes.NodeVisitor):
             'backrefs', 'auto', 'anonymous',
         )
         for k, v in node.attributes.items():
-            if not v:
+            if k in ignores or not v:
                 continue
-            elif isinstance(v, list):
-                v = ' '.join(v)
-
-            if k in ignores:
-                continue
-            elif k in replacements:
+            if k in replacements:
                 k = replacements[k]
-
-            attrs[k] = v
+            if isinstance(v, list):
+                v = ' '.join(v)
+            attributes[k] = v
 
         if getattr(self, 'next_elem_attr', None):
-            attrs.update(self.next_elem_attr)
+            attributes.update(self.next_elem_attr)
             del self.next_elem_attr
-        return name, indent, attrs
+        return tag_name, indent, attributes
 
     def once_attr(self, name, default=None):
         '''
@@ -491,10 +489,8 @@ class HTML5Translator(nodes.NodeVisitor):
         Initiate a new context to store inner HTML5 elements.
         '''
         if 'ids' in node and self.once_attr('expand_id_to_anchor', default=True):
-            '''
-            create an anchor <a id=id></a> for each id found before the
-            current element.
-            '''
+            # create an anchor <a id=id></a> for each id found before the
+            # current element.
             for id in node['ids'][1:]:
                 self.context.begin_elem()
                 self.context.commit_elem(tag.a(id=id))
@@ -507,8 +503,8 @@ class HTML5Translator(nodes.NodeVisitor):
         Create the node's corresponding HTML5 element and combine it with its
         stored context.
         '''
-        name, indent, attr = self.parse(node)
-        elem = getattr(tag, name)(**attr)
+        tag_name, indent, attributes = self.parse(node)
+        elem = getattr(tag, tag_name)(**attributes)
         self.context.commit_elem(elem, indent)
         return
 
@@ -566,9 +562,7 @@ class HTML5Translator(nodes.NodeVisitor):
             if self.heading_level == 0:
                 self.heading_level = 1
             if 'href' in attr:
-                '''
-                backref to toc entry
-                '''
+                # backref to toc entry
                 # anchor = tag.a(href=("#" + attr['href']), class_="toc-backref")
                 # self.context.commit_elem(anchor)
                 # anchor = self.context.pop()
@@ -757,13 +751,15 @@ class HTML5Translator(nodes.NodeVisitor):
             elem = tag.span(template)
         elem(class_='math')
         self.context.append(elem)
-        src = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        self.head.append(tag.script(src=src))
+        if not getattr(self, 'already_has_math_script', None):
+            src = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+            self.scripts.append(tag.script(src=src))
+            self.already_has_math_script = True
         raise nodes.SkipNode
 
     def visit_document(self, node):
         if 'title' in node:
-            self.head.append(tag.title(node['title']))
+            self.metatags.insert(0, tag.title(node['title']))
             self.title = node['title']
         else:
             self.title = ''
@@ -896,7 +892,7 @@ class HTML5Translator(nodes.NodeVisitor):
 
     def visit_meta(self, node):
         waste, waste_, attr = self.parse(node)
-        self.head.append(tag.meta(**attr))
+        self.metatags.append(tag.meta(**attr))
         raise nodes.SkipNode
 
     def visit_problematic(self, node):

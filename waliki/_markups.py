@@ -57,7 +57,7 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         if 'rest_parts' in self._cache:
             return self._cache['rest_parts']
         parts = self._publish_parts(text, source_path=self.filename,
-            writer_name='html5', settings_overrides=self.overrides, **self.kwargs)
+            settings_overrides=self.overrides, **self.kwargs)
         if self._enable_cache:
             self._cache['rest_parts'] = parts
         return parts

@@ -3,7 +3,7 @@ import importlib
 import collections
 from django.conf import settings
 from .utils import get_url
-from .rst2html5 import HTML5Writer
+from waliki.rst2html5 import HTML5Writer
 
 
 def _get_default_data_dir():
@@ -22,6 +22,7 @@ def _get_markup_settings(user_settings):
                         'link_stylesheet': True,
                         'syntax_highlight': 'short'},
                     'writer': HTML5Writer(),
+                    'writer_name': 'html5'
                     },
                 'Markdown': {
                     'extensions': ['wikilinks', 'headerid'],
@@ -51,3 +52,6 @@ WALIKI_INDEX_SLUG = getattr(settings, 'WALIKI_INDEX_SLUG', "home")
 
 # kwargs for each markup.
 WALIKI_MARKUPS_SETTINGS = _get_markup_settings(getattr(settings, 'WALIKI_MARKUPS_SETTINGS', {}))
+
+# get as txt
+WALIKI_PDF_INCLUDE_TITLE = getattr(settings, 'WALIKI_PDF_INCLUDE_TITLE', False)

@@ -2,6 +2,9 @@
 **Waliki** is an extensible wiki app for Django with a Git backend.
 
 
+.. attention:: It's usable but not production ready yet. I'll appreciate you feedback and help.
+
+
 .. image:: https://badge.fury.io/py/waliki.png
     :target: https://badge.fury.io/py/waliki
 
@@ -44,11 +47,12 @@ Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
     INSTALLED_APPS = (
         ...
         'waliki',
-        'waliki.git'   # optional
+        'waliki.git',   # optional
+        'waliki.pdf',   # optional
         ...
     )
 
-Include the waliki urls in you project's ``urls.py``::
+Include the waliki urls in your project's ``urls.py``::
 
     urlpatterns = patterns('',
         ...
