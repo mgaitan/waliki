@@ -21,10 +21,17 @@ matrix:
       env: DJANGO=1.7
     - python: "3.4"
       env: DJANGO=1.7
+
 before_install:
   - sudo apt-get install -y git
+
 install:
   - "pip install -r requirements-test.txt --use-mirrors"
   - "pip install -q Django==$DJANGO --use-mirrors"
   - "pip install . --use-mirrors"
-script: python runtests.py
+
+# command to run tests using coverage, e.g. python setup.py test
+script: coverage run --source waliki runtests.py
+
+# report coverage to coveralls.io
+after_success: coveralls

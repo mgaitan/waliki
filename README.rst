@@ -11,8 +11,8 @@
 .. image:: https://travis-ci.org/mgaitan/waliki.png?branch=master
     :target: https://travis-ci.org/mgaitan/django-waliki
 
-..  .. image:: https://coveralls.io/repos/mgaitan/waliki/badge.png?branch=master
-        :target: https://coveralls.io/r/mgaitan/waliki?branch=master
+.. image:: https://coveralls.io/repos/mgaitan/waliki/badge.png?branch=master
+    :target: https://coveralls.io/r/mgaitan/waliki?branch=master
 
 .. image:: https://readthedocs.org/projects/waliki/badge/?version=latest
    :target: https://readthedocs.org/projects/waliki/?badge=latest
