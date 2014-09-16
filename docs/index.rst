@@ -18,6 +18,7 @@ Contents:
    settings
    git
    autolinking
+   get_as_pdf
    write_a_plugin
    history
    contributing
