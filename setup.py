@@ -46,7 +46,7 @@ setup(
         'waliki',
     ],
     include_package_data=True,
-    install_requires=['django', 'markups', 'sh', 'docutils'],
+    install_requires=['django', 'markups', 'sh', 'docutils', 'rst2html5'],
     extras_require=extras_require,
     license="BSD",
     zip_safe=False,
