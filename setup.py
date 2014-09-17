@@ -41,7 +41,8 @@ extras_require = {                                      # noqa
 everything = set()
 for deps in extras_require.copy().values():
     everything.update(deps)
-    extras_require['all'] = everything
+
+extras_require['all'] = everything
 
 
 setup(

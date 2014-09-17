@@ -28,7 +28,7 @@ before_install:
 install:
   - "pip install -r requirements-test.txt --use-mirrors"
   - "pip install -q Django==$DJANGO --use-mirrors"
-  - "pip install . --use-mirrors"
+  - "pip install -e .[all] --use-mirrors"
 
 # command to run tests using coverage, e.g. python setup.py test
 script: coverage run --source waliki runtests.py
