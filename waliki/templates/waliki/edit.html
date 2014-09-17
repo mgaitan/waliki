@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="row">
-<div class="span10">
+<div class="col-sm-10 col-md-10">
 <div class="tabbable tabs-left">
 <ul class="nav nav-tabs">
     <li class="active"><a href="#editor" data-toggle="tab">Editor</a></li>
@@ -17,30 +17,15 @@
         <form method="post" class="form">
             {% csrf_token %}
             {{ form }}
-            {% comment %}
-            {{ form.hidden_tag() }}
-            {{ input(form.title, placeholder="Title", class="span8") }}
-
-
-            {{ input(form.body, placeholder=markup.NAME|capitalize,
-                     class="span8", rows="15", id="code") }}
 
             <div class="row">
-                <div class="span4">
-            {{ input(form.message, placeholder="Changes summary (optional)", class="span4") }}
-</div>
-                <div class="span4">{{ input(form.tags, placeholder="Tags (comma separated)", class="span4") }}
-            </div></div>
-            {% endcomment %}
-
-            <div class="row">
-                <div class="span8">
+                <div class="col-sm-8 col-md-8">
                         <div class="form-actions">
                     <div class="pull-left">
-                      <a class="btn" href="#preview" id="previewbtn">Preview</a>
+                      <a class="btn btn-default" href="#preview" id="previewbtn">Preview</a>
                     </div>
                             <div class="pull-right">
-                      <a class="btn" href="{% url 'waliki_detail' page.slug %}">Cancel</a>
+                      <a class="btn btn-default" href="{% url 'waliki_detail' page.slug %}">Cancel</a>
                                 <button class="btn btn-success" type="submit">Save</button>
                             </div>
                         </div>
