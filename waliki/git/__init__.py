@@ -40,7 +40,7 @@ class Git(object):
                 ("date_relative", "%ar"),
                 ("message", "%s")]
         format = "{%s}" % ','.join([""" \"%s\": \"%s\" """ % item for item in data])
-        output = git.log('--format=%s' % format, '-z', '--shortstat', page.path)
+        output = git.log('--format=%s' % format, '-z', '--shortstat', page.abspath)
         output = output.replace('\x00', '').split('\n')[:-1]
         history = []
         for line in output:
