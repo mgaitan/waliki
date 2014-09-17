@@ -7,12 +7,12 @@ from .utils import get_url
 
 class MarkdownMarkup(MarkdownMarkupBase):
 
-    def __init__(self, filename=None, extensions=None, extensions_config=None):
+    def __init__(self, filename=None, extensions=None, extension_configs=None):
         super(MarkdownMarkupBase, self).__init__(filename)
         import markdown
         self.markdown = markdown
         self.requested_extensions = extensions or []
-        self.extensions_config = extensions_config or {}
+        self.extension_configs = extension_configs or {}
         self.global_extensions = self._get_global_extensions(filename)
         self.document_extensions = []
         self._apply_extensions()
@@ -39,7 +39,7 @@ class MarkdownMarkup(MarkdownMarkupBase):
                 sys.stderr.write(
                     'Extension "%s" does not exist.\n' % extension)
                 extensions.remove(extension)
-        self.md = self.markdown.Markdown(extensions, extensions_config=self.extensions_config,
+        self.md = self.markdown.Markdown(extensions, extension_configs=self.extension_configs,
                                          output_format='html5')
         for i, pattern in enumerate(self._get_mathjax_patterns()):
             self.md.inlinePatterns.add('mathjax%d' % i, pattern, '<escape')
@@ -69,7 +69,7 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         #   Something_ will link to '/something'
         #  `something great`_  to '/something_great'
         #  `another thing <thing>`_  '/thing'
-        refs = re.findall(r'Unknown target name: \&quot;(.*)\&quot;', html)
+        refs = re.findall(r'Unknown target name: [\&quot;|"](.*)[\&quot;|"]', html)
         if refs:
             refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
                              for ref in refs)

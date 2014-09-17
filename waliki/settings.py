@@ -38,11 +38,12 @@ def _get_markup_settings(user_settings):
                     },
                 'Markdown': {
                     'extensions': ['wikilinks', 'headerid'],
-                    'extensions_config': {
-                        'wikilinks': [('build_url', get_url)],
-                        'headerid': [('level', 2)]},
+                    'extension_configs': {
+                        'wikilinks': {'build_url': get_url},
+                        'headerid': {'level': 2},
                     }
                 }
+            }
 
     deep_update(defaults, user_settings)
     return defaults

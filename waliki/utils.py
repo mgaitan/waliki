@@ -6,10 +6,11 @@ from django.utils.text import slugify
 
 
 def get_slug(text):
-    return '/'.join(slugify(t) for t in text.split('/'))
+    return '/'.join(slugify(t) for t in text.split('/')).strip('/')
 
 
-def get_url(text, **kwargs):
+def get_url(text, *args):
+    # *args needed to receive prefix and suffix for markdowns wikilinks ext
     return reverse('waliki_detail', args=(get_slug(text),))
 
 
