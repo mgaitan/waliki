@@ -27,6 +27,7 @@ class Git(object):
         elif isinstance(author, six.string_types):
             kwargs['author'] = author
         try:
+            git.add(path)
             git.commit(path, m=message or 'Update %s' % path, **kwargs)
         except:
             # TODO: make this more robust!
