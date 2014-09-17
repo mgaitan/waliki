@@ -10,11 +10,16 @@ import os
 import sys
 
 # for demo
-INTERP = '/home/waliki/.virtualenvs/waliki/bin/python'
-if os.path.exists(INTERP) and sys.executable != INTERP:
+activate_this = '/home/waliki/.virtualenvs/waliki/bin/activate_this.py'
+if os.path.exists(activate_this):
     #INTERP is present twice so that the new python interpreter knows the actual executable path
-    os.execl(INTERP, INTERP, *sys.argv)
-    sys.path.append('/home/waliki/waliki/waliki_project')
+    with open(activate_this) as f:
+        code = compile(f.read(), activate_this, 'exec')
+        exec(code, dict(__file__=activate_this))
+
+path = '/home/waliki/waliki/waliki_project'
+if path not in sys.path:
+    sys.path.append(path)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "waliki_project.settings")
 from django.core.wsgi import get_wsgi_application
