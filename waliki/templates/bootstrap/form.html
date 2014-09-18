@@ -1,0 +1,18 @@
+{% load bootstrap_tags %}
+
+{% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {% if form_error_title %}
+        <strong>{{ form_error_title }}</strong><br />
+        {% endif %}
+        {% if form.non_field_errors|length == 1 %}
+        {{ form.non_field_errors|first }}
+        {% else %}
+        {{ form.non_field_errors }}
+        {% endif %}
+    </div>
+{% endif %}
+
+{% for field in form %}
+    {% include "bootstrap/field.html" %}
+{% endfor %}

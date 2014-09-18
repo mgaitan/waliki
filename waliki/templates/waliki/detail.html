@@ -1,5 +1,5 @@
 {% extends "site_base.html" %}
-{% load waliki_plugins %}
+{% load waliki_tags %}
 
 {% block extra_style %}
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
@@ -9,8 +9,8 @@
     <div class="pull-right">
     {% block actions %}
         <div class="btn-group">
-            <a href="{% url "waliki_edit" slug %}" class="btn">Edit</a>
-            <button class="btn dropdown-toggle" data-toggle="dropdown">
+            <a href="{% url 'waliki_edit' slug=page.slug %}" class="btn btn-default">Edit</a>
+            <button class="btn dropdown-toggle btn-default" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
@@ -32,7 +32,7 @@
         {{ page.body|safe }}
     {% else %}
         <p>This page doesn't exist yet. </p>
-        <p><a href="{% url "waliki_edit" slug %}" class="btn btn-success">Create it</a></p>
+        <p><a href="{% url 'waliki_edit' slug=page.slug %}" class="btn btn-success">Create it</a></p>
     {% endif %}
 
  {% if page.footer %}
@@ -58,13 +58,13 @@ $('#confirmDelete').on('click', function() {
 
 function bootstrap_rst(){
 
-   $('.note').prepend('<i class="icon-info-sign icon-2x"></i>');
-   $('.tip').prepend('<i class="icon-ok icon-2x"></i>');
-   $('.warning, .caution').prepend('<i class="icon-warning-sign icon-2x"></i>');
-   $('.attention, .important').prepend('<i class="icon-exclamation icon-2x"></i>');
-   $('.error').prepend('<i class="icon-remove-sign icon-2x"></i>');
-   $('.danger').prepend('<i class="icon-bolt icon-2x"></i>');
-   $('.hint').prepend('<i class="icon-magic icon-2x"></i>');
+   $('.note').prepend('<i class="icon-info-sign icon-2x"></i> ');
+   $('.tip').prepend('<i class="icon-ok icon-2x"></i> ');
+   $('.warning, .caution').prepend('<i class="icon-warning-sign icon-2x"></i> ');
+   $('.attention, .important').prepend('<i class="icon-exclamation icon-2x"></i> ');
+   $('.error').prepend('<i class="icon-remove-sign icon-2x"></i> ');
+   $('.danger').prepend('<i class="icon-bolt icon-2x"></i> ');
+   $('.hint').prepend('<i class="icon-magic icon-2x"></i> ');
 
    $('div.container table').addClass('table table-bordered table-striped');
 
