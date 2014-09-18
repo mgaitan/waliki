@@ -20,11 +20,10 @@
 
 
 :home: https://github.com/mgaitan/waliki/
-:documentation: http://waliki.rtfd.org (under development)
+:demo: http://waliki.pythonanywhere.com
+:documentation: http://waliki.rtfd.org
 :group: https://groups.google.com/forum/#!forum/waliki-devs
 :license: `BSD <https://github.com/mgaitan/waliki/blob/master/LICENSE>`_
-
-.. :demo: http://waliki.nqnwebs.com
 
 
 At a glance, Waliki has:
