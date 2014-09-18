@@ -1,0 +1,61 @@
+{% load bootstrap_tags %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+    <div id="div_{{ field.auto_id }}" class="form-group {% if field.errors %}has-error{% endif %} {% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+
+        {% if field.label and not field|css_class == "checkboxinput" %}
+            <label for="{{ field.auto_id }}" class="control-label {% if field.field.required %}required-field{% endif %} {{ css_classes.label }}">
+                {{ field.label|safe }}
+            </label>
+        {% endif %}
+
+        {% if field|css_class == "checkboxselectmultiple" %}
+            <div class="{{ css_classes.wrap }}">
+                {% include "bootstrap/_field_errors_block.html" %}
+                {% for choice in field.field.choices %}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" {% if choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|stringformat:"s" %}checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}"> {{ choice.1 }}
+                        </label>
+                    </div>
+                {% endfor %}
+                {% include "bootstrap/_field_help_text.html" %}
+            </div>
+        {% endif %}
+        {% if field|css_class == "radioselect" %}
+            <div class="{{ css_classes.wrap }}">
+                {% include "bootstrap/_field_errors_block.html" %}
+                {% for choice in field.field.choices %}
+                    <div class="radio">
+                        <label>
+                            <input type="radio" {% if choice.0|stringformat:"s" == field.value|stringformat:"s" %}checked="checked" {% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}"> {{ choice.1 }}
+                        </label>
+                    </div>
+                {% endfor %}
+                {% include "bootstrap/_field_help_text.html" %}
+            </div>
+        {% endif %}
+        {% if field|css_class != "checkboxselectmultiple" and field|css_class != "radioselect" %}
+            {% if field|css_class == "checkboxinput" %}
+                <div class="{{ css_classes.single_container }}">
+                    {% include "bootstrap/_field_errors_block.html" %}
+                    <div class="checkbox">
+                        <label for="{{ field.auto_id }}" class="{% if field.field.required %}required-field{% endif %}">
+                            {{ field }}
+                            {{ field.label|safe }}
+                        </label>
+                    </div>
+                    {% include "bootstrap/_field_help_text.html" %}
+                </div>
+            {% else %}
+                <div class="{{ css_classes.wrap }}">
+                    {{ field }}
+                    {% include "bootstrap/_field_errors.html" %}
+                    {% include "bootstrap/_field_help_text.html" %}
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endif %}
