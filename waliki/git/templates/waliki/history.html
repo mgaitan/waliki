@@ -27,25 +27,25 @@
     <button type="submit" class="btn disabled btn-default btn-sm" disabled="disabled">Compare revisions</button>
 </div>
 
-
+<table class="table table-striped">
+        <tbody>
             {% for version in history %}
-
-            {% endfor %}
-            <table class="table table-striped">
-        <tbody><tr>
-                  <td class="span1"><input name="commit" value="{{ version.commit }}" type="checkbox"></td>
-                  <td class="span1"><a href="{% url 'waliki_version' page.slug version.commit %}">{{ version.commit }}</a></td>
-                  <td class="span1">{{ version.author }}</td>
-                  <td class="span2" title="{{ version.date }}">{{ version.date_relative }}</td>
-                  <td class="span3">{{ version.message }}</td>
-                  <td class="span2">
+                <tr>
+                  <td class="col-sm-1"><input name="commit" type="checkbox" value="{{ version.commit }}" ></td>
+                  <td class="col-sm-1"><a href="{% url 'waliki_version' page.slug version.commit %}">{{ version.commit }}</a></td>
+                  <td class="col-sm-1">{{ version.author }}</td>
+                  <td class="col-sm-2" title="{{ version.date }}">{{ version.date_relative }}</td>
+                  <td class="col-sm-3">{{ version.message }}</td>
+                  <td class="col-sm-2">
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" style="width: {{version.insertion_relative}}%;"></div>
                         <div class="progress-bar progress-bar-danger" style="width: {{version.deletion_relative}}%;"></div>
                     </div>
                    </td>
 
-                </tr></tbody>
+                </tr>
+            {% endfor %}
+            </tbody>
         </table>
 {% if history|length > 10 %}
 
