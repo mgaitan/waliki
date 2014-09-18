@@ -1,5 +1,5 @@
 body {
-  padding-top: 50px;
+  padding-top: 40px;
 }
 
 textarea#body {
@@ -81,3 +81,7 @@ div.important, div.note, div.hint {
   color: #3a87ad;
 }
 
+
+div#editor {
+    padding: 1.2em;
+}
