@@ -1,11 +1,14 @@
 import re
 import sys
 from markups import (MarkdownMarkup as MarkdownMarkupBase,
-                     TextileMarkup, ReStructuredTextMarkup as ReStructuredTextMarkupBase)
+                     TextileMarkup as TextileMarkupBase,
+                     ReStructuredTextMarkup as ReStructuredTextMarkupBase)
 from .utils import get_url
+from waliki.settings import WALIKI_AVAILABLE_MARKUPS
 
 
 class MarkdownMarkup(MarkdownMarkupBase):
+    codemirror_mode_name = codemirror_mode = 'markdown'
 
     def __init__(self, filename=None, extensions=None, extension_configs=None):
         super(MarkdownMarkupBase, self).__init__(filename)
@@ -48,6 +51,11 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
+    codemirror_mode = 'rst'
+    # see bug https://github.com/marijnh/CodeMirror/issues/2740
+    codemirror_mode_name = 'rst-base'
+
+
     def __init__(self, filename=None, **kwargs):
         settings_overrides = kwargs.pop('settings_overrides', None)
         super(ReStructuredTextMarkup, self).__init__(filename, settings_overrides)
@@ -78,11 +86,15 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         return html
 
 
+class TextileMarkup(TextileMarkupBase):
+    codemirror_mode_name = codemirror_mode = 'textile'
+
+
 def get_all_markups():
-    return set([ReStructuredTextMarkup, TextileMarkup, MarkdownMarkup])
+    return [find_markup_class_by_name(s) for s in WALIKI_AVAILABLE_MARKUPS]
 
 
 def find_markup_class_by_name(name):
-    for markup in get_all_markups():
+    for markup in (ReStructuredTextMarkup, MarkdownMarkup, TextileMarkup):
         if markup.name.lower() == name.lower():
             return markup

@@ -1,5 +1,6 @@
 from django import forms
 from .models import Page
+from ._markups import get_all_markups
 
 
 class PageForm(forms.ModelForm):
@@ -7,11 +8,10 @@ class PageForm(forms.ModelForm):
     message = forms.CharField(max_length=200, required=False)
 
     class Media:
-        js = ('codemirror/lib/codemirror.js',
-              'codemirror/mode/markdown/markdown.js',
-              'codemirror/mode/rst/rst.js',
-              'js/waliki.js'
-              )
+        modes = tuple('codemirror/mode/%s/%s.js' % (m.codemirror_mode, m.codemirror_mode)
+                      for m in get_all_markups() if hasattr(m, 'codemirror_mode'))
+
+        js = ('codemirror/lib/codemirror.js',) + modes + ('js/waliki.js',)
         css = {
             'all': ('codemirror/lib/codemirror.css',)
         }
@@ -20,6 +20,7 @@ class PageForm(forms.ModelForm):
         is_hidden = kwargs.pop('is_hidden', None)
         super(PageForm, self).__init__(*args, **kwargs)
         self.fields['raw'].initial = self.instance.raw
+        self.fields['markup'].widget = forms.HiddenInput()
         self.fields['message'].widget = forms.TextInput(attrs={'placeholder': 'Update %s' % self.instance.path})
         if is_hidden:
             for field in self.fields.values():

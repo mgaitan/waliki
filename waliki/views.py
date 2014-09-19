@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from .models import Page
 from .forms import PageForm
 from .signals import page_saved
+from ._markups import get_all_markups
 from . import settings
 
 
@@ -32,7 +33,13 @@ def edit(request, slug):
                         author=request.user,
                         message=form.cleaned_data["message"])
         return redirect('waliki_detail', slug=page.slug)
-    return render(request, 'waliki/edit.html', {'page': page, 'form': form, 'slug': slug})
+    cm_modes = [(m.name, m.codemirror_mode_name) for m in get_all_markups()]
+    current_mode = dict(cm_modes)[page.markup]
+    return render(request, 'waliki/edit.html', {'page': page,
+                                                'form': form,
+                                                'slug': slug,
+                                                'cm_modes': cm_modes,
+                                                'current_mode': current_mode})
 
 
 def preview(request):

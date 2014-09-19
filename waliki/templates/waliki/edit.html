@@ -18,17 +18,17 @@
     <li><a href="#preview" data-toggle="tab" id="previewlink">Preview</a></li>
     <li class="pull-right">
             <div class="btn-group btn-group-sm">
-            <a href="#" class="btn btn-default">reStructuredText</a>
-            <button class="btn dropdown-toggle btn-default" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a id="#" >Markdown</a></li>
-            </ul>
-        </div>
 
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                   <span data-bind="label">{{ page.markup }}</span>&nbsp;&nbsp;<span class="caret"></span>
+                 </button>
+                 <ul class="dropdown-menu" role="menu">
+                    {% for markup, mode in cm_modes %}
+                   <li><a href="#" data-mode="{{ mode }}">{{ markup }}</a></li>
+                    {% endfor %}
+                 </ul>
+            </div>
     </li>
-
 
 </ul>
 <div class="tab-content">
@@ -94,7 +94,10 @@ $('#previewbtn').on('click', function(event) {
     $('#previewlink').click();
 });
 
+var current_mode = '{{ current_mode }}';
 </script>
+
 {{ form.media.js }}
+
 
 {% endblock extra_script %}

@@ -17,10 +17,6 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/waliki.css'%}">
             {% block extra_style %}{% endblock %}
         {% endblock %}
-        {% comment %}
-        <link rel="stylesheet" type="text/css" href="{% static 'codemirror/theme'%}/{{ config.THEME }}.css">
-        <link rel="stylesheet" type="text/css" href="{% static 'codemirror/addon/display/placeholder.css'%}">
-        {% endcomment %}
 
         {% block html5shim %}
         <!-- HTML5 shim, for IE6-8 support of HTML elements -->
@@ -124,11 +120,6 @@
             });
         </script>
         <script src="{% static 'js/bootstrap.min.js'%}"></script>
-        <script src="{% static 'js/bootbox.min.js'%}"></script>
-        <script src="{% static 'codemirror/lib/codemirror.js'%}"></script>
-        <script src="{% static 'codemirror/addon/display/placeholder.js'%}"></script>
-        <script src="{% static 'codemirror/mode/markdown/markdown.js'%}"></script>
-        <script src="{% static 'codemirror/mode/rst/rst.js'%}"></script>
         {% block extra_script %}{% endblock %}
         {% endblock %}
 
