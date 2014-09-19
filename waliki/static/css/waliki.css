@@ -13,7 +13,7 @@ textarea#body {
   font-size: 13px;
 }
 
-//diff
+// diff
 
 span.ins, span.del {
     padding: 3px;
@@ -82,6 +82,6 @@ div.important, div.note, div.hint {
 }
 
 
-div#editor {
+div#editor, div#preview {
     padding: 1.2em;
 }

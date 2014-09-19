@@ -1,0 +1,1 @@
+CodeMirror.fromTextArea(document.getElementById("id_raw"));

@@ -6,6 +6,16 @@ class PageForm(forms.ModelForm):
     raw = forms.CharField(label="", widget=forms.Textarea)
     message = forms.CharField(max_length=200, required=False)
 
+    class Media:
+        js = ('codemirror/lib/codemirror.js',
+              'codemirror/mode/markdown/markdown.js',
+              'codemirror/mode/rst/rst.js',
+              'js/waliki.js'
+              )
+        css = {
+            'all': ('codemirror/lib/codemirror.css',)
+        }
+
     def __init__(self, *args, **kwargs):
         is_hidden = kwargs.pop('is_hidden', None)
         super(PageForm, self).__init__(*args, **kwargs)
@@ -24,5 +34,5 @@ class PageForm(forms.ModelForm):
 
     class Meta:
         model = Page
-        fields = ['title', 'raw', 'message']
+        fields = ['title', 'markup', 'raw', 'message']
 
