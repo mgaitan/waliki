@@ -11,7 +11,7 @@
 {% block content %}
 
 <div class="row">
-<div class="col-sm-12 col-md-12">
+<div id="waliki_editor" class="col-sm-12 col-md-12">
 <div class="tabbable tabs-left">
 <ul class="nav nav-tabs">
     <li class="active"><a href="#editor" data-toggle="tab">Editor</a></li>
@@ -27,6 +27,13 @@
                    <li><a href="#" data-mode="{{ mode }}">{{ markup }}</a></li>
                     {% endfor %}
                  </ul>
+
+            </div>
+
+            <div class="btn-group btn-group-sm">
+
+                 <button id="fullscreen" type="button" class="btn btn-default"><span class="glyphicon glyphicon-resize-full"></span> </button>
+
             </div>
     </li>
 
@@ -94,7 +101,7 @@ $('#previewbtn').on('click', function(event) {
     $('#previewlink').click();
 });
 
-var current_mode = '{{ current_mode }}';
+var cm_settings = {{ cm_settings|safe }};
 </script>
 
 {{ form.media.js }}

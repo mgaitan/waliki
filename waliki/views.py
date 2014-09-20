@@ -34,12 +34,14 @@ def edit(request, slug):
                         message=form.cleaned_data["message"])
         return redirect('waliki_detail', slug=page.slug)
     cm_modes = [(m.name, m.codemirror_mode_name) for m in get_all_markups()]
-    current_mode = dict(cm_modes)[page.markup]
+
+    cm_settings = settings.WALIKI_CODEMIRROR_SETTINGS
+    cm_settings.update({'mode': dict(cm_modes)[page.markup]})
     return render(request, 'waliki/edit.html', {'page': page,
                                                 'form': form,
                                                 'slug': slug,
                                                 'cm_modes': cm_modes,
-                                                'current_mode': current_mode})
+                                                'cm_settings': json.dumps(cm_settings)})
 
 
 def preview(request):

@@ -1,8 +1,6 @@
-debugger;
-var editor = CodeMirror.fromTextArea(document.getElementById("id_raw"),
-    {'mode': current_mode});
+var editor = CodeMirror.fromTextArea(document.getElementById("id_raw"), cm_settings);
 
-$( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+$(document.body).on('click', '.dropdown-menu li', function(event) {
 
   var $target = $( event.currentTarget );
 
@@ -20,4 +18,26 @@ $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
 
   return false;
 
+});
+
+function winHeight() {
+  return window.innerHeight || (document.documentElement || document.body).clientHeight;
+}
+
+
+$(document.body).on('click', '#fullscreen', function(event) {
+    var $editor = $('#waliki_editor');
+    var is_full = $editor.hasClass('waliki_full_screen');
+    if (is_full){
+        $editor.removeClass('waliki_full_screen');
+        $(this).find('span').attr('class', 'glyphicon glyphicon-resize-full');
+        $('.form-group:not(#div_id_raw), .row:last', 'form.form').show();
+        $('.CodeMirror').height($('.CodeMirror').data('height'));
+    }else{
+        $editor.addClass('waliki_full_screen');
+        $(this).find('span').attr('class', 'glyphicon glyphicon-resize-small');
+        $('.form-group:not(#div_id_raw), .row:last', 'form.form').hide();
+        $('.CodeMirror').data('height', $('.CodeMirror').height());
+        $('.CodeMirror').height(winHeight() - 75);
+    }
 });

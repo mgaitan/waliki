@@ -85,3 +85,28 @@ div.important, div.note, div.hint {
 div#editor, div#preview {
     padding: 1.2em;
 }
+
+
+
+.CodeMirror-scroll {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.CodeMirror {
+    font-family: courier;
+    font-size: 1.3em;
+    line-height: 1.6em;
+}
+
+.waliki_full_screen {
+    background: none repeat scroll 0 0 #FFFFFF;
+    height: 100%;
+    left: 0;
+    overflow: hidden;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 5000;
+}

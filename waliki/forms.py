@@ -1,6 +1,7 @@
 from django import forms
 from .models import Page
 from ._markups import get_all_markups
+from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS
 
 
 class PageForm(forms.ModelForm):
@@ -10,10 +11,11 @@ class PageForm(forms.ModelForm):
     class Media:
         modes = tuple('codemirror/mode/%s/%s.js' % (m.codemirror_mode, m.codemirror_mode)
                       for m in get_all_markups() if hasattr(m, 'codemirror_mode'))
+        theme = ('codemirror/theme/%s.css' % CM_SETTINGS['theme'],) if 'theme' in CM_SETTINGS else ()
 
         js = ('codemirror/lib/codemirror.js',) + modes + ('js/waliki.js',)
         css = {
-            'all': ('codemirror/lib/codemirror.css',)
+            'all': ('codemirror/lib/codemirror.css', ) + theme
         }
 
     def __init__(self, *args, **kwargs):
@@ -36,4 +38,3 @@ class PageForm(forms.ModelForm):
     class Meta:
         model = Page
         fields = ['title', 'markup', 'raw', 'message']
-
