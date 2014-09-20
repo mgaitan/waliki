@@ -1,6 +1,4 @@
-$(function(){
-    var editor = CodeMirror.fromTextArea(document.getElementById("id_raw"), cm_settings);
-});
+var editor = CodeMirror.fromTextArea(document.getElementById("id_raw"), cm_settings);
 
 $(document.body).on('click', '.dropdown-menu li', function(event) {
 
