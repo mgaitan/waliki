@@ -101,7 +101,7 @@ $('#previewbtn').on('click', function(event) {
     $('#previewlink').click();
 });
 
-var current_mode = '{{ current_mode }}';
+var cm_settings = {{ cm_settings|safe }};
 </script>
 
 {{ form.media.js }}
