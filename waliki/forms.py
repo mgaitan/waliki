@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from .models import Page
 from ._markups import get_all_markups
 from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS
@@ -6,7 +7,8 @@ from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS
 
 class PageForm(forms.ModelForm):
     raw = forms.CharField(label="", widget=forms.Textarea)
-    message = forms.CharField(max_length=200, required=False)
+    # Translators: log message
+    message = forms.CharField(label=_('Log message'), max_length=200, required=False)
 
     class Media:
         modes = tuple('codemirror/mode/%s/%s.js' % (m.codemirror_mode, m.codemirror_mode)
@@ -23,7 +25,8 @@ class PageForm(forms.ModelForm):
         super(PageForm, self).__init__(*args, **kwargs)
         self.fields['raw'].initial = self.instance.raw
         self.fields['markup'].widget = forms.HiddenInput()
-        self.fields['message'].widget = forms.TextInput(attrs={'placeholder': 'Update %s' % self.instance.path})
+        # Translator: placeholder for log message
+        self.fields['message'].widget = forms.TextInput(attrs={'placeholder': _('Update %s') % self.instance.path})
         if is_hidden:
             for field in self.fields.values():
                 field.widget = forms.HiddenInput()
