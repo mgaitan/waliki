@@ -82,11 +82,9 @@ div.important, div.note, div.hint {
 }
 
 
-div#editor, div#preview {
+.pad {
     padding: 1.2em;
 }
-
-
 
 .CodeMirror-scroll {
   overflow-y: hidden;

@@ -39,7 +39,7 @@
 
 </ul>
 <div class="tab-content">
-    <div class="tab-pane active" id="editor">
+    <div class="tab-pane active pad" id="editor">
 
         <form method="post" class="form">
             {% csrf_token %}
@@ -60,7 +60,7 @@
             </div>
         </form>
     </div>
-    <div class="tab-pane" id="preview"></div>
+    <div class="tab-pane pad" id="preview"></div>
 </div>
 </div>
 
@@ -76,7 +76,7 @@ $('#previewlink').on('click', function() {
     var $form = $('.form');
   var $inputs = $form.find('input, textarea, button');
   var $pre = $('#preview');
-  var bodycontent = $('#id_raw').val();
+  var bodycontent = editor.getValue();
   $inputs.prop('disabled', true);
   $pre.removeClass('alert').removeClass('alert-error').html("Loading...");
   $.ajax({

@@ -30,14 +30,25 @@ $(document.body).on('click', '#fullscreen', function(event) {
     var is_full = $editor.hasClass('waliki_full_screen');
     if (is_full){
         $editor.removeClass('waliki_full_screen');
+        $('#editor').addClass('pad');
         $(this).find('span').attr('class', 'glyphicon glyphicon-resize-full');
         $('.form-group:not(#div_id_raw), .row:last', 'form.form').show();
         $('.CodeMirror').height($('.CodeMirror').data('height'));
     }else{
         $editor.addClass('waliki_full_screen');
+        $('#editor').removeClass('pad');
         $(this).find('span').attr('class', 'glyphicon glyphicon-resize-small');
         $('.form-group:not(#div_id_raw), .row:last', 'form.form').hide();
         $('.CodeMirror').data('height', $('.CodeMirror').height());
-        $('.CodeMirror').height(winHeight() - 75);
+        $('.CodeMirror').height(winHeight() - 52);
     }
+    editor.focus();
+});
+
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+  var target = $(e.target).attr("href");
+  if ((target == '#editor')) {
+    editor.focus();
+  }
 });
