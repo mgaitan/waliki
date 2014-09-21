@@ -1,5 +1,5 @@
 {% extends "waliki/detail.html" %}
-
+{% load i18n %}
 {% block container %}
 <div class="row">
 <div class="col-lg-offset-1 col-sm-10 col-md-10">
@@ -8,13 +8,13 @@
 
         <div class="pull-right">
         {% block page_tools %}
-            <a href="{{ page.get_absolute_url }}" class="btn btn-default btn-sm">Back to page</a>
+            <a href="{{ page.get_absolute_url }}" class="btn btn-default btn-sm">{% trans "Back to page" %}</a>
 
-            <a href="{{ page.get_edit_url }}" class="btn btn-default btn-sm">Edit</a>
+            <a href="{{ page.get_edit_url }}" class="btn btn-default btn-sm">{% trans "Edit" %}</a>
         {% endblock page_tools %}
         </div>
         {% block title %}
-            <h3 id="top">History: <a href="{{ page.get_absolute_url }}">/{{ page.slug }}</a></h3>
+            <h3 id="top">{% trans "History" %}: <a href="{{ page.get_absolute_url }}">/{{ page.slug }}</a></h3>
         {% endblock title %}
     </div>
 
@@ -24,7 +24,7 @@
 <form method="post">
     {% csrf_token %}
 <div class="form-group">
-    <button type="submit" class="btn disabled btn-default btn-sm" disabled="disabled">Compare revisions</button>
+    <button type="submit" class="btn disabled btn-default btn-sm" disabled="disabled">{% trans "Compare revisions" %}</button>
 </div>
 
 <table class="table table-striped">
@@ -50,8 +50,8 @@
 {% if history|length > 10 %}
 
 <div class="form-group">
-    <button type="submit" class="btn disabled btn-default btn-sm" disabled="disabled">Compare revisions</button>
-    <a class="btn btn-default btn-sm" href="#top"><i class="icon-chevron-up"></i>Back to top</a>
+    <button type="submit" class="btn disabled btn-default btn-sm" disabled="disabled">{% trans "Compare revisions" %}</button>
+    <a class="btn btn-default btn-sm" href="#top"><i class="icon-chevron-up"></i>{% trans "Back to top"}</a>
 </div>
 {% endif %}
 </form>

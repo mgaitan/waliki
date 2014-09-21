@@ -1,6 +1,6 @@
 var editor = CodeMirror.fromTextArea(document.getElementById("id_raw"), cm_settings);
 
-$(document.body).on('click', '.dropdown-menu li', function(event) {
+$(document.body).on('click', '#markup_menu li', function(event) {
 
   var $target = $( event.currentTarget );
 

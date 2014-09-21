@@ -1,6 +1,7 @@
 {% extends "waliki/detail.html" %}
+{% load i18n %}
 {% load bootstrap_tags %}
-{% block title %}<h1>Editing: {{ page.title }}</h1>{% endblock title %}
+{% block title %}<h1>{% trans "Editing" %}: {{ page.title }}</h1>{% endblock title %}
 
 {% block extra_head %}
  {{ form.media.css }}
@@ -14,15 +15,15 @@
 <div id="waliki_editor" class="col-sm-12 col-md-12">
 <div class="tabbable tabs-left">
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#editor" data-toggle="tab">Editor</a></li>
-    <li><a href="#preview" data-toggle="tab" id="previewlink">Preview</a></li>
+    <li class="active"><a href="#editor" data-toggle="tab">{% trans "Editor" %}</a></li>
+    <li><a href="#preview" data-toggle="tab" id="previewlink">{% trans "Preview" %}</a></li>
     <li class="pull-right">
             <div class="btn-group btn-group-sm">
 
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                    <span data-bind="label">{{ page.markup }}</span>&nbsp;&nbsp;<span class="caret"></span>
                  </button>
-                 <ul class="dropdown-menu" role="menu">
+                 <ul id="markup_menu" class="dropdown-menu" role="menu">
                     {% for markup, mode in cm_modes %}
                    <li><a href="#" data-mode="{{ mode }}">{{ markup }}</a></li>
                     {% endfor %}
@@ -49,11 +50,11 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="form-actions">
                         <div class="pull-left">
-                          <a class="btn btn-default" href="#preview" id="previewbtn">Preview</a>
+                          <a class="btn btn-default" href="#preview" id="previewbtn">{% trans "Preview" %}</a>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-default" href="{% url 'waliki_detail' page.slug %}">Cancel</a>
-                            <button class="btn btn-success" type="submit">Save</button>
+                            <a class="btn btn-default" href="{% url 'waliki_detail' page.slug %}">{% trans "Cancel" %}</a>
+                            <button class="btn btn-success" type="submit">{% trans "Save" %}</button>
                         </div>
                     </div>
                 </div>
@@ -63,12 +64,9 @@
     <div class="tab-pane pad" id="preview"></div>
 </div>
 </div>
-
 </div>
 
-
 {% endblock content %}
-
 
 {% block extra_script %}
 <script type="text/javascript">
@@ -78,18 +76,17 @@ $('#previewlink').on('click', function() {
   var $pre = $('#preview');
   var bodycontent = editor.getValue();
   $inputs.prop('disabled', true);
-  $pre.removeClass('alert').removeClass('alert-error').html("Loading...");
+  $pre.removeClass('alert').removeClass('alert-error').html('{% trans "Loading..." %}');
   $.ajax({
     url: "{% url 'waliki_preview' %}",
     type: "POST",
     data: { text: bodycontent, markup: '{{ page.markup }}' },
     success: function(msg) {
       $pre.html(msg.html);
-      // bootstrap_rst();
     },
     error: function() {
             $pre.addClass('alert').addClass('alert-error');
-      $pre.html('There was a problem with the preview.');
+      $pre.html('{% trans "There was a problem with the preview." %}');
     },
     complete: function() {
       $inputs.prop('disabled', false);
@@ -105,6 +102,5 @@ var cm_settings = {{ cm_settings|safe }};
 </script>
 
 {{ form.media.js }}
-
 
 {% endblock extra_script %}

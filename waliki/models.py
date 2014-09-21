@@ -2,15 +2,20 @@
 import os.path
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from waliki import _markups, settings
 
 
 class Page(models.Model):
     MARKUP_CHOICES = [(m.name, m.name) for m in _markups.get_all_markups()]
-    title = models.CharField(max_length=200)
+    title = models.CharField(verbose_name=_('Title'), max_length=200)
     slug = models.CharField(max_length=200, unique=True)
     path = models.CharField(max_length=200, unique=True)
-    markup = models.CharField(max_length=20, choices=MARKUP_CHOICES, default=settings.WALIKI_DEFAULT_MARKUP)
+    markup = models.CharField(verbose_name=_('Markup'), max_length=20, choices=MARKUP_CHOICES, default=settings.WALIKI_DEFAULT_MARKUP)
+
+    class Meta:
+        verbose_name = _('Page')
+        verbose_name_plural = _('Pages')
 
     def __str__(self):
         return self.__unicode__()
