@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-09-20 22:40-0300\n"
+"POT-Creation-Date: 2014-09-20 22:40-0300\n"
+"Last-Translator: Martín Gaitán <gaitan@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Translators: log message
+#: forms.py:11
+msgid "Log message"
+msgstr "Mensaje de log"
+
+#: forms.py:29
+#, python-format
+msgid "Update %s"
+msgstr "Actualiza %s"
+
+#: models.py:11
+msgid "Title"
+msgstr "Título"
+
+#: models.py:14
+msgid "Markup"
+msgstr "Markup"
+
+#: models.py:17
+msgid "Page"
+msgstr "Página"
+
+#: models.py:18
+msgid "Pages"
+msgstr "Páginas"
+
+#: git/templates/waliki/diff.html:7 git/templates/waliki/history.html:17
+msgid "History"
+msgstr "Historial"
+
+#: git/templates/waliki/diff.html:14
+msgid "Comparing"
+msgstr "Comparando"
+
+#: git/templates/waliki/history.html:11
+msgid "Back to page"
+msgstr "Volver a la página"
+
+#: git/templates/waliki/history.html:13 templates/waliki/detail.html:9
+msgid "Edit"
+msgstr "Editar"
+
+#: git/templates/waliki/history.html:27 git/templates/waliki/history.html:53
+msgid "Compare revisions"
+msgstr "Comparar versiones"
+
+#: git/templates/waliki/version.html:17
+msgid "Restore this version"
+msgstr "Restaurar esta versión"
+
+#: templates/waliki/detail.html:16
+msgid "Delete"
+msgstr "Eliminar"
+
+#: templates/waliki/detail.html:31
+msgid "This page doesn't exist yet."
+msgstr "Ésta página todavía no existe."
+
+#: templates/waliki/detail.html:32
+msgid "Create it"
+msgstr "Creala"
+
+#: templates/waliki/detail.html:47
+#, python-format
+msgid ""
+"\n"
+"        Are you sure you want to delete %(title)s?\n"
+"        "
+msgstr ""
+"\n"
+"        ¿Estás seguro de que quieres eliminar %(title)s?\n"
+"        "
+
+#: templates/waliki/detail.html:50 templates/waliki/edit.html:56
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/waliki/detail.html:51
+msgid "Yes, delete"
+msgstr "Sí, eliminar"
+
+#: templates/waliki/edit.html:4
+msgid "Editing"
+msgstr "Editando"
+
+#: templates/waliki/edit.html:18
+msgid "Editor"
+msgstr "Editor"
+
+#: templates/waliki/edit.html:19 templates/waliki/edit.html.py:53
+msgid "Preview"
+msgstr "Previsualizar"
+
+#: templates/waliki/edit.html:57
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/waliki/edit.html:79
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: templates/waliki/edit.html:89
+msgid "There was a problem with the preview."
+msgstr "Hubo un problema con la previsualización."
