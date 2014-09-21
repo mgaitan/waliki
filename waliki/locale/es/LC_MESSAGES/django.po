@@ -8,8 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-20 22:40-0300\n"
-"POT-Creation-Date: 2014-09-20 22:40-0300\n"
+"POT-Creation-Date: 2014-09-21 03:05-0300\n"
 "Last-Translator: Martín Gaitán <gaitan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -44,7 +43,8 @@ msgstr "Página"
 msgid "Pages"
 msgstr "Páginas"
 
-#: git/templates/waliki/diff.html:7 git/templates/waliki/history.html:17
+#: git/waliki_plugin.py:9 git/templates/waliki/diff.html:7
+#: git/templates/waliki/history.html:17
 msgid "History"
 msgstr "Historial"
 
@@ -67,6 +67,10 @@ msgstr "Comparar versiones"
 #: git/templates/waliki/version.html:17
 msgid "Restore this version"
 msgstr "Restaurar esta versión"
+
+#: pdf/waliki_plugin.py:8
+msgid "Get as PDF"
+msgstr "Descargar PDF"
 
 #: templates/waliki/detail.html:16
 msgid "Delete"
