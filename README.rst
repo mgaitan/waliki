@@ -32,6 +32,7 @@ At a glance, Waliki has:
 - Version control for your content using Git
 - Extensible architecture with plugins
 - Markdown, reStructuredText or textile markups. Easy to add more.
+- A simple ACL system
 - UI based on Twitter's Bootstrap
 
 How to start
