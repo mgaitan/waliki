@@ -44,14 +44,22 @@ class GroupFactory(factory.django.DjangoModelFactory):
 class ACLRuleFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ACLRule
+
+    name = factory.Sequence(lambda n: u'Rule {0}'.format(n))
     slug = factory.Sequence(lambda n: u'page{0}'.format(n))
 
-    @classmethod
-    def _prepare(cls, create, **kwargs):
-        if 'permission' in kwargs and not isinstance(kwargs['permission'], Permission):
-            kwargs['permission'] = Permission.objects.get(content_type__app_label='waliki',
-                                                          codename=kwargs['permission'])
-        return super(ACLRuleFactory, cls)._prepare(create, **kwargs)
+    @factory.post_generation
+    def permissions(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for perm in extracted:
+                if not isinstance(perm, Permission):
+                    perm = Permission.objects.get(content_type__app_label='waliki', codename=perm)
+                self.permissions.add(perm)
 
     @factory.post_generation
     def users(self, create, extracted, **kwargs):

@@ -99,15 +99,23 @@ class Page(models.Model):
 
 
 class ACLRule(models.Model):
-    permission = models.ForeignKey(Permission, limit_choices_to={'content_type__app_label': 'waliki'})
-    slug = models.CharField(max_length=200, unique=True)
+    name = models.CharField(verbose_name=_('Name'), max_length=200, unique=True)
+    slug = models.CharField(max_length=200)
+    as_namespace = models.BooleanField(verbose_name=_('As namespace'), default=False)
+    permissions = models.ManyToManyField(Permission, limit_choices_to={'content_type__app_label': 'waliki'})
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
     groups = models.ManyToManyField(Group, blank=True)
+
+    def __unicode__(self):
+        return u'Rule: ' + self.name + ' for /' + self.slug
+
+    def __str__(self):
+        return self.__unicode__()
 
     @classmethod
     def get_users_for(cls, perm, slug):
         # TODO check parent namespace for an slug
         User = get_user_model()
-        lookup = Q(aclrule__permission__codename=perm, aclrule__slug=slug)
-        lookup |= Q(groups__aclrule__permission__codename=perm, groups__aclrule__slug=slug)
+        lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
+        lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
         return User.objects.filter(lookup).distinct()

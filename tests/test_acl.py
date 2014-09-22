@@ -7,14 +7,14 @@ class TestGetUsersRules(TestCase):
 
     def test_simple_user(self):
         user = UserFactory()
-        ACLRuleFactory(slug='page', permission='view_page', users=[user])
+        ACLRuleFactory(slug='page', permissions=['view_page'], users=[user])
         users = ACLRule.get_users_for('view_page', 'page')
         self.assertEqual(set(users), {user})
 
     def test_simple_group(self):
         group_users = [UserFactory(), UserFactory()]
         group = GroupFactory(users=group_users)
-        ACLRuleFactory(slug='page', permission='view_page', groups=[group])
+        ACLRuleFactory(slug='page', permissions=['view_page'], groups=[group])
         users = ACLRule.get_users_for('view_page', 'page')
         self.assertEqual(set(users), set(group_users))
 
@@ -24,7 +24,17 @@ class TestGetUsersRules(TestCase):
         group2_users = [UserFactory(), UserFactory()]
         group1 = GroupFactory(users=group1_users)
         group2 = GroupFactory(users=group2_users)
-        ACLRuleFactory(slug='page', permission='view_page',
+        ACLRuleFactory(slug='page', permissions=['view_page'],
                        groups=[group1, group2], users=[user])
         users = ACLRule.get_users_for('view_page', 'page')
         self.assertEqual(set(users), set(group1_users + group2_users + [user]))
+
+    def test_is_distinct(self):
+        user = UserFactory()
+        group1_users = [user]
+        group1 = GroupFactory(users=group1_users)
+        ACLRuleFactory(slug='page', permissions=['view_page'],
+                       groups=[group1], users=[user])
+        users = ACLRule.get_users_for('view_page', 'page')
+        self.assertEqual(users.count(), 1)
+        self.assertEqual(set(users), set(group1_users))
