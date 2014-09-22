@@ -11,11 +11,15 @@ class Page(models.Model):
     title = models.CharField(verbose_name=_('Title'), max_length=200)
     slug = models.CharField(max_length=200, unique=True)
     path = models.CharField(max_length=200, unique=True)
-    markup = models.CharField(verbose_name=_('Markup'), max_length=20, choices=MARKUP_CHOICES, default=settings.WALIKI_DEFAULT_MARKUP)
+    markup = models.CharField(verbose_name=_('Markup'), max_length=20,
+                              choices=MARKUP_CHOICES, default=settings.WALIKI_DEFAULT_MARKUP)
 
     class Meta:
         verbose_name = _('Page')
         verbose_name_plural = _('Pages')
+        permissions = (
+            ('view_page', _('View page')),
+        )
 
     def __str__(self):
         return self.__unicode__()
