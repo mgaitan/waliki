@@ -18,7 +18,7 @@ class Page(models.Model):
         verbose_name = _('Page')
         verbose_name_plural = _('Pages')
         permissions = (
-            ('view_page', _('View page')),
+            ('view_page', 'Can view page'),
         )
 
     def __str__(self):
