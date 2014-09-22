@@ -23,7 +23,7 @@ class Git(object):
     def commit(self, path, message='', author=None):
         kwargs = {}
         if isinstance(author, User) and author.is_authenticated():
-            kwargs['author'] = "% <%s>" % (author.get_full_name() or author.username)
+            kwargs['author'] = u"%s <%s>" % (author.get_full_name() or author.username, author.email)
         elif isinstance(author, six.string_types):
             kwargs['author'] = author
         try:

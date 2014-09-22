@@ -6,7 +6,7 @@
     <div class="pull-right">
     {% block actions %}
         <div class="btn-group">
-            <a href="{% url 'waliki_edit' slug=page.slug %}" class="btn btn-default">{% trans "Edit" %}</a>
+            <a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-default">{% trans "Edit" %}</a>
             <button class="btn dropdown-toggle btn-default" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
@@ -29,7 +29,7 @@
         {{ page.body|safe }}
     {% else %}
         <p>{% trans "This page doesn't exist yet." %}</p>
-        <p><a href="{% url 'waliki_edit' slug=page.slug %}" class="btn btn-success">{% trans "Create it" %}</a></p>
+        <p><a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-success">{% trans "Create it" %}</a></p>
     {% endif %}
 
  {% if page.footer %}

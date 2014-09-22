@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 import os.path
 from django.db import models
+from django.db.models import Q
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from waliki import _markups, settings
+from django.contrib.auth.models import Permission, Group
+from django.contrib.auth import get_user_model
+
+from . import _markups
+from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
 
 
 class Page(models.Model):
@@ -11,11 +17,15 @@ class Page(models.Model):
     title = models.CharField(verbose_name=_('Title'), max_length=200)
     slug = models.CharField(max_length=200, unique=True)
     path = models.CharField(max_length=200, unique=True)
-    markup = models.CharField(verbose_name=_('Markup'), max_length=20, choices=MARKUP_CHOICES, default=settings.WALIKI_DEFAULT_MARKUP)
+    markup = models.CharField(verbose_name=_('Markup'), max_length=20,
+                              choices=MARKUP_CHOICES, default=WALIKI_DEFAULT_MARKUP)
 
     class Meta:
         verbose_name = _('Page')
         verbose_name_plural = _('Pages')
+        permissions = (
+            ('view_page', 'Can view page'),
+        )
 
     def __str__(self):
         return self.__unicode__()
@@ -44,7 +54,7 @@ class Page(models.Model):
 
     @raw.setter
     def raw(self, value):
-        filename = os.path.join(settings.WALIKI_DATA_DIR, self.path)
+        filename = os.path.join(WALIKI_DATA_DIR, self.path)
         try:
             os.makedirs(os.path.dirname(filename))
         except OSError:
@@ -54,11 +64,11 @@ class Page(models.Model):
 
     @property
     def abspath(self):
-        return os.path.abspath(os.path.join(settings.WALIKI_DATA_DIR, self.path))
+        return os.path.abspath(os.path.join(WALIKI_DATA_DIR, self.path))
 
     @staticmethod
     def get_markup_instance(markup):
-        markup_settings = settings.WALIKI_MARKUPS_SETTINGS.get(markup, None)
+        markup_settings = WALIKI_MARKUPS_SETTINGS.get(markup, None)
         markup_class = _markups.find_markup_class_by_name(markup)
         return markup_class(**markup_settings)
 
@@ -86,3 +96,26 @@ class Page(models.Model):
     @property
     def javascript(self):
         return self._get_part('get_javascript')
+
+
+class ACLRule(models.Model):
+    name = models.CharField(verbose_name=_('Name'), max_length=200, unique=True)
+    slug = models.CharField(max_length=200)
+    as_namespace = models.BooleanField(verbose_name=_('As namespace'), default=False)
+    permissions = models.ManyToManyField(Permission, limit_choices_to={'content_type__app_label': 'waliki'})
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
+    groups = models.ManyToManyField(Group, blank=True)
+
+    def __unicode__(self):
+        return u'Rule: ' + self.name + ' for /' + self.slug
+
+    def __str__(self):
+        return self.__unicode__()
+
+    @classmethod
+    def get_users_for(cls, perm, slug):
+        # TODO check parent namespace for an slug
+        User = get_user_model()
+        lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
+        lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
+        return User.objects.filter(lookup).distinct()

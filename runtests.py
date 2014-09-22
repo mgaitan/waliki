@@ -23,7 +23,8 @@ try:
             "waliki",
         ],
         SITE_ID=1,
-        NOSE_ARGS=['-s'],
+        NOSE_ARGS=['-s', '--nologcapture', '--nocapture',
+                   '--with-id', '--logging-clear-handlers'],
         WALIKI_DATA_DIR=WALIKI_DATA_DIR,
     )
 
