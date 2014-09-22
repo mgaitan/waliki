@@ -7,5 +7,6 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'waliki_project.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^', include('waliki.urls')),
 )
