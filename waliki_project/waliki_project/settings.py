@@ -39,7 +39,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     # allauth specific context processors
     "allauth.account.context_processors.account",
     "allauth.socialaccount.context_processors.socialaccount",
-    )
+)
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -55,7 +55,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'guardian',
     'waliki',
     'waliki.git',
     'waliki.pdf',
@@ -104,8 +103,6 @@ USE_L10N = True
 USE_TZ = True
 
 SITE_ID = 1
-
-ANONYMOUS_USER_ID = -1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
