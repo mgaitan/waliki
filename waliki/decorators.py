@@ -8,10 +8,21 @@ from django.utils.six.moves.urllib.parse import urlparse
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import resolve_url
 from .models import ACLRule
-from .settings import WALIKI_ANONYMOUS_USER_PERMISSIONS, WALIKI_LOGGED_USER_PERMISSIONS
+from .settings import (WALIKI_ANONYMOUS_USER_PERMISSIONS, WALIKI_LOGGED_USER_PERMISSIONS,
+                       WALIKI_RENDER_403)
 
 
-def page_permission(perm, login_url=None, raise_exception=False, redirect_field_name=REDIRECT_FIELD_NAME):
+def permission_required(perm, login_url=None, raise_exception=False, redirect_field_name=REDIRECT_FIELD_NAME):
+    """
+    this is analog to django's builtin ``permission_required`` decorator, but
+    improved to check per slug ACLRules and default permissions for
+    anonymous and logged in users
+
+    if there is a rule affecting a slug, the user needs to be part of the
+    rule's allowed users. If there isn't a matching rule, defaults permissions
+    apply.
+    """
+
     def decorator(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
@@ -27,10 +38,12 @@ def page_permission(perm, login_url=None, raise_exception=False, redirect_field_
                 if user.is_authenticated() and perm in WALIKI_LOGGED_USER_PERMISSIONS:
                     return True
 
+                # default "column" permissions.
                 if not isinstance(perm, (list, tuple)):
                     perms = (perm, )
                 else:
                     perms = perm
+
                 # First check if the user has the permission (even anon users)
                 if user.has_perms(perms):
                     return True

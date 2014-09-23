@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
 from waliki.models import Page
 from waliki.forms import PageForm
+from waliki.decorators import permission_required
 from . import Git
 
 
+@permission_required('view_page')
 def history(request, slug):
     page = get_object_or_404(Page, slug=slug)
     if request.method == 'POST':
@@ -18,6 +20,7 @@ def history(request, slug):
                                                    'max_changes': max_changes})
 
 
+@permission_required('view_page')
 def version(request, slug, version):
     page = get_object_or_404(Page, slug=slug)
     content = Git().version(page, version)
@@ -32,14 +35,14 @@ def version(request, slug, version):
                                                    'version': version,
                                                    'form': form})
 
-
+@permission_required('view_page')
 def diff(request, slug, old, new):
     page = get_object_or_404(Page, slug=slug)
     old_content = Git().version(page, old)
     new_content = Git().version(page, new)
     return render(request, 'waliki/diff.html', {'page': page,
-                                                   'old_content': old_content,
-                                                   'new_content': new_content,
-                                                   'slug': slug,
-                                                   'old_commit': old,
-                                                   'new_commit': new})
+                                                'old_content': old_content,
+                                                'new_content': new_content,
+                                                'slug': slug,
+                                                'old_commit': old,
+                                                'new_commit': new})

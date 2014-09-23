@@ -5,7 +5,7 @@ from .models import Page
 from .forms import PageForm
 from .signals import page_saved
 from ._markups import get_all_markups
-from .decorators import page_permission
+from .decorators import permission_required
 from . import settings
 
 
@@ -13,7 +13,7 @@ def home(request):
     return detail(request, slug=settings.WALIKI_INDEX_SLUG)
 
 
-@page_permission('view_page')
+@permission_required('view_page')
 def detail(request, slug):
     slug = slug.strip('/')
     try:
@@ -23,7 +23,7 @@ def detail(request, slug):
     return render(request, 'waliki/detail.html', {'page': page, 'slug': slug})
 
 
-@page_permission('change_page')
+@permission_required('change_page')
 def edit(request, slug):
     slug = slug.strip('/')
     page, _ = Page.objects.get_or_create(slug=slug)
@@ -54,7 +54,7 @@ def preview(request):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-@page_permission('delete_page')
+@permission_required('delete_page')
 def delete(request, slug):
     return render(request, 'waliki/detail.html', {})
 
