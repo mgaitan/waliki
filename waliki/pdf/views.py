@@ -4,8 +4,10 @@ from django.shortcuts import get_object_or_404
 from waliki.models import Page
 from waliki.utils import send_file
 from waliki.settings import WALIKI_PDF_INCLUDE_TITLE
+from waliki.decorators import page_permission
 
 
+@page_permission('view_page')
 def pdf(request, slug):
     page = get_object_or_404(Page, slug=slug)
 

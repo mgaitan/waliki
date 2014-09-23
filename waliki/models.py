@@ -107,10 +107,14 @@ class ACLRule(models.Model):
     groups = models.ManyToManyField(Group, blank=True)
 
     def __unicode__(self):
-        return u'Rule: ' + self.name + ' for /' + self.slug
+        return _('Rule: %(name)s for /%(slug)s') % {'name': self.name, 'slug': self.slug}
 
     def __str__(self):
         return self.__unicode__()
+
+    class Meta:
+        verbose_name = _('ACL rule')
+        verbose_name_plural = _('ACL rules')
 
     @classmethod
     def get_users_for(cls, perm, slug):
