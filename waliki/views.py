@@ -54,6 +54,7 @@ def preview(request):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+@page_permission('delete_page')
 def delete(request, slug):
     return render(request, 'waliki/detail.html', {})
 
