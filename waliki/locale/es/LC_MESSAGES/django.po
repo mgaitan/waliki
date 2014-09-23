@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-21 03:05-0300\n"
+"POT-Creation-Date: 2014-09-23 00:03-0300\n"
 "Last-Translator: Martín Gaitán <gaitan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,24 +27,8 @@ msgstr "Mensaje de log"
 msgid "Update %s"
 msgstr "Actualiza %s"
 
-#: models.py:11
-msgid "Title"
-msgstr "Título"
-
-#: models.py:14
-msgid "Markup"
-msgstr "Markup"
-
-#: models.py:17
-msgid "Page"
-msgstr "Página"
-
-#: models.py:18
-msgid "Pages"
-msgstr "Páginas"
-
-#: git/waliki_plugin.py:9 git/templates/waliki/diff.html:7
-#: git/templates/waliki/history.html:17
+#: git/templates/waliki/diff.html:7 git/templates/waliki/history.html:17
+#: git/waliki_plugin.py:9
 msgid "History"
 msgstr "Historial"
 
@@ -68,9 +52,50 @@ msgstr "Comparar versiones"
 msgid "Restore this version"
 msgstr "Restaurar esta versión"
 
+#: models.py:17
+msgid "Title"
+msgstr "Título"
+
+#: models.py:20
+msgid "Markup"
+msgstr "Markup"
+
+#: models.py:24
+msgid "Page"
+msgstr "Página"
+
+#: models.py:25
+msgid "Pages"
+msgstr "Páginas"
+
+#: models.py:102
+msgid "Name"
+msgstr "Nombre"
+
+#: models.py:104
+msgid "As namespace"
+msgstr "Como espacio de nombre"
+
+#: models.py:110
+#, python-format
+msgid "Rule: %(name)s for /%(slug)s"
+msgstr "Regla: %(name)s para /%(slug)s"
+
+#: models.py:116
+msgid "ACL rule"
+msgstr "Regla ACL"
+
+#: models.py:117
+msgid "ACL rules"
+msgstr "Reglas ACL"
+
 #: pdf/waliki_plugin.py:8
 msgid "Get as PDF"
 msgstr "Descargar PDF"
+
+#: templates/waliki/403.html:5
+msgid "You aren't authorized to see this page."
+msgstr "No estás autorizado a ver esta página."
 
 #: templates/waliki/detail.html:16
 msgid "Delete"
