@@ -26,7 +26,7 @@
 :license: `BSD <https://github.com/mgaitan/waliki/blob/master/LICENSE>`_
 
 
-At a glance, Waliki has:
+At a glance, Waliki has this features:
 
 - File based content storage.
 - Version control for your content using Git
@@ -34,6 +34,7 @@ At a glance, Waliki has:
 - Markdown, reStructuredText or textile markups. Easy to add more.
 - A simple ACL system
 - UI based on Twitter's Bootstrap
+- Works with Python 2.7, 3.3+ or PyPy in Django 1.5 or newer
 
 How to start
 ------------
@@ -59,6 +60,11 @@ Include the waliki urls in your project's ``urls.py``::
         url(r'^wiki/', include('waliki.urls')),
         ...
     )
+
+Sync your db::
+
+    $ python manage.py syncdb
+
 
 Enjoy!
 
