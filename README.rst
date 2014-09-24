@@ -41,7 +41,12 @@ How to start
 
 Install with::
 
-    $ pip install waliki
+    $ pip install
+
+Or the development version ::
+
+    $ pip install https://github.com/mgaitan/waliki/tarball/master
+
 
 Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
 
