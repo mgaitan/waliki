@@ -73,6 +73,6 @@ WALIKI_ANONYMOUS_USER_PERMISSIONS = getattr(settings, 'WALIKI_ANONYMOUS_USER_PER
                                             ('view_page',))
 
 WALIKI_LOGGED_USER_PERMISSIONS = getattr(settings, 'WALIKI_LOGGED_USER_PERMISSIONS',
-                                            ('add_page', 'change_page'))
+                                         ('view_page', 'add_page', 'change_page'))
 
 WALIKI_RENDER_403 = getattr(settings, 'WALIKI_RENDER_403', True)

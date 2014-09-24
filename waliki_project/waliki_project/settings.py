@@ -111,6 +111,6 @@ STATIC_URL = '/static/'
 
 
 try:
-    from local_settings import *    # noqa
+    from .local_settings import *    # noqa
 except:
     pass
