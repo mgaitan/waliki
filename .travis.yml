@@ -4,6 +4,7 @@ python:
   - "3.3"
   - "3.4"
   - "pypy"
+
 env:
   - DJANGO=1.5.9
   - DJANGO=1.6.7
