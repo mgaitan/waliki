@@ -98,3 +98,9 @@ def find_markup_class_by_name(name):
     for markup in (ReStructuredTextMarkup, MarkdownMarkup, TextileMarkup):
         if markup.name.lower() == name.lower():
             return markup
+
+
+def find_markup_class_by_extension(extension):
+    for markup in (ReStructuredTextMarkup, MarkdownMarkup, TextileMarkup):
+        if extension.lower() in markup.file_extensions:
+            return markup
