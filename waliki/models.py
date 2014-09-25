@@ -4,11 +4,13 @@ from django.db import models
 from django.db.models import Q
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth import get_user_model
 
 from . import _markups
+from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
 
 
@@ -44,6 +46,19 @@ class Page(models.Model):
         if not self.path:
             self.path = self.slug + self._markup.file_extensions[0]
         super(Page, self).save(*args, **kwargs)
+
+    @classmethod
+    def from_path(cls, path, markup=None):
+
+        filename, ext = os.path.splitext(path)
+        if markup and isinstance(markup, string_types):
+            markup = _markups.find_markup_class_by_name(markup)
+        else:
+            markup = _markups.find_markup_class_by_extension(ext)
+        page = Page(path=path, slug=get_slug(filename), markup=markup.name)
+        page.title = page._get_part('get_document_title')
+        page.save()
+        return page
 
     @property
     def raw(self):

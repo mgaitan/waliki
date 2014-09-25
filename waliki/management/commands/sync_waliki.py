@@ -16,7 +16,7 @@ class Command(BaseCommand):
         make_option('--ignored_dirs',
                     dest='ignored_dirs',
                     default=".git",
-                    help="List of directories to ignore, separeted by comman. Default: '.git'"),
+                    help="List of directories to ignore, separated by comman. Default: '.git'"),
     ) + BaseCommand.option_list
 
     def handle(self, *args, **options):
@@ -32,3 +32,8 @@ class Command(BaseCommand):
                 if not Page.objects.filter(path=path).exists():
                     page = Page.from_path(path)
                     self.stdout.write('Created page %s for %s' % (page.get_absolute_url(), path))
+
+        for page in Page.objects.all():
+            if not os.path.exists(page.abspath):
+                self.stdout.write('Deleted page %s (missing %s)' % (page.get_absolute_url(), page.path))
+                page.delete()
