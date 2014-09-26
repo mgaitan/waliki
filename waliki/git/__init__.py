@@ -20,19 +20,29 @@ class Git(object):
             git.init()
             self.commit('.', 'initial commit')
 
-    def commit(self, path, message='', author=None):
+    def commit(self, page, message='', author=None, parent=None):
+        path = page.path
         kwargs = {}
         if isinstance(author, User) and author.is_authenticated():
             kwargs['author'] = u"%s <%s>" % (author.get_full_name() or author.username, author.email)
         elif isinstance(author, six.string_types):
             kwargs['author'] = author
+
         try:
-            git.add(path)
-            git.commit(path, m=message or 'Update %s' % path, **kwargs)
+            if parent:
+                git.stash()
+                git.checkout('--detach', parent)
+                git.stash('pop')
+            git.commit(path, allow_empty_message=True, m=message, **kwargs)
+            last = self.last_version(page)
+            if parent:
+                git.checkout('master')
+                git.merge(last)
+
         except:
             # TODO: make this more robust!
             # skip when stage is empty
-            pass
+            raise
 
     def history(self, page):
         data = [("commit", "%h"),
@@ -64,3 +74,6 @@ class Git(object):
             return six.text_type(git.show('%s:%s' % (version, page.path)))
         except:
             return ''
+
+    def last_version(self, page):
+        return six.text_type(git.log("--pretty=format:%h", "-n 1", page.path))

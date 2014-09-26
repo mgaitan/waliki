@@ -9,6 +9,8 @@ class PageForm(forms.ModelForm):
     raw = forms.CharField(label="", widget=forms.Textarea)
     # Translators: log message
     message = forms.CharField(label=_('Log message'), max_length=200, required=False)
+    extra_data = forms.CharField(widget=forms.HiddenInput, required=False)
+
 
     class Media:
         modes = tuple('codemirror/mode/%s/%s.js' % (m.codemirror_mode, m.codemirror_mode)
