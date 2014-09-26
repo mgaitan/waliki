@@ -51,8 +51,9 @@ class Git(object):
                 ("date_relative", "%ar"),
                 ("message", "%s")]
         format = "{%s}" % ','.join([""" \"%s\": \"%s\" """ % item for item in data])
-        output = git.log('--format=%s' % format, '-z', '--shortstat', page.abspath)
-        output = output.replace('\x00', '').split('\n')[:-1]
+        output = git.log('--format=%s' % format, '-z', '--no-merges', '--shortstat', page.abspath)
+        import ipdb; ipdb.set_trace()
+        output = output.replace('\x00', '').replace('}{', '}\n{').split('\n')[:-1]
         history = []
         for line in output:
             if line.startswith('{'):
