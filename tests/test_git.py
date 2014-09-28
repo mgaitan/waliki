@@ -1,8 +1,10 @@
+import os
+from sh import git, pwd
 from django.test import TestCase
-from sh import git
 from django.core.urlresolvers import reverse
 from waliki.models import Page
 from waliki.git import Git
+from waliki.settings import WALIKI_DATA_DIR
 from .factories import PageFactory
 
 
@@ -22,6 +24,17 @@ class TestGit(TestCase):
         self.assertEqual(Git().version(self.page, 'HEAD'), "test content")
         self.assertIn("testing :)", git.log('-s', '--format=%s', self.page.path))
 
+    def test_commit_existent_page_with_previous_commits(self):
+        self.page.raw = "lala"
+        Git().commit(self.page, message="previous commit")
+        assert "previous commit" in git.log('-s', '--format=%s', self.page.path)
+        response = self.client.get(self.edit_url)
+        data = response.context[0]['form'].initial
+        data["raw"] = "test content"
+        response = self.client.post(self.edit_url, data)
+        self.assertEqual(self.page.raw, "test content")
+        self.assertEqual(Git().version(self.page, 'HEAD'), "test content")
+
     def test_commit_new_page(self):
         assert not Page.objects.filter(slug='test').exists()
         url = reverse('waliki_edit', args=('test',))
@@ -37,5 +50,6 @@ class TestGit(TestCase):
         self.assertEqual(page.title, "Test Page")
         self.assertEqual(page.raw, "hey there\n")
         self.assertEqual(Git().version(page, 'HEAD'), "hey there\n")
+
 
 
