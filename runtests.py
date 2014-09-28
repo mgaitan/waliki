@@ -20,12 +20,24 @@ try:
             "django.contrib.auth",
             "django.contrib.contenttypes",
             "django.contrib.sites",
+            "django.contrib.staticfiles",
             "waliki",
+            "waliki.git"
         ],
+        MIDDLEWARE_CLASSES=(
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.middleware.common.CommonMiddleware',
+            'django.middleware.csrf.CsrfViewMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+            'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        ),
+        STATIC_URL='/static/',
         SITE_ID=1,
         NOSE_ARGS=['-s', '--nologcapture', '--nocapture',
                    '--with-id', '--logging-clear-handlers'],
         WALIKI_DATA_DIR=WALIKI_DATA_DIR,
+        WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page')
     )
 
     try:
