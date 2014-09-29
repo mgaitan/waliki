@@ -80,7 +80,7 @@ Why "Waliki" ?
 **Waliki** is an `Aymara <http://en.wikipedia.org/wiki/Aymara_language>`_ word that means *all right*, *fine*.
 
 It sounds a bit like *Wiki*, has a meaningful sense for this project
-and also plays with the idea of using a "non mainstream" language [1]_ .
+and also plays with the idea of using a non-mainstream language [1]_ .
 
 And last but not less important, it's a humble tribute to bolivian `President Evo Morales Ayma <http://en.wikipedia.org/wiki/Evo_Morales>`_
 
