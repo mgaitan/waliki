@@ -1,0 +1,36 @@
+{% extends "waliki/detail.html" %}
+{% load i18n %}
+{% block header %}
+    {% block title %}<h1>{% trans "What changed" %}</h1>{% endblock title %}
+{% endblock %}
+
+{% block content %}
+
+
+<table class="table table-striped">
+        <tbody>
+            {% for change in changes %}
+                <tr>
+                  <td class="col-sm-1"><a href="{{ change.page.get_absolute_url }}">{{ change.page.get_absolute_url }}</td>
+                  <td class="col-sm-1"><a href="{% url 'waliki_version' change.page.slug change.version %}">{{ change.version }}</a></td>
+                  {% with change.version|add:"^" as parent %}
+                  <td class="col-sm-1"><a href="{% url 'waliki_diff' change.page.slug parent change.version %}">{% trans "diff" %}</a></td>
+                  {% endwith %}
+                  <td class="col-sm-1">{{ change.author }}</td>
+                  <td class="col-sm-2" title="{{ change.date }}">{{ change.date }}</td>
+                  <td class="col-sm-3">{{ change.message }}</td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% if changes|length > 10 %}
+
+<div class="form-group">
+    <a class="btn btn-default btn-sm" href="#top"><i class="icon-chevron-up"></i>{% trans "Back to top" %}</a>
+</div>
+{% endif %}
+
+</div>
+</div>
+{% endblock content %}
