@@ -51,10 +51,7 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
-    codemirror_mode = 'rst'
-    # see bug https://github.com/marijnh/CodeMirror/issues/2740
-    codemirror_mode_name = 'rst-base'
-
+    codemirror_mode = codemirror_mode_name = 'rst'
 
     def __init__(self, filename=None, **kwargs):
         settings_overrides = kwargs.pop('settings_overrides', None)
@@ -65,7 +62,8 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         if 'rest_parts' in self._cache:
             return self._cache['rest_parts']
         parts = self._publish_parts(text, source_path=self.filename,
-            settings_overrides=self.overrides, **self.kwargs)
+                                    settings_overrides=self.overrides,
+                                    **self.kwargs)
         if self._enable_cache:
             self._cache['rest_parts'] = parts
         return parts
