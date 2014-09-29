@@ -39,11 +39,11 @@ At a glance, Waliki has this features:
 How to start
 ------------
 
-Install with::
+Install it with pip::
 
-    $ pip install
+    $ pip install waliki
 
-Or the development version ::
+Or the development version::
 
     $ pip install https://github.com/mgaitan/waliki/tarball/master
 
@@ -53,12 +53,12 @@ Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
     INSTALLED_APPS = (
         ...
         'waliki',
-        'waliki.git',   # optional
+        'waliki.git',   # optional but recommended
         'waliki.pdf',   # optional
         ...
     )
 
-Include the waliki urls in your project's ``urls.py``::
+Include ``waliki.urls`` in your project's ``urls.py``. For example::
 
     urlpatterns = patterns('',
         ...

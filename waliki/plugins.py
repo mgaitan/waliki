@@ -11,6 +11,7 @@ from django.utils.importlib import import_module
 
 _cache = {}
 _extra_page_actions = {}
+_navbar_links = []
 
 
 class BasePlugin(object):
@@ -22,8 +23,8 @@ class BasePlugin(object):
     # settings_form = None    # A form class to add to the settings tab
     urls_root = []   # General urlpatterns that will reside in waliki root
     urls_page = []    # urlpatterns that receive page slug  .../page/slug/
-    extra_page_actions = {}   # {'all': (_('Attachments'), "icon-file")}
-
+    extra_page_actions = {}   # Example: {'all': [('waliki_history', _('History'))]}
+    navbar_links = ()   # (('waliki_whatchanged', _('What changed')),)
 
 
 def get_module(app, modname, verbose, failfast):
@@ -68,11 +69,14 @@ def register(PluginClass):
     plugin = PluginClass()
     _cache[PluginClass] = plugin
 
-    if getattr(PluginClass, 'extra_page_actions', None):
+    if getattr(PluginClass, 'extra_page_actions', False):
         for key in plugin.extra_page_actions:
             if key not in _extra_page_actions:
                 _extra_page_actions[key] = []
             _extra_page_actions[key].extend(plugin.extra_page_actions[key])
+
+    if getattr(PluginClass, 'navbar_links', False):
+        _navbar_links.extend(list(plugin.navbar_links))
 
 
 def page_urls():
@@ -90,3 +94,7 @@ def get_plugins():
 
 def get_extra_page_actions():
     return _extra_page_actions
+
+
+def get_navbar_links():
+    return _navbar_links
