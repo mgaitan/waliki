@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-23 00:03-0300\n"
+"POT-Creation-Date: 2014-09-29 13:24-0300\n"
 "Last-Translator: Martín Gaitán <gaitan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -22,10 +22,14 @@ msgstr ""
 msgid "Log message"
 msgstr "Mensaje de log"
 
-#: forms.py:29
+#: forms.py:31
 #, python-format
 msgid "Update %s"
 msgstr "Actualiza %s"
+
+#: git/__init__.py:58
+msgid "Automatic merge failed. Please, fix the conflict and save the page."
+msgstr "La mezcla automática falló. Por favor, corrige el conflicto y guarda la página"
 
 #: git/templates/waliki/diff.html:7 git/templates/waliki/history.html:17
 #: git/waliki_plugin.py:9
@@ -48,44 +52,56 @@ msgstr "Editar"
 msgid "Compare revisions"
 msgstr "Comparar versiones"
 
+#: git/templates/waliki/history.html:54
+#, fuzzy
+#| msgid "Back to page"
+msgid "Back to top"
+msgstr "Ir arriba"
+
 #: git/templates/waliki/version.html:17
 msgid "Restore this version"
 msgstr "Restaurar esta versión"
 
-#: models.py:17
+#: git/views.py:30
+#, fuzzy, python-format
+#| msgid "Restore this version"
+msgid "Restored version @%s"
+msgstr "Versión @%s restaurada"
+
+#: models.py:20
 msgid "Title"
 msgstr "Título"
 
-#: models.py:20
+#: models.py:23
 msgid "Markup"
 msgstr "Markup"
 
-#: models.py:24
+#: models.py:27
 msgid "Page"
 msgstr "Página"
 
-#: models.py:25
+#: models.py:28
 msgid "Pages"
 msgstr "Páginas"
 
-#: models.py:102
+#: models.py:121
 msgid "Name"
 msgstr "Nombre"
 
-#: models.py:104
+#: models.py:123
 msgid "As namespace"
 msgstr "Como espacio de nombre"
 
-#: models.py:110
+#: models.py:129
 #, python-format
 msgid "Rule: %(name)s for /%(slug)s"
 msgstr "Regla: %(name)s para /%(slug)s"
 
-#: models.py:116
+#: models.py:135
 msgid "ACL rule"
 msgstr "Regla ACL"
 
-#: models.py:117
+#: models.py:136
 msgid "ACL rules"
 msgstr "Reglas ACL"
 
@@ -151,3 +167,7 @@ msgstr "Cargando..."
 #: templates/waliki/edit.html:89
 msgid "There was a problem with the preview."
 msgstr "Hubo un problema con la previsualización."
+
+#: views.py:37
+msgid "Page created"
+msgstr "Página creada"

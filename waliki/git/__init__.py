@@ -55,7 +55,7 @@ class Git(object):
             # TODO: make this more robust!
             error = e.stdout.decode('utf8')
             if 'CONFLICT' in error:
-                raise Page.EditionConflict(_('Automerge conflict with %s. Please fix it and save the page.') % page.slug)
+                raise Page.EditionConflict(_('Automatic merge failed. Please, fix the conflict and save the page.') % page.slug)
             raise
 
 
