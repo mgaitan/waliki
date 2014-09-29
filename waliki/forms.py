@@ -17,7 +17,8 @@ class PageForm(forms.ModelForm):
                       for m in get_all_markups() if hasattr(m, 'codemirror_mode'))
         theme = ('codemirror/theme/%s.css' % CM_SETTINGS['theme'],) if 'theme' in CM_SETTINGS else ()
 
-        js = ('codemirror/lib/codemirror.js',) + modes + ('js/waliki.js',)
+        js = ('codemirror/lib/codemirror.js',
+              'codemirror/addon/mode/overlay.js') + modes + ('js/waliki.js',)
         css = {
             'all': ('codemirror/lib/codemirror.css', ) + theme
         }
