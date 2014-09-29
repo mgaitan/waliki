@@ -29,7 +29,7 @@
 At a glance, Waliki has this features:
 
 - File based content storage.
-- Version control for your content using Git
+- Version control and concurrent edition for your content using Git
 - Extensible architecture with plugins
 - Markdown, reStructuredText or textile markups. Easy to add more.
 - A simple ACL system
