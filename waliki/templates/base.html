@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load url from future %}
+{% load waliki_tags %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
     <head>
@@ -37,21 +38,11 @@
             <div class="container">
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"><div class="navbar-header"><a href="#" class="navbar-brand">{{ config.TITLE }}</a></div>
+                        <div class="col-sm-12 col-md-12"><div class="navbar-header"><a href="{% url 'waliki_home' %}" class="navbar-brand">{{ site_name|default:"Waliki" }}</a></div>
+
+                            {% navbar_links %}
+
                             {% comment %}
-
-
-
-                            <ul class="nav navbar-nav">
-                                <li><a href="{{ url_for('home') }}">Home</a></li>
-                                <li><a href="{{ url_for('index') }}">Index</a></li>
-                                <li><a href="{{ url_for('tags') }}">Tags</a></li>
-                                <li><a href="{{ url_for('search') }}">Search</a></li>
-                                <li class="divider-vertical"></li>
-                                <li><a href="{{ url_for('create') }}">New Page</a></li>
-                                <li class="divider-vertical"></li>
-                                <li></li>
-                            </ul>
 
                             <ul class="nav pull-right navbar-nav">
                                 {% if current_user.is_anonymous() %}
