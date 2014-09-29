@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-29 13:24-0300\n"
+"POT-Creation-Date: 2014-09-29 14:05-0300\n"
 "Last-Translator: Martín Gaitán <gaitan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,9 +27,17 @@ msgstr "Mensaje de log"
 msgid "Update %s"
 msgstr "Actualiza %s"
 
-#: git/__init__.py:58
+#: git/__init__.py:59
 msgid "Automatic merge failed. Please, fix the conflict and save the page."
-msgstr "La mezcla automática falló. Por favor, corrige el conflicto y guarda la página"
+msgstr ""
+"La mezcla automática falló. Por favor, corrige el conflicto y guarda la "
+"página"
+
+#: git/models.py:13
+msgid ""
+"There were changes in the page during your edition. Auto-merge has been "
+"applied."
+msgstr "Hubo cambios en la página durante tu edición. Se aplicó auto-mezclado."
 
 #: git/templates/waliki/diff.html:7 git/templates/waliki/history.html:17
 #: git/waliki_plugin.py:9
