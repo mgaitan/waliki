@@ -9,7 +9,7 @@
     :target: https://badge.fury.io/py/waliki
 
 .. image:: https://travis-ci.org/mgaitan/waliki.png?branch=master
-    :target: https://travis-ci.org/mgaitan/django-waliki
+    :target: https://travis-ci.org/mgaitan/waliki
 
 .. image:: https://coveralls.io/repos/mgaitan/waliki/badge.png?branch=master
     :target: https://coveralls.io/r/mgaitan/waliki?branch=master
