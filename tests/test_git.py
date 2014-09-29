@@ -67,7 +67,11 @@ class TestGit(TestCase):
         data2["raw"] = '- item0\n' + self.page.raw
         data1["message"] = "add item0"
         self.client.post(self.edit_url, data1)
-        self.client.post(self.edit_url, data2)
+        with patch('waliki.views.messages') as messages:
+            self.client.post(self.edit_url, data2)
+        # there is a message
+        self.assertTrue(messages.warning.called)
+        self.assertIn('There were changes', messages.warning.call_args[0][1])
         self.assertEqual(self.page.raw, "- item0\n\n- item1\n\n- item2\n")
 
     def test_concurrent_edition_with_conflict(self):
@@ -99,8 +103,6 @@ class TestGit(TestCase):
         self.assertRedirects(response, reverse('waliki_detail', args=(self.page.slug,)))
         self.assertEqual(self.page.raw, '- item0\n- item2')
 
-
-
     def test_concurrent_edition_no_existent_page(self):
         assert not Page.objects.filter(slug='test2').exists()
         url = reverse('waliki_edit', args=('test2',))
@@ -123,6 +125,7 @@ class TestGit(TestCase):
             response = self.client.post(url, data2)
         # there is a warning
         self.assertTrue(messages.warning.called)
+        self.assertIsInstance(messages.warning.call_args[0][1], Page.EditionConflict)
 
         # redirect
         self.assertRedirects(response, url)

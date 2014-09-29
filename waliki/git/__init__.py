@@ -32,6 +32,7 @@ class Git(object):
             kwargs['author'] = author
 
         try:
+            there_were_changes = parent and parent != self.last_version(page)
             status = git.status('--porcelain', path).stdout.decode('utf8')[:2]
             if parent and status != "UU":
                 git.stash()
@@ -55,8 +56,8 @@ class Git(object):
             # TODO: make this more robust!
             error = e.stdout.decode('utf8')
             if 'CONFLICT' in error:
-                raise Page.EditionConflict(_('Automatic merge failed. Please, fix the conflict and save the page.') % page.slug)
-            raise
+                raise Page.EditionConflict(_('Automatic merge failed. Please, fix the conflict and save the page.'))
+        return there_were_changes
 
 
     def history(self, page):

@@ -47,15 +47,19 @@ def edit(request, slug):
     if form.is_valid():
         page = form.save()
         try:
-            page_saved.send(sender=edit,
-                            page=page,
-                            author=request.user,
-                            message=form.cleaned_data["message"],
-                            form_extra_data=json.loads(form.cleaned_data["extra_data"] or "{}"))
+            receivers_responses = page_saved.send(sender=edit,
+                                                  page=page,
+                                                  author=request.user,
+                                                  message=form.cleaned_data["message"],
+                                                  form_extra_data=json.loads(form.cleaned_data["extra_data"] or "{}"))
         except Page.EditionConflict as e:
             messages.warning(request, e)
             return redirect('waliki_edit', slug=page.slug)
 
+        for r in receivers_responses:
+            if isinstance(r[1], dict) and 'messages' in r[1]:
+                for key, value in r[1]['messages'].items():
+                    getattr(messages, key)(request, value)
         return redirect('waliki_detail', slug=page.slug)
     cm_modes = [(m.name, m.codemirror_mode_name) for m in get_all_markups()]
 
