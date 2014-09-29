@@ -1,11 +1,12 @@
 import os
+import shutil
 from sh import git
 from mock import patch
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from waliki.models import Page
 from waliki.git import Git
-from waliki.settings import WALIKI_DATA_DIR
+from waliki.settings import WALIKI_DATA_DIR, WALIKI_COMMITTER_EMAIL, WALIKI_COMMITTER_NAME
 from .factories import PageFactory
 
 
@@ -14,6 +15,15 @@ class TestGit(TestCase):
     def setUp(self):
         self.page = PageFactory()
         self.edit_url = reverse('waliki_edit', args=(self.page.slug,))
+
+    def test_init_git_create_repo(self):
+        git_dir = os.path.join(WALIKI_DATA_DIR, '.git')
+        shutil.rmtree(git_dir)
+        Git()
+        self.assertTrue(os.path.isdir(git_dir))
+        self.assertEqual(git.config('user.name').stdout.decode('utf8')[:-1], WALIKI_COMMITTER_NAME)
+        self.assertEqual(git.config('user.email').stdout.decode('utf8')[:-1], WALIKI_COMMITTER_EMAIL)
+
 
     def test_commit_existent_page_with_no_previous_commits(self):
         response = self.client.get(self.edit_url)

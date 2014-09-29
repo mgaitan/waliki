@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.utils import six
 from waliki.models import Page
+from waliki import settings
 from sh import git, ErrorReturnCode
 
 
@@ -21,7 +22,9 @@ class Git(object):
         os.chdir(self.content_dir)
         if not os.path.isdir(os.path.join(self.content_dir, '.git')):
             git.init()
-            # self.commit('.', 'initial commit')
+            git.config("user.email", settings.WALIKI_COMMITTER_EMAIL)
+            git.config("user.name", settings.WALIKI_COMMITTER_NAME)
+
 
     def commit(self, page, message='', author=None, parent=None):
         path = page.path

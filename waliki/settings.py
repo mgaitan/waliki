@@ -76,3 +76,8 @@ WALIKI_LOGGED_USER_PERMISSIONS = getattr(settings, 'WALIKI_LOGGED_USER_PERMISSIO
                                          ('view_page', 'add_page', 'change_page'))
 
 WALIKI_RENDER_403 = getattr(settings, 'WALIKI_RENDER_403', True)
+
+
+WALIKI_COMMITTER_EMAIL = getattr(settings, 'WALIKI_COMMITTER_EMAIL', 'waliki@waliki.pythonanywhere.com')
+
+WALIKI_COMMITTER_NAME = getattr(settings, 'WALIKI_COMMITTER_NAME', 'Waliki')
