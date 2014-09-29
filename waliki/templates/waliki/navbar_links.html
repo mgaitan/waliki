@@ -1,0 +1,9 @@
+{% if navbar_links %}
+<ul class="nav navbar-nav">
+    {% for url_name, link_text in navbar_links  %}
+    <li><a href="{% url url_name %}">{{ link_text }}</a></li>
+    {% endfor %}
+    <li class="divider-vertical"></li>
+    <li></li>
+</ul>
+{% endif %}
