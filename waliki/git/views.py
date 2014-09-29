@@ -47,3 +47,17 @@ def diff(request, slug, old, new):
                                                 'slug': slug,
                                                 'old_commit': old,
                                                 'new_commit': new})
+
+def whatchanged(request):
+    changes = []
+    for version in Git().whatchanged():
+        for path in version[-1]:
+            try:
+                page = Page.objects.get(path=path)
+            except Page.DoesNotExist:
+                continue
+            changes.append({'page': page, 'author': version[0],
+                            'version': version[2], 'message': version[3],
+                            'date': version[4]})
+
+    return render(request, 'waliki/whatchanged.html', {'changes': changes})

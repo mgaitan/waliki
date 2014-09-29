@@ -101,3 +101,16 @@ class Git(object):
             return six.text_type(git.log("--pretty=format:%h", "-n 1", page.path))
         except ErrorReturnCode:
             return None
+
+    def whatchanged(self):
+        pages = []
+        log = git.whatchanged("--pretty=format:%an//%ae//%h//%s//%ar").stdout.decode('utf8')
+        logs = re.findall(r'((.*)\/\/(.*)//(.*)//(.*)//(.*))?\n:.*\t(.*)', log, flags=re.MULTILINE)
+        for log in logs:
+            if log[0]:
+                log = list(log[1:])
+                log[-1] = [log[-1]]
+                pages.append(list(log))
+            else:
+                pages[-1].append(log[-1])
+        return pages

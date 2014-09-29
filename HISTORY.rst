@@ -6,6 +6,7 @@ Changelog
 0.2dev
 ++++++
 
+- Added "What changed" page (from Git)
 - Added concurrent edition support
 - Added a simple ACL system
 - ``i18n`` support (and locales for ``es``)
