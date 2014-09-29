@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
 from waliki.models import Page
 from waliki.forms import PageForm
@@ -26,7 +27,7 @@ def version(request, slug, version):
     content = Git().version(page, version)
     if not content:
         raise Http404
-    form = PageForm(instance=page, initial={'message': 'Restored version @%s' % version, 'raw': content},
+    form = PageForm(instance=page, initial={'message': _('Restored version @%s') % version, 'raw': content},
                     is_hidden=True)
     content = Page.preview(page.markup, content)
     return render(request, 'waliki/version.html', {'page': page,

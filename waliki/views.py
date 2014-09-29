@@ -1,6 +1,8 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.translation import ugettext_lazy as _
+from django.contrib import messages
 from .models import Page
 from .forms import PageForm
 from .signals import page_saved, page_preedit
@@ -26,11 +28,16 @@ def detail(request, slug):
 @permission_required('change_page')
 def edit(request, slug):
     slug = slug.strip('/')
-    page, _ = Page.objects.get_or_create(slug=slug)
+    page, created = Page.objects.get_or_create(slug=slug)
+    if created:
+        page.raw = ""
+        page_saved.send(sender=edit,
+                        page=page,
+                        author=request.user,
+                        message=_("Page created"),
+                        form_extra_data={})
     data = request.POST if request.method == 'POST' else None
-
     form_extra_data = {}
-
     receivers_responses = page_preedit.send(sender=edit, page=page)
     for r in receivers_responses:
         if isinstance(r[1], dict) and 'form_extra_data' in r[1]:
@@ -38,12 +45,17 @@ def edit(request, slug):
 
     form = PageForm(data, instance=page, initial={'extra_data': json.dumps(form_extra_data)})
     if form.is_valid():
-        form.save()
-        page_saved.send(sender=edit,
-                        page=page,
-                        author=request.user,
-                        message=form.cleaned_data["message"],
-                        form_extra_data=json.loads(form.cleaned_data["extra_data"]))
+        page = form.save()
+        try:
+            page_saved.send(sender=edit,
+                            page=page,
+                            author=request.user,
+                            message=form.cleaned_data["message"],
+                            form_extra_data=json.loads(form.cleaned_data["extra_data"] or "{}"))
+        except Page.EditionConflict as e:
+            messages.warning(request, e)
+            return redirect('waliki_edit', slug=page.slug)
+
         return redirect('waliki_detail', slug=page.slug)
     cm_modes = [(m.name, m.codemirror_mode_name) for m in get_all_markups()]
 

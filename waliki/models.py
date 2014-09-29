@@ -14,6 +14,7 @@ from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
 
 
+
 class Page(models.Model):
     MARKUP_CHOICES = [(m.name, m.name) for m in _markups.get_all_markups()]
     title = models.CharField(verbose_name=_('Title'), max_length=200)
@@ -28,6 +29,9 @@ class Page(models.Model):
         permissions = (
             ('view_page', 'Can view page'),
         )
+
+    class EditionConflict(Exception):
+        pass
 
     def __str__(self):
         return self.__unicode__()
