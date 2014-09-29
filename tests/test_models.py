@@ -38,7 +38,7 @@ class TestPage(TestCase):
         self.assertEqual(content, rst)
 
     def test_raw_empty_if_file_doesnt_exist(self):
-        page = Page(path='test2.rst')
+        page = Page(path='test3.rst')
         assert not os.path.exists(page.abspath)
         self.assertEqual(page.raw, "")
 

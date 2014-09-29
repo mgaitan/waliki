@@ -1,6 +1,6 @@
 import factory
 from django.contrib.auth.models import User, Group, Permission
-from waliki.models import ACLRule
+from waliki.models import ACLRule, Page
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -82,3 +82,20 @@ class ACLRuleFactory(factory.django.DjangoModelFactory):
             # A list of groups were passed in, use them
             for group in extracted:
                 self.groups.add(group)
+
+
+class PageFactory(factory.django.DjangoModelFactory):
+    title = factory.Sequence(lambda n: u'Page {0}'.format(n))
+    slug = factory.Sequence(lambda n: u'page{0}'.format(n))
+
+    @factory.post_generation
+    def raw(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            self.raw = extracted
+
+    class Meta:
+        model = Page
