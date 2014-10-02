@@ -14,7 +14,7 @@ except ImportError:
 version = waliki.__version__
 
 if sys.argv[-1] == 'publish':
-    os.system('sudo python setup.py sdist upload')
+    os.system('sudo python setup.py sdist bdist_wheel upload')
     os.system("git tag -a %s -m 'version %s'" % (version, version))
     os.system("git push --tags")
     sys.exit()

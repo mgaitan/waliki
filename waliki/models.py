@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os.path
+from collections import Iterable
 from django.db import models
 from django.db.models import Q
 from django.conf import settings
@@ -136,9 +137,22 @@ class ACLRule(models.Model):
         verbose_name_plural = _('ACL rules')
 
     @classmethod
-    def get_users_for(cls, perm, slug):
-        # TODO check parent namespace for an slug
+    def get_users_for(cls, perms, slug):
+        """return users with ``perms`` for the given ``slug``.
+
+        ``perms`` could be the permission name or an
+        an iterable of permissions name
+        """
+
+        if not isinstance(perms, Iterable):
+            perms = (perms,)
+
         User = get_user_model()
-        lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
-        lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
+
+        lookup = Q()
+        for perm in perms:
+            perm_lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
+            perm_lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
+            lookup &= perm_lookup
+
         return User.objects.filter(lookup).distinct()
