@@ -12,7 +12,6 @@ import sys
 # for demo
 activate_this = '/home/waliki/.virtualenvs/waliki/bin/activate_this.py'
 if os.path.exists(activate_this):
-    #INTERP is present twice so that the new python interpreter knows the actual executable path
     with open(activate_this) as f:
         code = compile(f.read(), activate_this, 'exec')
         exec(code, dict(__file__=activate_this))
