@@ -8,11 +8,10 @@ from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth import get_user_model
-
+from django.utils.six import string_types
 from . import _markups
 from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
-
 
 
 class Page(models.Model):
@@ -136,9 +135,18 @@ class ACLRule(models.Model):
         verbose_name_plural = _('ACL rules')
 
     @classmethod
-    def get_users_for(cls, perm, slug):
-        # TODO check parent namespace for an slug
-        User = get_user_model()
-        lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
-        lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
-        return User.objects.filter(lookup).distinct()
+    def get_users_for(cls, perms, slug):
+        """return users with ``perms`` for the given ``slug``.
+
+        ``perms`` could be the permission name or an iterable
+         of permissions names
+        """
+        if isinstance(perms, string_types):
+            perms = (perms,)
+
+        users = get_user_model().objects.all()
+        for perm in perms:
+            lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
+            lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
+            users = users.filter(lookup)
+        return users.distinct()

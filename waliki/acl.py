@@ -1,4 +1,5 @@
 from functools import wraps
+from collections import Iterable
 from django.conf import settings
 from django.shortcuts import render
 from django.core.exceptions import PermissionDenied
@@ -12,7 +13,37 @@ from .settings import (WALIKI_ANONYMOUS_USER_PERMISSIONS, WALIKI_LOGGED_USER_PER
                        WALIKI_RENDER_403)
 
 
-def permission_required(perm, login_url=None, raise_exception=False, redirect_field_name=REDIRECT_FIELD_NAME):
+def check_perms(perms, user, slug, raise_exception=False):
+    """a helper user to check if a user has the permissions
+    for a given slug"""
+
+    if isinstance(perms, (tuple, list, set)):
+        perms = set(perms)
+    else:
+        perms = {perms}
+
+    allowed_users = ACLRule.get_users_for(perms, slug)
+
+    if allowed_users:
+        return user in allowed_users
+
+    if perms.issubset(set(WALIKI_ANONYMOUS_USER_PERMISSIONS)):
+        return True
+
+    if user.is_authenticated() and perms.issubset(set(WALIKI_LOGGED_USER_PERMISSIONS)):
+        return True
+
+    # First check if the user has the permission (even anon users)
+    if user.has_perms(perms):
+        return True
+    # In case the 403 handler should be called raise the exception
+    if raise_exception:
+        raise PermissionDenied
+    # As the last resort, show the login form
+    return False
+
+
+def permission_required(perms, login_url=None, raise_exception=False, redirect_field_name=REDIRECT_FIELD_NAME):
     """
     this is analog to django's builtin ``permission_required`` decorator, but
     improved to check per slug ACLRules and default permissions for
@@ -27,33 +58,7 @@ def permission_required(perm, login_url=None, raise_exception=False, redirect_fi
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
 
-            def check_perms(user):
-                allowed_users = ACLRule.get_users_for(perm, kwargs['slug'])
-                if allowed_users:
-                    return user in allowed_users
-
-                if perm in WALIKI_ANONYMOUS_USER_PERMISSIONS:
-                    return True
-
-                if user.is_authenticated() and perm in WALIKI_LOGGED_USER_PERMISSIONS:
-                    return True
-
-                # default "column" permissions.
-                if not isinstance(perm, (list, tuple)):
-                    perms = (perm, )
-                else:
-                    perms = perm
-
-                # First check if the user has the permission (even anon users)
-                if user.has_perms(perms):
-                    return True
-                # In case the 403 handler should be called raise the exception
-                if raise_exception:
-                    raise PermissionDenied
-                # As the last resort, show the login form
-                return False
-
-            if check_perms(request.user):
+            if check_perms(perms, request.user, kwargs['slug'], raise_exception=raise_exception):
                 return view_func(request, *args, **kwargs)
 
             if request.user.is_authenticated():

@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
 from waliki.models import Page
 from waliki.forms import PageForm
-from waliki.decorators import permission_required
+from waliki.acl import permission_required
 from . import Git
 
 

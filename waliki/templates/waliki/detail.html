@@ -1,6 +1,8 @@
 {% extends "site_base.html" %}
 {% load i18n %}
 {% load waliki_tags %}
+{% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
+
 
 {% block header %}
     <div class="pull-right">
@@ -12,9 +14,16 @@
             </button>
             <ul class="dropdown-menu">
             <!-- dropdown menu links -->
+
             {% if page %}
-                <li><a id="confirmDelete" class="text-error">{% trans "Delete" %}</a></li>
                 {% extra_page_actions page %}
+
+                {% if can_delete %}
+                <li class="divider"></li>
+                <li><a id="confirmDelete" class="text-error">{% trans "Delete" %}</a></li>
+
+                {% endif %}
+
             {% endif %}
             </ul>
         </div>
@@ -37,22 +46,29 @@
    <hr>
    <div class="pull-right"><em><small>{{ page.footer|safe }}</small></em></div>
 </div>
- {% endif %}
+{% endif %}
+
+{% if can_delete %}
+
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                Hello world!
+            </div>
+            <!-- dialog buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endif %}
+
 {% endblock content %}
 
-{% block extra_script %}
-<script type="text/javascript">
-$('#confirmDelete').on('click', function() {
-
-    bootbox.dialog("{% blocktrans with title=page.title %}
-        Are you sure you want to delete {{title}}?
-        {% endblocktrans %}",
-                   [{"label": "{% trans "Cancel" %}},
-                    {"label": "{% trans "Yes, delete" %}",
-                     "callback": function(){
-                        $('<form method=\"post\" action=\"./delete">').appendTo('body').submit()  },
-                     "class":"btn-danger"}]);
-});
-
-</script>
-{% endblock %}

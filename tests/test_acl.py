@@ -1,6 +1,8 @@
-from .factories import UserFactory, GroupFactory, ACLRuleFactory
-from waliki.models import ACLRule
 from django.test import TestCase
+from django.template import Template, Context, TemplateSyntaxError
+from mock import patch
+from waliki.models import ACLRule
+from .factories import UserFactory, GroupFactory, ACLRuleFactory
 
 
 class TestGetUsersRules(TestCase):
@@ -38,3 +40,98 @@ class TestGetUsersRules(TestCase):
         users = ACLRule.get_users_for('view_page', 'page')
         self.assertEqual(users.count(), 1)
         self.assertEqual(set(users), set(group1_users))
+
+    def test_simple_user_for_multiples_perms(self):
+        user1 = UserFactory()
+        user2 = UserFactory()
+        ACLRuleFactory(
+            slug='page', permissions=['view_page'], users=[user1, user2])
+        ACLRuleFactory(slug='page', permissions=['change_page'], users=[user1])
+        users = ACLRule.get_users_for(['view_page', 'change_page'], 'page')
+        self.assertEqual(set(users), {user1})
+
+
+class CheckPermTagTest(TestCase):
+
+    def render_template(self, template, context):
+        """
+        Returns rendered ``template`` with ``context``, which are given as string
+        and dict respectively.
+        """
+        t = Template(template)
+        return t.render(Context(context))
+
+    def test_wrong_formats(self):
+        wrong_formats = (
+            # no quotes
+            '{% check_perms "view_page" for user in slug as has_perm %}',
+            # wrong quotes
+            '{% check_perms "view_page" for user in slug as \'has_perms" %}',
+            # wrong quotes
+            '{% check_perms view_page for user in slug as "has_perms" %}',
+            # wrong quotes
+            '{% check_perms "view_page, change_page for user in slug as "has_perms" %}',
+            # wrong quotes
+            '{% check_perms "view_page" user in slug as "has_perms" %}',
+            # no context_var
+            '{% check_perms "view_page" for user in slug as %}',
+            # no slug
+            '{% check_perms "view_page" for user as "has_perms" %}',
+            # no user
+            '{% check_perms "view_page" in slug as "has_perms" %}',
+            # no "for" bit
+            '{% check_perms "view_page, change_page" user in slug as "has_perms" %}',
+            # no "as" bit
+            '{% check_perms "view_page" for user in slug "has_perms" %}',
+        )
+        context = {'user': UserFactory(), 'slug': "any/slug"}
+        for wrong in wrong_formats:
+            fullwrong = '{% load waliki_tags %}' + wrong
+            with self.assertRaises(TemplateSyntaxError):
+                self.render_template(fullwrong, context)
+
+    def test_check_users_is_called(self):
+        template = """
+        {% load waliki_tags %}
+        {% check_perms "view_page" for user in slug as "has_perms" %}
+        {{ has_perms }}
+        """
+        user = UserFactory()
+        slug = 'any/slug'
+        context = {'user': user, 'slug': slug}
+
+        with patch('waliki.templatetags.waliki_tags.check_perms_helper') as check:
+            check.return_value = "return_value"
+            output = self.render_template(template, context)
+        check.assert_called_once_with(["view_page"], user, slug)
+        self.assertEqual(output.strip(), 'return_value')
+
+    def test_check_users_is_called_with_multiple(self):
+        template = """
+        {% load waliki_tags %}
+        {% check_perms "x, y,z" for user in slug as "has_perms" %}
+        {{ has_perms }}
+        """
+        user = UserFactory()
+        slug = 'any/slug'
+        context = {'user': user, 'slug': slug}
+
+        with patch('waliki.templatetags.waliki_tags.check_perms_helper') as check:
+            check.return_value = "return_value"
+            output = self.render_template(template, context)
+        check.assert_called_once_with(["x", "y", "z"], user, slug)
+        self.assertEqual(output.strip(), 'return_value')
+
+    def test_check_users_is_called_slug_literal(self):
+        template = """
+        {% load waliki_tags %}
+        {% check_perms "x, y,z" for user in "literal_slug" as "has_perms" %}
+        {{ has_perms }}
+        """
+        user = UserFactory()
+        context = {'user': user}
+        with patch('waliki.templatetags.waliki_tags.check_perms_helper') as check:
+            check.return_value = "return_value"
+            output = self.render_template(template, context)
+        check.assert_called_once_with(["x", "y", "z"], user, "literal_slug")
+        self.assertEqual(output.strip(), 'return_value')
