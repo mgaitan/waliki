@@ -37,7 +37,7 @@ class CheckPermissionsNode(template.Node):
     def render(self, context):
         perms = [perm.strip() for perm in self.perms.literal.split(',')]
         user = self.user.resolve(context)
-        slug = self.slug.resolve(context)
+        slug = self.slug.literal or self.slug.resolve(context)
         context[self.context_var] = check_perms_helper(perms, user, slug)
         return ''
 
@@ -51,6 +51,10 @@ def check_perms(parser, token):
     Parses ``check_perms`` tag which should be in format::
 
         {% check_perms "perm1[, perm2, ...]" for user in slug as "context_var" %}
+
+    or
+
+        {% check_perms "perm1[, perm2, ...]" for user in "slug" as "context_var" %}
 
     .. note::
 

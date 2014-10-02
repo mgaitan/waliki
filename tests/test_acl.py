@@ -122,3 +122,16 @@ class CheckPermTagTest(TestCase):
         check.assert_called_once_with(["x", "y", "z"], user, slug)
         self.assertEqual(output.strip(), 'return_value')
 
+    def test_check_users_is_called_slug_literal(self):
+        template = """
+        {% load waliki_tags %}
+        {% check_perms "x, y,z" for user in "literal_slug" as "has_perms" %}
+        {{ has_perms }}
+        """
+        user = UserFactory()
+        context = {'user': user}
+        with patch('waliki.templatetags.waliki_tags.check_perms_helper') as check:
+            check.return_value = "return_value"
+            output = self.render_template(template, context)
+        check.assert_called_once_with(["x", "y", "z"], user, "literal_slug")
+        self.assertEqual(output.strip(), 'return_value')
