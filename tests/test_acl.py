@@ -38,3 +38,11 @@ class TestGetUsersRules(TestCase):
         users = ACLRule.get_users_for('view_page', 'page')
         self.assertEqual(users.count(), 1)
         self.assertEqual(set(users), set(group1_users))
+
+    def test_simple_user_for_multiples_perms(self):
+        user1 = UserFactory()
+        user2 = UserFactory()
+        ACLRuleFactory(slug='page', permissions=['view_page'], users=[user1, user2])
+        ACLRuleFactory(slug='page', permissions=['change_page'], users=[user1])
+        users = ACLRule.get_users_for(['view_page', 'change_page'], 'page')
+        self.assertEqual(set(users), {user1})

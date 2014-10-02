@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os.path
-from collections import Iterable
 from django.db import models
 from django.db.models import Q
 from django.conf import settings
@@ -9,11 +8,10 @@ from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth import get_user_model
-
+from django.utils.six import string_types
 from . import _markups
 from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
-
 
 
 class Page(models.Model):
@@ -140,19 +138,15 @@ class ACLRule(models.Model):
     def get_users_for(cls, perms, slug):
         """return users with ``perms`` for the given ``slug``.
 
-        ``perms`` could be the permission name or an
-        an iterable of permissions name
+        ``perms`` could be the permission name or an iterable
+         of permissions names
         """
-
-        if not isinstance(perms, Iterable):
+        if isinstance(perms, string_types):
             perms = (perms,)
 
-        User = get_user_model()
-
-        lookup = Q()
+        users = get_user_model().objects.all()
         for perm in perms:
-            perm_lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
-            perm_lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
-            lookup &= perm_lookup
-
-        return User.objects.filter(lookup).distinct()
+            lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
+            lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
+            users = users.filter(lookup)
+        return users.distinct()

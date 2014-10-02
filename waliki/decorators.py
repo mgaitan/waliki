@@ -15,7 +15,7 @@ from .settings import (WALIKI_ANONYMOUS_USER_PERMISSIONS, WALIKI_LOGGED_USER_PER
 
 def check_perms(perms, user, slug, raise_exception=False):
 
-    if isinstance(perms, Iterable):
+    if isinstance(perms, (tuple, list, set)):
         perms = set(perms)
     else:
         perms = {perms}
