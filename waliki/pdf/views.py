@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from waliki.models import Page
 from waliki.utils import send_file
 from waliki.settings import WALIKI_PDF_INCLUDE_TITLE
-from waliki.decorators import permission_required
+from waliki.acl import permission_required
 
 
 @permission_required('view_page')

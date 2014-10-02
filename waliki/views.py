@@ -7,7 +7,7 @@ from .models import Page
 from .forms import PageForm
 from .signals import page_saved, page_preedit
 from ._markups import get_all_markups
-from .decorators import permission_required
+from .acl import permission_required
 from . import settings
 
 
