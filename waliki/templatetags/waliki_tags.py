@@ -38,7 +38,10 @@ class CheckPermissionsNode(template.Node):
         perms = [perm.strip() for perm in self.perms.literal.split(',')]
         user = self.user.resolve(context)
         slug = self.slug.literal or self.slug.resolve(context)
-        context[self.context_var] = check_perms_helper(perms, user, slug)
+        if slug:
+            context[self.context_var] = check_perms_helper(perms, user, slug)
+        else:
+            context[self.context_var] = False
         return ''
 
 
@@ -61,8 +64,7 @@ def check_perms(parser, token):
        Make sure that you set and use those permissions in same template
        block (``{% block %}``).
 
-    Example of usage (assuming ``page` objects are
-    available from *context*)::
+    Example of usage (assuming ``page` objects are available from *context*)::
 
         {% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
         {% if can_delete %}
