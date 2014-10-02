@@ -1,7 +1,8 @@
-from .factories import UserFactory, GroupFactory, ACLRuleFactory
-from waliki.models import ACLRule
 from django.test import TestCase
 from django.template import Template, Context, TemplateSyntaxError
+from mock import patch
+from waliki.models import ACLRule
+from .factories import UserFactory, GroupFactory, ACLRuleFactory
 
 
 class TestGetUsersRules(TestCase):
@@ -88,3 +89,36 @@ class CheckPermTagTest(TestCase):
             fullwrong = '{% load waliki_tags %}' + wrong
             with self.assertRaises(TemplateSyntaxError):
                 self.render_template(fullwrong, context)
+
+    def test_check_users_is_called(self):
+        template = """
+        {% load waliki_tags %}
+        {% check_perms "view_page" for user in slug as "has_perms" %}
+        {{ has_perms }}
+        """
+        user = UserFactory()
+        slug = 'any/slug'
+        context = {'user': user, 'slug': slug}
+
+        with patch('waliki.templatetags.waliki_tags.check_perms_helper') as check:
+            check.return_value = "return_value"
+            output = self.render_template(template, context)
+        check.assert_called_once_with(["view_page"], user, slug)
+        self.assertEqual(output.strip(), 'return_value')
+
+    def test_check_users_is_called_with_multiple(self):
+        template = """
+        {% load waliki_tags %}
+        {% check_perms "x, y,z" for user in slug as "has_perms" %}
+        {{ has_perms }}
+        """
+        user = UserFactory()
+        slug = 'any/slug'
+        context = {'user': user, 'slug': slug}
+
+        with patch('waliki.templatetags.waliki_tags.check_perms_helper') as check:
+            check.return_value = "return_value"
+            output = self.render_template(template, context)
+        check.assert_called_once_with(["x", "y", "z"], user, slug)
+        self.assertEqual(output.strip(), 'return_value')
+
