@@ -1,6 +1,11 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
+from django.core.management import call_command
+from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.utils.six import StringIO, text_type
 from waliki.models import Page
 from waliki.forms import PageForm
 from waliki.acl import permission_required
@@ -36,6 +41,7 @@ def version(request, slug, version):
                                                    'version': version,
                                                    'form': form})
 
+
 @permission_required('view_page')
 def diff(request, slug, old, new):
     page = get_object_or_404(Page, slug=slug)
@@ -47,6 +53,7 @@ def diff(request, slug, old, new):
                                                 'slug': slug,
                                                 'old_commit': old,
                                                 'new_commit': new})
+
 
 def whatchanged(request):
     changes = []
@@ -61,3 +68,18 @@ def whatchanged(request):
                             'date': version[4]})
 
     return render(request, 'waliki/whatchanged.html', {'changes': changes})
+
+
+def webhook_pull(request, remote='origin'):
+    if request.method == 'POST':
+        try:
+            log = Git().pull(remote)
+            s = StringIO()
+            call_command('sync_waliki', stdout=s)
+            s.seek(0)
+            r = {'pull': log, 'sync': s.read()}
+        except Exception as e:
+            r = {'error': text_type(e)}
+        return HttpResponse(json.dumps(r), content_type="application/json")
+
+    return HttpResponse("POST to %s" % reverse("waliki_webhook_pull", args=(remote,)))

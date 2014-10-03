@@ -114,3 +114,7 @@ class Git(object):
             else:
                 pages[-1].append(log[-1])
         return pages
+
+    def pull(self, remote):
+        log = git.pull('-s', 'ours', remote, 'HEAD').stdout.decode('utf8')
+        return log
