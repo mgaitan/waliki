@@ -23,6 +23,10 @@ class TestGitWebhook(TestCase):
         # init
         remote = WALIKI_DATA_DIR + '_remote'
         git.clone(WALIKI_DATA_DIR, remote)
+        os.chdir(remote)
+        git.config("user.email", 'somebody@tolove.com')
+        git.config("user.name", 'I am me, yo')
+
         os.chdir(WALIKI_DATA_DIR)
         git.remote('add', 'origin', remote)
         if chdir:
