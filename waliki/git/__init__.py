@@ -116,5 +116,5 @@ class Git(object):
         return pages
 
     def pull(self, remote):
-        log = git.pull('-s', 'ours', remote, 'HEAD').stdout.decode('utf8')
+        log = git.pull('-s', 'recursive', '-X', 'ours', remote, 'HEAD').stdout.decode('utf8')
         return log
