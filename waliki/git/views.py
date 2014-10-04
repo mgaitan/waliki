@@ -10,7 +10,6 @@ from django.views.decorators.csrf import csrf_exempt
 from waliki.models import Page
 from waliki.forms import PageForm
 from waliki.acl import permission_required
-from django.contrib.admin.views.decorators import staff_member_required
 from . import Git
 
 
@@ -81,8 +80,11 @@ def webhook_pull(request, remote='origin'):
             call_command('sync_waliki', stdout=s)
             s.seek(0)
             r = {'pull': log, 'sync': s.read()}
+            status_code = 200
         except Exception as e:
             r = {'error': text_type(e)}
-        return HttpResponse(json.dumps(r), content_type="application/json")
+            status_code = 500
+        return HttpResponse(json.dumps(r), status=status_code,
+                            content_type="application/json")
 
     return HttpResponse("POST to %s" % reverse("waliki_webhook_pull", args=(remote,)))
