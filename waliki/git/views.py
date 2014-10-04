@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from waliki.models import Page
 from waliki.forms import PageForm
 from waliki.acl import permission_required
+from django.contrib.admin.views.decorators import staff_member_required
 from . import Git
 
 

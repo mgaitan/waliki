@@ -70,7 +70,7 @@ class TestGitWebhook(TestCase):
         git.add('.')
         git.commit('-m', 'add new page')
         response = self.client.post(self.url, {})
-        self.assertEqual(Page.objects.count(), 2)
+        # now exists
         new_page = Page.objects.get(path="newpage.rst")
         self.assertEqual(new_page.raw, 'the new content')
 
@@ -79,4 +79,3 @@ class TestGitWebhook(TestCase):
         git.commit('-m', 'delete page')
         response = self.client.post(self.url, {})
         self.assertEqual(Page.objects.count(), 0)
-
