@@ -6,6 +6,7 @@ from django.core.management import call_command
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.six import StringIO, text_type
+from django.views.decorators.csrf import csrf_exempt
 from waliki.models import Page
 from waliki.forms import PageForm
 from waliki.acl import permission_required
@@ -70,6 +71,7 @@ def whatchanged(request):
     return render(request, 'waliki/whatchanged.html', {'changes': changes})
 
 
+@csrf_exempt
 def webhook_pull(request, remote='origin'):
     if request.method == 'POST':
         try:
