@@ -3,9 +3,13 @@ import mimetypes
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
+from django.utils.six import PY2
 
 
 def get_slug(text):
+    if PY2:
+        from django.utils.encoding import force_unicode
+        text = force_unicode(text)
     return '/'.join(slugify(t) for t in text.split('/')).strip('/')
 
 
