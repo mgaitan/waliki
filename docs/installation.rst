@@ -47,8 +47,8 @@ Create this model table using::
 
     $ python manage.py syncdb
 
-Include urlpatterns
--------------------
+Include url patterns
+--------------------
 
 Include the waliki urls in you project's ``urls.py``. For example::
 

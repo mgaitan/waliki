@@ -6,14 +6,14 @@ One of the most important feature in any wiki system is the simplicity to create
 Autolinks in reStructuredText
 -----------------------------
 
-There is autolininking support for restructuredtext with a very simple trick: if you don't define the target in a link (a word ending with and undercore like ``this_``), it will automatically point to an internal wiki page (even if it doesn't exist yet).
+There is autolinking support for restructuredtext with a very simple trick: if you don't explicitly define the target in a link (a word ending with and undercore like ``this_``), it will automatically point to an internal wiki page (even if it doesn't exist yet).
 
 So, just define ``somewhere_`` and to link the page with the slug *somewhere*
 
 How it is implemented?
 ++++++++++++++++++++++
 
-It's dirty but very simple: Just render the page as usual using docutils and every unreferenced target is parsed and appended to internals urls.
+It's dirty but very simple: just render the page as usual using docutils and every unreferenced target is parsed and appended to internals urls.
 
 
 Autolinks in Markdown
