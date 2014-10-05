@@ -131,7 +131,8 @@ class ACLRule(models.Model):
 
     name = models.CharField(verbose_name=_('Name'), max_length=200, unique=True)
     slug = models.CharField(max_length=200)
-    as_namespace = models.BooleanField(verbose_name=_('As namespace'), default=False)
+    as_namespace = models.BooleanField(verbose_name=_('As namespace'),
+                                       default=False)
     permissions = models.ManyToManyField(Permission, limit_choices_to={'content_type__app_label': 'waliki'})
     apply_to = models.CharField(max_length=25, choices=APPLY_TO_CHOICES, default=TO_EXPLICIT_LIST)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
@@ -154,13 +155,25 @@ class ACLRule(models.Model):
         ``perms`` could be the permission name or an iterable
          of permissions names
         """
+        def parents_for(slug):
+            parent_slugs = []
+            for f in slug.rsplit('/'):
+                try:
+                    parent = parent_slugs[-1] + '/' + f
+                except IndexError:
+                    parent = f
+                parent_slugs.append(parent)
+            return parent_slugs
 
         if isinstance(perms, string_types):
             perms = (perms,)
 
         rules = cls.objects.all()
+        parent_slugs = parents_for(slug)
         for perm in perms:
-            lookup = Q(permissions__codename=perm, slug=slug)
+            lookup = Q(permissions__codename=perm, as_namespace=False, slug=slug)
+            for parent in parent_slugs:
+                lookup |= Q(permissions__codename=perm, as_namespace=True, slug=parent)
             rules = rules.filter(lookup)
         return rules.distinct()
 

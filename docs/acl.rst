@@ -39,7 +39,6 @@ You want this:
 So, first, by default anonymous users only have ``view_page`` permission,
 and logged in users can also edit but not delete. In your settings::
 
-
     WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', )
     WALIKI_LOGGED_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page')
 
@@ -47,10 +46,66 @@ Then go to the admin an create the following rules:
 
 - One rule for the slug **intranet** with the permissions
   ``view_page``, ``add_page`` and ``change_page``. In "Apply to" select *Any logged in user*
-- Another rule for the homepage: slug *home* (or the slug defined
-  in ``WALIKI_HOME_SLUG``), with permission ``delete_page``, applied to *Any user/group explicitly defined*,
-  and add the user *jhon* and the group *editors* respectively
-- Lastly, add a rule for the delete permissions to superusers
+- Add a rule for the homepage: slug *home* (or the slug defined
+  in ``WALIKI_INDEX_SLUG``), with the permission ``add_page`` and ``change_page``, apply to *Any user/group explicitly defined*, and add the user *jhon* and the group *editors* respectively.
+- Lastly, add a rule for the permission ``delete_page`` and apply it to
+  *Any superusers*
+
+
+
+Checking permissions in your plugins
+------------------------------------
+
+If you are writing your own plugin, you can use the ACL reusing the view decorator. For example:
+
+.. code-block:: python
+
+    from waliki.acl import permission_required
+
+    @permission_required('view_page')
+    def your_read_only_view(request, slug):
+        ...
+
+    @permission_required(['change_page', 'add_page'])
+    def your_read_write_view(request, slug):
+        ...
+
+.. attention:: When a view requires more than one permission, at least one
+               rule with **all those permissions** should apply to the user.
+
+               For example, if the rule *A* gives to *user1* the permission ``change_page`` and the rule *B* gives to *user1* the permission
+               ``delete_page``, *user1* still don't be allowed to request a view that requires both ``change_page`` and ``delete_page``.
+
+
+Also, you can use the low-level helper :func:`acl.check_perms` ::
+
+.. code-block:: python
+
+    if check_perms(('edit_page'), request.user, page.slug):
+        do_something()
+
+To check permissions in a template, you can use the templatetag :func:`waliki_tags.check_perms`
+
+The format is::
+
+    {% check_perms "perm1[, perm2, ...]" for user in slug as "context_var" %}
+
+or::
+
+    {% check_perms "perm1[, perm2, ...]" for user in "slug" as "context_var" %}
+
+
+For example (assuming ``page`` objects are available from *context*)::
+
+    {% load waliki_tags %}
+
+    {% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
+    {% if can_delete %}
+        <a id="confirmDelete" class="text-error">Delete</a>
+    {% endif %}
+
+
+
 
 
 
