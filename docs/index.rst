@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to Waliki's documentation!
-=================================================================
+==================================
 
 .. include:: ../README.rst
 
@@ -17,6 +17,8 @@ Contents:
    installation
    settings
    git
+   acl
+   boxes
    autolinking
    get_as_pdf
    write_a_plugin
