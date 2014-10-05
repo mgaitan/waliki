@@ -174,10 +174,9 @@ class ACLRule(models.Model):
         """
 
         rules = cls.get_rules_for(perms, slug)
-
         if rules.filter(apply_to=ACLRule.TO_ANY).exists():
             return {AnonymousUser()} | set(get_user_model().objects.all())
-        elif rules.filter(apply_to__in=ACLRule.TO_LOGGED).exists():
+        elif rules.filter(apply_to=ACLRule.TO_LOGGED).exists():
             return get_user_model().objects.all()
 
         allowed = []

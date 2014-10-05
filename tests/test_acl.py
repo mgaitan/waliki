@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.template import Template, Context, TemplateSyntaxError
+from django.contrib.auth.models import AnonymousUser
 from mock import patch
 from waliki.models import ACLRule
 from .factories import UserFactory, GroupFactory, ACLRuleFactory
@@ -49,6 +50,35 @@ class TestGetUsersRules(TestCase):
         ACLRuleFactory(slug='page', permissions=['view_page', 'change_page'], users=[user1])
         users = ACLRule.get_users_for(['view_page', 'change_page'], 'page')
         self.assertEqual(set(users), {user1})
+
+    def test_any_user(self):
+        user1 = UserFactory()
+        ACLRuleFactory(slug='page', permissions=['view_page'], apply_to=ACLRule.TO_ANY)
+        users = ACLRule.get_users_for(['view_page'], 'page')
+        self.assertIn(AnonymousUser(), users)
+        self.assertIn(user1, users)
+
+    def test_any_logged_user(self):
+        user1 = UserFactory()
+        ACLRuleFactory(slug='page', permissions=['view_page'], apply_to=ACLRule.TO_LOGGED)
+        users = ACLRule.get_users_for(['view_page'], 'page')
+        self.assertNotIn(AnonymousUser(), users)
+        self.assertIn(user1, users)
+
+    def test_to_staff(self):
+        user1 = UserFactory()
+        user2 = UserFactory(is_staff=True)
+        ACLRuleFactory(slug='page', permissions=['view_page'], apply_to=ACLRule.TO_STAFF)
+        users = ACLRule.get_users_for(['view_page'], 'page')
+        self.assertEqual(set(users), {user2})
+
+    def test_to_super(self):
+        user0 = UserFactory()
+        user1 = UserFactory(is_staff=True)
+        user2 = UserFactory(is_superuser=True)
+        ACLRuleFactory(slug='page', permissions=['change_page'], apply_to=ACLRule.TO_SUPERUSERS)
+        users = ACLRule.get_users_for(['change_page'], 'page')
+        self.assertEqual(set(users), {user2})
 
 
 class CheckPermTagTest(TestCase):
