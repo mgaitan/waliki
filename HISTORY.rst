@@ -3,8 +3,14 @@
 Changelog
 ---------
 
-0.2dev
+0.3dev
 ++++++
+
+- Implement *per namespace* ACL rules
+
+
+0.2 (2014-09-29)
+++++++++++++++++
 
 - Support concurrent edition
 - Added a simple ACL system

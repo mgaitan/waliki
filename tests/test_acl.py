@@ -3,6 +3,7 @@ from django.template import Template, Context, TemplateSyntaxError
 from django.contrib.auth.models import AnonymousUser
 from mock import patch
 from waliki.models import ACLRule
+from waliki.acl import check_perms
 from .factories import UserFactory, GroupFactory, ACLRuleFactory
 
 
@@ -66,19 +67,53 @@ class TestGetUsersRules(TestCase):
         self.assertIn(user1, users)
 
     def test_to_staff(self):
-        user1 = UserFactory()
+        UserFactory()
         user2 = UserFactory(is_staff=True)
         ACLRuleFactory(slug='page', permissions=['view_page'], apply_to=ACLRule.TO_STAFF)
         users = ACLRule.get_users_for(['view_page'], 'page')
         self.assertEqual(set(users), {user2})
 
     def test_to_super(self):
-        user0 = UserFactory()
-        user1 = UserFactory(is_staff=True)
+        UserFactory()
+        UserFactory(is_staff=True)
         user2 = UserFactory(is_superuser=True)
         ACLRuleFactory(slug='page', permissions=['change_page'], apply_to=ACLRule.TO_SUPERUSERS)
         users = ACLRule.get_users_for(['change_page'], 'page')
         self.assertEqual(set(users), {user2})
+
+
+class TestNamespaces(TestCase):
+
+    def test_simple_namespace(self):
+        user1 = UserFactory()
+        user2 = UserFactory()
+        ACLRuleFactory(slug='user1-section', permissions=['change_page'],
+                       as_namespace=True, users=[user1])
+        self.assertTrue(check_perms('change_page', user1, 'user1-section'))
+        self.assertTrue(check_perms('change_page', user1, 'user1-section/nested/page'))
+        self.assertFalse(check_perms('change_page', user2, 'user1-section'))
+        self.assertFalse(check_perms('change_page', user2, 'user1-section/nested/page'))
+
+    def test_two_levels_namespace(self):
+        user1 = UserFactory()
+        user2 = UserFactory()
+        ACLRuleFactory(slug='section/special', permissions=['change_page'],
+                       as_namespace=True, users=[user1])
+        self.assertTrue(check_perms('change_page', user1, 'section/special'))
+        self.assertTrue(check_perms('change_page', user1, 'section/special/page'))
+        self.assertTrue(check_perms('change_page', user2, 'section/no-special'))
+        self.assertFalse(check_perms('change_page', user2, 'section/special/page'))
+
+    def test_a_section_for_staff(self):
+        user = UserFactory()
+        staff_member = UserFactory(is_staff=True)
+        ACLRuleFactory(slug='staff-section', permissions=['view_page', 'add_page', 'change_page'],
+                       as_namespace=True, apply_to=ACLRule.TO_STAFF)
+        for perm in ['view_page', 'add_page', 'change_page']:
+            self.assertFalse(check_perms(perm, user, 'staff-section'))
+            self.assertFalse(check_perms(perm, user, 'staff-section/a-page'))
+            self.assertTrue(check_perms(perm, staff_member, 'staff-section'))
+            self.assertTrue(check_perms(perm, staff_member, 'staff-section/a-page'))
 
 
 class CheckPermTagTest(TestCase):
