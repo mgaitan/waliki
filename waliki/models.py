@@ -6,9 +6,8 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.models import Permission, Group, AnonymousUser
 from django.contrib.auth import get_user_model
-from django.utils.six import string_types
 from . import _markups
 from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
@@ -117,10 +116,24 @@ class Page(models.Model):
 
 
 class ACLRule(models.Model):
+    TO_ANY = 'any'
+    TO_LOGGED = 'logged'
+    TO_STAFF = 'staff'
+    TO_SUPERUSERS = 'superusers'
+    TO_EXPLICIT_LIST = 'explicit'
+    APPLY_TO_CHOICES = (
+        (TO_ANY, _('Any user')),
+        (TO_LOGGED, _('Any logged in user')),
+        (TO_STAFF, _('Any staff member')),
+        (TO_SUPERUSERS, _('Any superuser')),
+        (TO_EXPLICIT_LIST, _('Any user/group explicitly defined')),
+    )
+
     name = models.CharField(verbose_name=_('Name'), max_length=200, unique=True)
     slug = models.CharField(max_length=200)
     as_namespace = models.BooleanField(verbose_name=_('As namespace'), default=False)
     permissions = models.ManyToManyField(Permission, limit_choices_to={'content_type__app_label': 'waliki'})
+    apply_to = models.CharField(max_length=25, choices=APPLY_TO_CHOICES, default=TO_EXPLICIT_LIST)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
     groups = models.ManyToManyField(Group, blank=True)
 
@@ -135,18 +148,46 @@ class ACLRule(models.Model):
         verbose_name_plural = _('ACL rules')
 
     @classmethod
-    def get_users_for(cls, perms, slug):
-        """return users with ``perms`` for the given ``slug``.
+    def get_rules_for(cls, perms, slug):
+        """return rules with ``perms`` for the given ``slug``
 
         ``perms`` could be the permission name or an iterable
          of permissions names
         """
+
         if isinstance(perms, string_types):
             perms = (perms,)
 
-        users = get_user_model().objects.all()
+        rules = cls.objects.all()
         for perm in perms:
-            lookup = Q(aclrule__permissions__codename=perm, aclrule__slug=slug)
-            lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
-            users = users.filter(lookup)
-        return users.distinct()
+            lookup = Q(permissions__codename=perm, slug=slug)
+            rules = rules.filter(lookup)
+        return rules.distinct()
+
+    @classmethod
+    def get_users_for(cls, perms, slug):
+        """
+        return users with ``perms`` for the given ``slug``.
+
+        ``perms`` could be the permission name or an iterable
+         of permissions names
+        """
+
+        rules = cls.get_rules_for(perms, slug)
+
+        if rules.filter(apply_to=ACLRule.TO_ANY).exists():
+            return {AnonymousUser()} | set(get_user_model().objects.all())
+        elif rules.filter(apply_to__in=ACLRule.TO_LOGGED).exists():
+            return get_user_model().objects.all()
+
+        allowed = []
+        for rule in rules:
+            if rule.apply_to == ACLRule.TO_STAFF:
+                allowed += get_user_model().objects.filter(is_staff=True).values_list('id', flat=True)
+            elif rule.apply_to == ACLRule.TO_SUPERUSERS:
+                allowed += get_user_model().objects.filter(is_superuser=True).values_list('id', flat=True)
+            else:
+                allowed += get_user_model().objects.filter(Q(aclrule=rule) |
+                                                           Q(groups__aclrule=rule)).values_list('id',
+                                                                                                 flat=True)
+        return get_user_model().objects.filter(id__in=allowed).distinct()

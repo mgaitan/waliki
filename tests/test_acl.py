@@ -46,7 +46,7 @@ class TestGetUsersRules(TestCase):
         user2 = UserFactory()
         ACLRuleFactory(
             slug='page', permissions=['view_page'], users=[user1, user2])
-        ACLRuleFactory(slug='page', permissions=['change_page'], users=[user1])
+        ACLRuleFactory(slug='page', permissions=['view_page', 'change_page'], users=[user1])
         users = ACLRule.get_users_for(['view_page', 'change_page'], 'page')
         self.assertEqual(set(users), {user1})
 
