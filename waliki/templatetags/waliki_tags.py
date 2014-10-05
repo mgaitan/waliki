@@ -1,5 +1,9 @@
 from django import template
+from django.core.urlresolvers import reverse
 from waliki.acl import check_perms as check_perms_helper
+from waliki.models import Page
+from waliki.forms import PageForm
+
 
 register = template.Library()
 
@@ -28,6 +32,7 @@ def get_attr(obj, val):
 
 
 class CheckPermissionsNode(template.Node):
+
     def __init__(self, perms, user, slug, context_var):
         self.perms = template.Variable(perms)
         self.user = template.Variable(user)
@@ -90,3 +95,38 @@ def check_perms(parser, token):
                                            "argument should be in quotes")
     context_var = context_var[1:-1]
     return CheckPermissionsNode(perms, user, slug, context_var)
+
+
+@register.inclusion_tag("waliki/box.html", takes_context=True)
+def waliki_box(context, slug, show_edit=True, *args, **kwargs):
+    """
+    A templatetag to render a wiki page content as a box in any webpage,
+    and allow rapid edition if you have permission.
+
+    It's inspired in `django-boxes`_
+
+    .. _django-boxes: https://github.com/eldarion/django-boxes
+    """
+
+    request = context["request"]
+    try:
+        page = Page.objects.get(slug=slug)
+    except Page.DoesNotExist:
+        page = None
+
+    if (page and check_perms_helper('change_page', request.user, slug)
+            or (not page and check_perms_helper('add_page', request.user, slug))):
+        form = PageForm(instance=page, initial={'slug': slug})
+        form_action = reverse("waliki_edit", args=[slug])
+    else:
+        form = None
+        form_action = None
+
+    return {
+        "request": request,
+        "slug": slug,
+        "label": slug.replace('/', '_'),
+        "page": page,
+        "form": form,
+        "form_action": form_action,
+    }

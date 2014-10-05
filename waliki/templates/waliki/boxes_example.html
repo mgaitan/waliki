@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load waliki_tags %}
+
+
+{% block body %}
+
+        <div class="row" style="margin-top: 50px">
+            <div class="col-sm-8">
+                {% waliki_box "boxes/row1/left" %}
+            </div>
+            <div class="col-sm-4">
+                {% waliki_box "boxes/row1/right" %}
+            </div>
+        </div>
+        <!-- /.row -->
+        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                {% waliki_box "boxes/row2/left" %}
+            </div>
+            <div class="col-sm-4">
+                {% waliki_box "boxes/row2/center" %}
+            </div>
+            <div class="col-sm-4">
+                {% waliki_box "boxes/row2/right" %}
+            </div>
+        </div>
+        <!-- /.row -->
+        <hr>
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                        {% waliki_box "boxes/footer/"|add:request.user.username %}
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
+    </div>
+
+
+{% endblock %}

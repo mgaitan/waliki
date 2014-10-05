@@ -8,7 +8,6 @@ from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth import get_user_model
-from django.utils.six import string_types
 from . import _markups
 from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
@@ -66,7 +65,7 @@ class Page(models.Model):
     @property
     def raw(self):
         filename = self.abspath
-        if not os.path.exists(filename):
+        if not os.path.exists(filename) or os.path.isdir(filename):
             return ""
         return open(filename, "r").read()
 
