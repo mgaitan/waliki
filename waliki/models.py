@@ -65,7 +65,7 @@ class Page(models.Model):
     @property
     def raw(self):
         filename = self.abspath
-        if not os.path.exists(filename):
+        if not os.path.exists(filename) or os.path.isdir(filename):
             return ""
         return open(filename, "r").read()
 
@@ -123,7 +123,7 @@ class ACLRule(models.Model):
     TO_EXPLICIT_LIST = 'explicit'
     APPLY_TO_CHOICES = (
         (TO_ANY, _('Any user')),
-        (TO_LOGGED, _('Any logged in user')),
+        (TO_LOGGED, _('Any authenticated user')),
         (TO_STAFF, _('Any staff member')),
         (TO_SUPERUSERS, _('Any superuser')),
         (TO_EXPLICIT_LIST, _('Any user/group explicitly defined')),

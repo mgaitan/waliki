@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load bootstrap_tags %}
+{% if form %}
+        <div id="edit_{{ label }}" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+            <form id="edit_form_{{ label }}" accept-charset="UTF-8" class="modal-form" method="POST" action="{{ form_action }}?next={{ request.path }}">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span></button>
+                <h4 class="modal-title">{% trans "Editing" %} {{ slug }}</h4>
+              </div>
+              <div class="modal-body">
+                    {% csrf_token %}
+                    {{ form|as_bootstrap }}
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
+              </div>
+            </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+{% endif %}
+
+<div id="content_{{ label }}" class="content-box {% if form %}editable{% endif %}">
+    {% if form %}
+        <button type="button" data-toggle="modal" data-target="#edit_{{ label }}" class="btn btn-default" title="{% trans 'Edit this content' %}"><span class="glyphicon glyphicon-pencil"></span></button>
+    {% endif %}
+    {{ page.body|safe }}
+</div>

@@ -44,7 +44,7 @@ p.admonition-title { display: none;}
 .admonition, .system-message, .attention, .caution,
 .danger, .error, .hint, .important,
 .note, .tip, .warning {
-  width: 850px;
+  width: 80%;
   padding: 8px 35px 8px 14px;
   margin-bottom: 20px;
   margin-left: 40px;

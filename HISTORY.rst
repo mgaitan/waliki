@@ -6,7 +6,9 @@ Changelog
 0.3dev
 ++++++
 
-- Implement *per namespace* ACL rules
+- Added the ``waliki_box`` templatetag
+- Implemented *per namespace* ACL rules
+- Added a webhook to pull and sync change from a remote repository (Git)
 
 
 0.2 (2014-09-29)
