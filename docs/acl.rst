@@ -1,7 +1,9 @@
+.. _acl:
+
 The access control system
 =========================
 
-Waliki has a very simple *"per slug"* `ACL <http://en.wikipedia.org/wiki/Access_control_list>`_ system builtin, that allow to control who have access to view, add, change or delete pages (and possible other permissions and objects) in your wiki.
+Waliki has a very simple *"per slug"* `ACL <http://en.wikipedia.org/wiki/Access_control_list>`_ system built-in, that allow to control who have access to view, add, change or delete pages (and possible other permissions and objects) in your wiki.
 
 It's inspired in `django-guardian <https://github.com/lukaszb/django-guardian>`_` and leverages on ``django.contrib.auth``.
 
@@ -12,10 +14,11 @@ for anonymous and logged users in your settings (``WALIKI_ANONYMOUS_USER_PERMISS
     - to which groups and/or users
     - limited to which slug
 
+
 So, here is how it works:
 
-- Access controlled views has a decorator :func:`acl.permission_required`
-  that asks the user for one or more permissions **in that specific slug** to access
+- Access controlled views have a decorator :func:`acl.permission_required`
+  that asks the user for one or more permissions **in that specific slug** to access the view.
 - The decorator checks if there is an ACL rule with the requested
   permission/s that apply to this slug.
 - If there is a rule and the user is in the rule's allowed users (because
@@ -26,7 +29,7 @@ So, here is how it works:
 An example
 ----------
 
-You want this:
+Suppose you want this:
 
 - Anonymous users can view any page except the
   ones under the slug *intranet*. Anonymous users can't edit pages.
@@ -42,10 +45,13 @@ and logged in users can also edit but not delete. In your settings::
     WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', )
     WALIKI_LOGGED_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page')
 
+.. note:: Note that, in this case, those are the Waliki's
+          defaults permissions, so, you wouldn't need to set them.
+
 Then go to the admin an create the following rules:
 
 - One rule for the slug **intranet** with the permissions
-  ``view_page``, ``add_page`` and ``change_page``. In "Apply to" select *Any logged in user*
+  ``view_page``, ``add_page`` and ``change_page``. In "Apply to" select *Any authenticated user*
 - Add a rule for the homepage: slug *home* (or the slug defined
   in ``WALIKI_INDEX_SLUG``), with the permission ``add_page`` and ``change_page``, apply to *Any user/group explicitly defined*, and add the user *jhon* and the group *editors* respectively.
 - Lastly, add a rule for the permission ``delete_page`` and apply it to
