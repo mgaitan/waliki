@@ -48,6 +48,13 @@ Where ``boxes_example.html`` is as following:
 
     {% endblock %}
 
+
+
+.. raw:: html
+
+    <iframe width="420" height="315" src="//www.youtube.com/embed/-mm0uQGUEsw" frameborder="0" allowfullscreen></iframe>
+
+
 You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>`_ live in the demo site. Note that the demo site apply an :ref:`ACL rule <acl_>`
 to limit the edition under the *namespace* ``boxes``  to authenticated users.
 
