@@ -33,4 +33,4 @@ The *pull* webhook
     POST http://yoursite.com[/<waliki_prefix>]/hooks/pull/<remote>
 
 
-This is useful to sync your wiki whenever a repository is pushed to. For example when you push `to <https://developer.github.com/webhooks/>`_.
+This is useful to sync your wiki whenever a repository is pushed to. For example when you push `to github <https://developer.github.com/webhooks/>`_.
