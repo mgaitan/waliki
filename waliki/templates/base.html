@@ -33,7 +33,7 @@
     </head>
 
     <body>
-
+        {% block navbar %}
         <div class="navbar navbar-fixed-top navbar-default">
             <div class="container">
                 <div class="container">
@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-
+        {% endblock %}
         <div class="container">
         {% block messages %}
             <div class="row">
