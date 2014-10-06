@@ -60,6 +60,9 @@ def edit(request, slug):
             if isinstance(r[1], dict) and 'messages' in r[1]:
                 for key, value in r[1]['messages'].items():
                     getattr(messages, key)(request, value)
+
+        if 'next' in request.GET:
+            return redirect(request.GET['next'])
         return redirect('waliki_detail', slug=page.slug)
     cm_modes = [(m.name, m.codemirror_mode_name) for m in get_all_markups()]
 
