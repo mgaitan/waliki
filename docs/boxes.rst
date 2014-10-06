@@ -1,7 +1,7 @@
 Boxes: Waliki as a (dummy) CMS
 ==============================
 
-The templatetag ``waliki_box`` allow to render the body of a wiki page as a portion (a "box") of a webpage, and a rapid inline edition if the user has the right permission.
+The templatetag ``waliki_box`` allows to display the body of a wiki page as a portion (a "box") of a webpage, and a rapid inline edition if the user has the right permission.
 
 The templatetag receives the page's slug as only parameter::
 
