@@ -49,7 +49,7 @@ Where ``boxes_example.html`` is as following:
     {% endblock %}
 
 You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>`_ live in the demo site. Note that the demo site apply an :ref:`ACL rule <acl_>`
-to limit the edition of the any block under the *namespace* ``boxes``  to authenticated users.
+to limit the edition under the *namespace* ``boxes``  to authenticated users.
 
 `Login <http://waliki.pythonanywhere.com/accounts/login/?next=/boxes-example/>`_ to edit the boxes!
 
