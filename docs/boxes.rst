@@ -12,7 +12,7 @@ Usage example
 
 Consider a view that render a template:
 
-.. code-python:: python
+.. code-block:: python
 
     urlpatterns = patterns('',
         ...
@@ -48,13 +48,13 @@ Where ``boxes_example.html`` is as following:
 
     {% endblock %}
 
-You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>` live in the demo site. Note that the demo site apply an :ref:`ACL rule <acl>`
+You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>` live in the demo site. Note that the demo site apply an :ref:`ACL rule <acl_>`
 to limit the edition of the any block under the *namespace* ``boxes``  to authenticated users.
 
-`Login http://waliki.pythonanywhere.com/accounts/login/?next=/boxes-example/"<to edit the boxes!
+`Login <http://waliki.pythonanywhere.com/accounts/login/?next=/boxes-example/>`_ to edit the boxes!
 
-.. tip:: As you can see, the last box is all yours,
-         because it will render "boxes/footer/<your_username>"
+.. tip:: As you can see in the code of the template, the last box is all yours,
+         because it will render "boxes/footer/<your_username>" :)
 
 
 

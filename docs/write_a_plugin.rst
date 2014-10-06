@@ -1,3 +1,5 @@
+.. _write_plugin:
+
 Write a plugin
 ==============
 
