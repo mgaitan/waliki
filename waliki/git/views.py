@@ -48,8 +48,11 @@ def version(request, slug, version, raw=False):
 
 
 @permission_required('view_page')
-def diff(request, slug, old, new):
+def diff(request, slug, old, new, raw=False):
     page = get_object_or_404(Page, slug=slug)
+    if raw:
+        content = Git().diff(page, new, old)
+        return HttpResponse(content, content_type='text/plain')
     old_content = Git().version(page, old)
     new_content = Git().version(page, new)
     return render(request, 'waliki/diff.html', {'page': page,

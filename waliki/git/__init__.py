@@ -118,3 +118,6 @@ class Git(object):
     def pull(self, remote):
         log = git.pull('-s', 'recursive', '-X', 'ours', remote, 'HEAD').stdout.decode('utf8')
         return log
+
+    def diff(self, page, new, old):
+        return git.diff('--no-color', new, old, '--', page.path).stdout.decode('utf8')
