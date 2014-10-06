@@ -55,6 +55,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'waliki_project',
     'waliki',
     'waliki.git',
     'waliki.pdf',
@@ -108,7 +109,6 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-
 
 try:
     from .local_settings import *    # noqa
