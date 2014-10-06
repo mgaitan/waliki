@@ -83,7 +83,7 @@ If you are writing your own plugin, you can use the ACL reusing the view decorat
                ``delete_page``, *user1* still don't be allowed to request a view that requires both ``change_page`` and ``delete_page``.
 
 
-Also, you can use the low-level helper :func:`acl.check_perms` ::
+Also, you can use the low-level helper :func:`acl.check_perms`:
 
 .. code-block:: python
 
@@ -101,7 +101,9 @@ or::
     {% check_perms "perm1[, perm2, ...]" for user in "slug" as "context_var" %}
 
 
-For example (assuming ``page`` objects are available from *context*)::
+For example (assuming ``page`` objects are available from *context*)
+
+.. code-block:: html
 
     {% load waliki_tags %}
 
@@ -109,9 +111,5 @@ For example (assuming ``page`` objects are available from *context*)::
     {% if can_delete %}
         <a id="confirmDelete" class="text-error">Delete</a>
     {% endif %}
-
-
-
-
 
 
