@@ -11,7 +11,7 @@ With this simple logic you'll get:
 * History of changes (who, when, what)
 * Diff: compare any version an see what was added or removed
 * Smart concurrent edition handling: don't lock editions, merge them!
-* View and restor old page revisions (without loose history)
+* View and restore old revisions (without lose history)
 * Simple stats: how many lines were added or removed. (go to the history page to see it in action!)
 * Backup (pushing your repo to a remote place)
 * Edit your content outside the web using the editor of your preference!

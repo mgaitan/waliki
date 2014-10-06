@@ -28,8 +28,8 @@ def _get_version():
     """Get the version from package itself."""
     with open("../waliki/__init__.py") as fh:
         for line in fh:
-            if line.startswith("VERSION = "):
-                return line.split("=")[-1].strip().strip('"')
+            if line.startswith("__version__ = "):
+                return line.split("=")[-1].strip().strip("'").strip('"')
 
 
 # -- General configuration -----------------------------------------------------
