@@ -8,6 +8,7 @@
     <div class="pull-right">
     {% block actions %}
         <div class="btn-group">
+
             <a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-default">{% trans "Edit" %}</a>
             <button class="btn dropdown-toggle btn-default" data-toggle="dropdown">
                 <span class="caret"></span>
@@ -17,6 +18,8 @@
 
             {% if page %}
                 {% extra_page_actions page %}
+
+                <li><a href="{% url "waliki_detail_raw" page.slug %}">{% trans "Raw" %}</a></li>
 
                 {% if can_delete %}
                 <li class="divider"></li>

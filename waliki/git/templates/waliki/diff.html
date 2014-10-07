@@ -2,17 +2,19 @@
 {% load i18n %}
 {% load static %}
 
-
-{% block page_tools %}
-    <a href="{% url 'waliki_history' page.slug %}" class="btn btn-default btn-sm">{% trans "History" %}</a>
-    {{ block.super }}
-{% endblock %}
+{% block title %}
+    <h3 id="top">{% trans "Diff" %}: <a href="{{ page.get_absolute_url }}">/{{ page.slug }}</a></h3>
+{% endblock title %}
 
 {% block content %}
 
     <div class="alert alert-info">
-        {% trans "Comparing" %} <strong>{{ new_commit }}</strong> vs <strong>{{ old_commit }}</strong>
+        {% trans "Comparing" %} <a href="{% url "waliki_version" page.slug new_commit %}">{{ new_commit }}</a> vs. <a href="{% url "waliki_version" page.slug old_commit %}">{{ old_commit }}</a>
+
+        <a href="{% url 'waliki_diff_raw' page.slug old_commit new_commit %}" class="btn btn-default btn-sm">{% trans "Raw" %}</a>
     </div>
+
+
 
 
     <div id="diff" class="monospace"></div>
