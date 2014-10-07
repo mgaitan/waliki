@@ -2,8 +2,10 @@
 {% load i18n %}
 
 {% block title %}
-    <h3 id="top"><a href="{{ page.get_absolute_url }}">/{{ page.slug }}</a> (@{{ version }})</h3>
+    <h3 id="top"><a href="{{ page.get_absolute_url }}">/{{ page.slug }}</a> @{{ version }}</h3>
 {% endblock title %}
+
+
 
 
 {% block content %}
@@ -15,6 +17,9 @@
 
 <div class="form-group">
     <button type="submit" class="btn btn-success btn-sm">{% trans "Restore this version" %}</button>
+    <a href="{% url 'waliki_version_raw' page.slug version %}" class="btn btn-default btn-sm">{% trans "Raw" %}</a>
+    <a href="{% url 'waliki_diff' page.slug version|add:'^' version %}" class="btn btn-default btn-sm">{% trans "Diff" %}</a>
+
 </div>
 </form>
 <h1>{{ page.title }} </h1>

@@ -5,7 +5,7 @@ from waliki.models import ACLRule, Page
 
 class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Sequence(lambda n: u'user{0}'.format(n))
-    password = 'pass'
+    password = factory.PostGenerationMethodCall('set_password', 'pass')
     email = factory.LazyAttribute(lambda o: '%s@example.org' % o.username)
 
     class Meta:

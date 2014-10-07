@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
@@ -16,12 +16,17 @@ def home(request):
 
 
 @permission_required('view_page')
-def detail(request, slug):
+def detail(request, slug, raw=False):
     slug = slug.strip('/')
     try:
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
         page = None
+    if raw and page:
+        return HttpResponse(page.raw, content_type='text/plain')
+    elif raw:
+        raise Http404
+
     return render(request, 'waliki/detail.html', {'page': page, 'slug': slug})
 
 

@@ -6,21 +6,22 @@ from django.core.exceptions import PermissionDenied
 from django.utils.decorators import available_attrs
 from django.utils.encoding import force_str
 from django.utils.six.moves.urllib.parse import urlparse
+from django.utils.six import string_types
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import resolve_url
 from .models import ACLRule
-from .settings import (WALIKI_ANONYMOUS_USER_PERMISSIONS, WALIKI_LOGGED_USER_PERMISSIONS,
+from .settings import (WALIKI_ANONYMOUS_USER_PERMISSIONS,
+                       WALIKI_LOGGED_USER_PERMISSIONS,
                        WALIKI_RENDER_403)
 
 
 def check_perms(perms, user, slug, raise_exception=False):
     """a helper user to check if a user has the permissions
     for a given slug"""
-
-    if isinstance(perms, (tuple, list, set)):
-        perms = set(perms)
-    else:
+    if isinstance(perms, string_types):
         perms = {perms}
+    else:
+        perms = set(perms)
 
     allowed_users = ACLRule.get_users_for(perms, slug)
 
@@ -60,7 +61,6 @@ def permission_required(perms, login_url=None, raise_exception=False, redirect_f
 
             if check_perms(perms, request.user, kwargs['slug'], raise_exception=raise_exception):
                 return view_func(request, *args, **kwargs)
-
             if request.user.is_authenticated():
                 if WALIKI_RENDER_403:
                     return render(request, 'waliki/403.html', kwargs, status=403)
