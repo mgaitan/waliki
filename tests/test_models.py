@@ -132,4 +132,18 @@ class TestMeta(TestCase):
         self.assertIn(meta, ('\n###. \n.. title: %s\n.. other_meta: something\n\n' % p.title,
                              '\n###. \n.. other_meta: something\n.. title: %s\n\n' % p.title))
 
+    def _test_parse_meta(self, markup):
+        p = PageFactory(raw="hello world!", markup=markup)
+        kw = dict(title=p.title, other_meta='something')
+        meta_block = p._markup.format_meta(**kw)
+        p.raw = meta_block + p.raw
+        self.assertEqual(p._parse_meta(), kw)
 
+    def test_parse_meta_rst(self):
+        self._test_parse_meta('reStructuredText')
+
+    def test_parse_meta_md(self):
+        self._test_parse_meta('Markdown')
+
+    def test_parse_meta_textile(self):
+        self._test_parse_meta('Textile')

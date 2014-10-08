@@ -41,8 +41,9 @@ def _get_markup_settings(user_settings):
                     'extension_configs': {
                         'wikilinks': {'build_url': get_url},
                         'headerid': {'level': 2},
-                    }
-                }
+                    },
+                },
+                'Textile': {}
             }
 
     deep_update(defaults, user_settings)

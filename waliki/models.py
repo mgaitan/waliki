@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import os.path
 from django.db import models
 from django.db.models import Q
@@ -15,7 +16,7 @@ from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DAT
 
 class Page(models.Model):
     MARKUP_CHOICES = [(m.name, m.name) for m in _markups.get_all_markups()]
-    title = models.CharField(verbose_name=_('Title'), max_length=200)
+    title = models.CharField(verbose_name=_('Title'), max_length=200, blank=True, null=True)
     slug = models.CharField(max_length=200, unique=True)
     path = models.CharField(max_length=200, unique=True)
     markup = models.CharField(verbose_name=_('Markup'), max_length=20,
@@ -61,6 +62,17 @@ class Page(models.Model):
         page.title = page._get_part('get_document_title')
         page.save()
         return page
+
+    def _parse_meta(self):
+        meta = {}
+        pattern = re.compile('^\.\. (.*?): (.*)')
+        for l in self.raw.split('\n'):
+            if not l and meta:
+                break
+            found = pattern.findall(l)
+            if found:
+                meta.update(pattern.findall(l))
+        return meta
 
     @property
     def raw(self):
