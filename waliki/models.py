@@ -64,6 +64,7 @@ class Page(models.Model):
         return page
 
     def _parse_meta(self):
+        """return a dict with metadata in the header"""
         meta = {}
         pattern = re.compile('^\.\. (.*?): (.*)')
         for l in self.raw.split('\n'):

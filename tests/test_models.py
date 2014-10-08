@@ -147,3 +147,7 @@ class TestMeta(TestCase):
 
     def test_parse_meta_textile(self):
         self._test_parse_meta('Textile')
+
+    def test_only_parses_meta_from_header(self):
+        p = PageFactory(raw='.. title: tit\n\nSomething\.. own_comment: something')
+        self.assertEqual(p._parse_meta(), {'title': 'tit'})
