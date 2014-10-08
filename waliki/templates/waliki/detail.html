@@ -35,7 +35,7 @@
 {% block content %}
 
     {% if page %}
-        {{ page.body|safe }}
+        {{ page.get_cached_content|safe }}
     {% else %}
         <p>{% trans "This page doesn't exist yet." %}</p>
         <p><a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-success">{% trans "Create it" %}</a></p>

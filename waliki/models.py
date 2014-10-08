@@ -9,6 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth import get_user_model
 from django.utils.six import string_types
+from django.core.cache import cache
+from django.db.models.signals import post_save, pre_delete
 from . import _markups
 from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
@@ -116,6 +118,23 @@ class Page(models.Model):
         return self._get_part('get_javascript')
 
 
+    def get_cache_key(self):
+        return "waliki:content:%s" % self.slug
+
+    def get_cached_content(self):
+        """Returns cached """
+        cache_key = self.get_cache_key()
+        cached_content =  cache.get(cache_key)
+
+        if cached_content is None:
+            cached_content = self._get_part('get_document_body')
+            cache.set(cache_key, cached_content, 60*60*24) #Cache por invalidacion y tiempo (1 dia)
+        return cached_content
+
+    def clear_cache(self):
+        cache.delete(self.get_cache_key())
+
+
 class ACLRule(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=200, unique=True)
     slug = models.CharField(max_length=200)
@@ -150,3 +169,16 @@ class ACLRule(models.Model):
             lookup |= Q(groups__aclrule__permissions__codename=perm, groups__aclrule__slug=slug)
             users = users.filter(lookup)
         return users.distinct()
+
+
+######################################################
+# SIGNAL HANDLERS
+######################################################
+
+def _clear_ancestor_cache(page):
+    page.clear_cache()
+
+def on_page_save_clear_cache(instance, **kwargs):
+    _clear_ancestor_cache(instance)
+
+post_save.connect(on_page_save_clear_cache, Page)
