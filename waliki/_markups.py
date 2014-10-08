@@ -48,6 +48,10 @@ class MarkdownMarkup(MarkdownMarkupBase):
             self.md.inlinePatterns.add('mathjax%d' % i, pattern, '<escape')
         self.extensions = extensions
 
+    def format_meta(self, **kwargs):
+        meta = '\n'.join(".. %s :%s" % i for i in kwargs.items())
+        return "\n"('<!--', meta, '-->\n')
+
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
@@ -83,9 +87,16 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
                 text + '\n\n' + refs)
         return html
 
+    def format_meta(self, **kwargs):
+        return '\n'.join(".. %s :%s" % i for i in kwargs.items()) + '\n'
+
 
 class TextileMarkup(TextileMarkupBase):
     codemirror_mode_name = codemirror_mode = 'textile'
+
+    def format_meta(self, **kwargs):
+        meta = '\n'.join(".. %s :%s" % i for i in kwargs.items())
+        return "\n".join('\n###. ', meta, '\n')
 
 
 def get_all_markups():
