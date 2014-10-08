@@ -49,8 +49,8 @@ class MarkdownMarkup(MarkdownMarkupBase):
         self.extensions = extensions
 
     def format_meta(self, **kwargs):
-        meta = '\n'.join(".. %s :%s" % i for i in kwargs.items())
-        return "\n"('<!--', meta, '-->\n')
+        meta = '\n'.join(".. %s: %s" % i for i in kwargs.items())
+        return "\n".join(('<!--', meta, '-->\n'))
 
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
@@ -88,15 +88,15 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         return html
 
     def format_meta(self, **kwargs):
-        return '\n'.join(".. %s :%s" % i for i in kwargs.items()) + '\n'
+        return '\n'.join(".. %s: %s" % i for i in kwargs.items()) + '\n'
 
 
 class TextileMarkup(TextileMarkupBase):
     codemirror_mode_name = codemirror_mode = 'textile'
 
     def format_meta(self, **kwargs):
-        meta = '\n'.join(".. %s :%s" % i for i in kwargs.items())
-        return "\n".join('\n###. ', meta, '\n')
+        meta = '\n'.join(".. %s: %s" % i for i in kwargs.items())
+        return "\n".join(('\n###. ', meta, '\n'))
 
 
 def get_all_markups():

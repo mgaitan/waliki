@@ -6,7 +6,7 @@ from django.test import TestCase
 from waliki.models import Page
 from waliki.settings import deep_update
 from waliki import settings
-
+from .factories import PageFactory
 
 rst = """
 Title
@@ -110,3 +110,26 @@ class TestMarkupSettings(TestCase):
                 }, 'Markdown': ['...']
              }
         self.assertEqual(deep_update(d, u), expected)
+
+
+class TestMeta(TestCase):
+
+    def test_format_meta_rst(self):
+        p = PageFactory()
+        meta = p._markup.format_meta(title=p.title, other_meta='something')
+        self.assertIn(meta, ('.. title: %s\n.. other_meta: something\n' % p.title,
+                             '.. other_meta: something\n.. title: %s\n' % p.title))
+
+    def test_format_meta_md(self):
+        p = PageFactory(markup="Markdown")
+        meta = p._markup.format_meta(title=p.title, other_meta='something')
+        self.assertIn(meta, ('<!--\n.. title: %s\n.. other_meta: something\n-->\n' % p.title,
+                             '<!--\n.. other_meta: something\n.. title: %s\n-->\n' % p.title))
+
+    def test_format_meta_textile(self):
+        p = PageFactory(markup="Textile")
+        meta = p._markup.format_meta(title=p.title, other_meta='something')
+        self.assertIn(meta, ('\n###. \n.. title: %s\n.. other_meta: something\n\n' % p.title,
+                             '\n###. \n.. other_meta: something\n.. title: %s\n\n' % p.title))
+
+

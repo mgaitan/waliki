@@ -27,7 +27,8 @@ install_requires = ['django', 'markups', 'sh', 'docutils', 'rst2html5']
 
 extras_require = {                                      # noqa
         'restructuredtext': [],
-        'markdown': ['markdown']
+        'markdown': ['markdown'],
+        'textile': ['textile']
     }
 
 everything = set()
