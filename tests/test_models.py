@@ -137,7 +137,7 @@ class TestMeta(TestCase):
         kw = dict(title=p.title, other_meta='something')
         meta_block = p._markup.format_meta(**kw)
         p.raw = meta_block + p.raw
-        self.assertEqual(p._parse_meta(), kw)
+        self.assertEqual(p._parse_meta()[0], kw)
 
     def test_parse_meta_rst(self):
         self._test_parse_meta('reStructuredText')
@@ -149,5 +149,26 @@ class TestMeta(TestCase):
         self._test_parse_meta('Textile')
 
     def test_only_parses_meta_from_header(self):
-        p = PageFactory(raw='.. title: tit\n\nSomething\.. own_comment: something')
-        self.assertEqual(p._parse_meta(), {'title': 'tit'})
+        p = PageFactory(raw='.. title: tit\n\nSomething\n.. own_comment: something')
+        meta, parsed_raw = p._parse_meta()
+        self.assertEqual(meta, {'title': 'tit'})
+        self.assertEqual(parsed_raw, '\nSomething\n.. own_comment: something')
+
+    def test_only_parses_meta_from_header_ignore_first_blanks(self):
+        p = PageFactory(raw='\n\n.. title: tit\n\nSomething\n.. own_comment: something')
+        meta, parsed_raw = p._parse_meta()
+        self.assertEqual(meta, {'title': 'tit'})
+        self.assertEqual(parsed_raw, '\nSomething\n.. own_comment: something')
+
+    def test_only_parses_meta_from_header_ignores_up_to_one_line(self):
+        p = PageFactory(raw='<!--\n.. title: tit\n-->\n\nSomething\n.. own_comment: something')
+        meta, parsed_raw = p._parse_meta()
+        self.assertEqual(meta, {'title': 'tit'})
+        self.assertEqual(parsed_raw, '\nSomething\n.. own_comment: something')
+
+    def test_only_parses_meta_from_header_empty_if_more_than_one_line_doesnt_match(self):
+        raw = '\n<!--\nthis is not metadata\n.. title: tit\n-->\n\nSomething\n.. own_comment: something'
+        p = PageFactory(raw=raw)
+        self.assertEqual(p._parse_meta(), ({}, raw))
+
+

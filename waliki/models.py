@@ -63,17 +63,41 @@ class Page(models.Model):
         page.save()
         return page
 
+    def _get_meta(self):
+        # only title for now
+        return self._markup.format_meta(title=self.title)
+
     def _parse_meta(self):
-        """return a dict with metadata in the header"""
+        """
+        extract the metatada from the header of the content.
+        and return it and the remain content (meta, content)
+
+        ignore first blank lines and up to one line not matching
+        the pattern.
+        """
         meta = {}
         pattern = re.compile('^\.\. (.*?): (.*)')
-        for l in self.raw.split('\n'):
+        last_line = None
+        raw_lines = self.raw.split('\n')
+        for i, l in enumerate(raw_lines):
             if not l and meta:
                 break
             found = pattern.findall(l)
             if found:
                 meta.update(pattern.findall(l))
-        return meta
+            elif last_line:
+                break
+            last_line = l
+        if meta:
+            # consume until the next blank line
+            for j, l in enumerate(raw_lines[i:]):
+                if not l:
+                    break
+            raw_no_meta = "\n".join(raw_lines[i + j:])
+        else:
+            # no metadata found
+            raw_no_meta = self.raw
+        return meta, raw_no_meta
 
     @property
     def raw(self):
@@ -88,9 +112,12 @@ class Page(models.Model):
         try:
             os.makedirs(os.path.dirname(filename))
         except OSError:
+            # file exists?
             pass
         with open(filename, "w") as f:
-            f.write(value)
+            meta = self._get_meta()
+            f.write(meta + '\n' + value)
+
 
     @property
     def abspath(self):
