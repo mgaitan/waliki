@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 from waliki.plugins import BasePlugin, register
 
 
