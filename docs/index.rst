@@ -21,6 +21,7 @@ Contents:
    boxes
    autolinking
    get_as_pdf
+   slides
    write_a_plugin
    history
    contributing
