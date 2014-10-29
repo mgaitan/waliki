@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.dispatch import receiver
 from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group
@@ -13,7 +14,7 @@ from django.core.cache import cache
 from django.db.models.signals import post_save, pre_delete
 from . import _markups
 from .utils import get_slug
-from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
+from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR, WALIKI_CACHE_TIMEOUT
 
 
 class Page(models.Model):
@@ -107,7 +108,7 @@ class Page(models.Model):
 
     @property
     def body(self):
-        return self._get_part('get_document_body')
+        return self.get_cached_content()
 
     @property
     def stylesheet(self):
@@ -128,11 +129,10 @@ class Page(models.Model):
 
         if cached_content is None:
             cached_content = self._get_part('get_document_body')
-            cache.set(cache_key, cached_content, 60*60*24) #Cache por invalidacion y tiempo (1 dia)
+            cache.set(cache_key, cached_content, WALIKI_CACHE_TIMEOUT) #Cache por invalidacion y tiempo (1 dia)
         return cached_content
 
-    def clear_cache(self):
-        cache.delete(self.get_cache_key())
+
 
 
 class ACLRule(models.Model):
@@ -176,9 +176,9 @@ class ACLRule(models.Model):
 ######################################################
 
 def _clear_ancestor_cache(page):
-    page.clear_cache()
+    cache.delete(page.get_cache_key())
 
+@receiver(post_save, sender=Page)
 def on_page_save_clear_cache(instance, **kwargs):
     _clear_ancestor_cache(instance)
 
-post_save.connect(on_page_save_clear_cache, Page)

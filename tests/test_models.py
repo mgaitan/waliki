@@ -58,6 +58,8 @@ class TestRestructuredText(TestCase):
     def test_body(self):
         page = Page(path='test.rst')
         page.raw = rst
+        print(page.body)
+        print(rst_html);
         self.assertEqual(page.body, rst_html)
 
     def test_preview(self):
