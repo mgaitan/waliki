@@ -4,13 +4,16 @@ from django.db import models
 from django.db.models import Q
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.dispatch import receiver
 from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group, AnonymousUser
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
+from django.db.models.signals import post_save
 from . import _markups
 from .utils import get_slug
-from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
+from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR, WALIKI_CACHE_TIMEOUT
 
 
 class Page(models.Model):
@@ -104,7 +107,7 @@ class Page(models.Model):
 
     @property
     def body(self):
-        return self._get_part('get_document_body')
+        return self.get_cached_content()
 
     @property
     def stylesheet(self):
@@ -113,6 +116,19 @@ class Page(models.Model):
     @property
     def javascript(self):
         return self._get_part('get_javascript')
+
+    def get_cache_key(self):
+        return "waliki:content:%s" % self.slug
+
+    def get_cached_content(self):
+        """Returns cached """
+        cache_key = self.get_cache_key()
+        cached_content = cache.get(cache_key)
+
+        if cached_content is None:
+            cached_content = self._get_part('get_document_body')
+            cache.set(cache_key, cached_content, WALIKI_CACHE_TIMEOUT)
+        return cached_content
 
 
 class ACLRule(models.Model):
@@ -201,5 +217,14 @@ class ACLRule(models.Model):
             else:
                 allowed += get_user_model().objects.filter(Q(aclrule=rule) |
                                                            Q(groups__aclrule=rule)).values_list('id',
-                                                                                                 flat=True)
+                                                                                                flat=True)
         return get_user_model().objects.filter(id__in=allowed).distinct()
+
+
+######################################################
+# SIGNAL HANDLERS
+######################################################
+
+@receiver(post_save, sender=Page)
+def on_page_save_clear_cache(instance, **kwargs):
+    cache.delete(instance.get_cache_key())

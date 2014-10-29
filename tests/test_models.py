@@ -4,6 +4,7 @@ import os
 import mock
 from django.test import TestCase
 from waliki.models import Page
+from .factories import PageFactory
 from waliki.settings import deep_update
 from waliki import settings
 
@@ -56,8 +57,7 @@ class TestPage(TestCase):
 class TestRestructuredText(TestCase):
 
     def test_body(self):
-        page = Page(path='test.rst')
-        page.raw = rst
+        page = PageFactory(path='test-rst.rst', raw=rst)
         self.assertEqual(page.body, rst_html)
 
     def test_preview(self):
@@ -73,8 +73,7 @@ class TestRestructuredText(TestCase):
 class TestMarkdown(TestCase):
 
     def test_body(self):
-        page = Page(path='test.md', markup='Markdown')
-        page.raw = md
+        page = PageFactory(path='test.md', markup='Markdown', raw=md)
         self.assertEqual(page.body, md_html)
 
     def test_preview(self):
