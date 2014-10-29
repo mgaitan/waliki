@@ -81,3 +81,5 @@ WALIKI_RENDER_403 = getattr(settings, 'WALIKI_RENDER_403', True)
 WALIKI_COMMITTER_EMAIL = getattr(settings, 'WALIKI_COMMITTER_EMAIL', 'waliki@waliki.pythonanywhere.com')
 
 WALIKI_COMMITTER_NAME = getattr(settings, 'WALIKI_COMMITTER_NAME', 'Waliki')
+
+WALIKI_CACHE_TIMEOUT = 60*60*24
