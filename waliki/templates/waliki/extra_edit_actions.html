@@ -1,0 +1,12 @@
+{% load waliki_tags %}
+{% if extra_edit_actions %}
+	<div class="btn-group btn-group-sm">
+    {% for url_name, action in extra_edit_actions.all %}
+        <a id="btn-{{ url_name }}" class="btn btn-default" href="{% url url_name page.slug %}">{{ action }}</a>
+    {% endfor %}
+    {% for url_name, action in extra_edit_actions|getattr:page.markup %}
+        <a id="btn-{{ url_name }}" class="btn btn-default" href="{% url url_name page.slug %}">{{ action }}</a>
+    {% endfor %}
+    </div>
+
+{% endif %}
