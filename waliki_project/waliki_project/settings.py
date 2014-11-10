@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'waliki.git',
     'waliki.pdf',
     'waliki.slides',
+    'waliki.attachments',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

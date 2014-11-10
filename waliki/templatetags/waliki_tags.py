@@ -14,6 +14,37 @@ def extra_page_actions(page):
     return {'page': page, 'extra_page_actions': get_extra_page_actions()}
 
 
+@register.inclusion_tag('waliki/extra_edit_actions.html')
+def extra_edit_actions(page):
+    from waliki.plugins import get_extra_edit_actions
+    return {'page': page, 'extra_edit_actions': get_extra_edit_actions()}
+
+
+@register.inclusion_tag('waliki/extend_block.html', takes_context=True)
+def extend_block(context, block_name):
+    """include an snippet at the bottom of a block, if it exists 
+        
+    For example, if the plugin with slug 'attachments' is registered
+
+       waliki/attachments_edit_content.html  will be included with
+
+        {% extend_block 'edit_content' %}
+
+    which is declared at the bottom of the block 'content' in edit.html
+    """
+    from waliki.plugins import get_plugins
+    includes = []
+    for plugin in get_plugins():
+        template_name = 'waliki/%s_%s.html' % (plugin.slug, block_name)
+        try: 
+            # template exists
+            template.loader.get_template(template_name)
+            includes.append(template_name)
+        except template.TemplateDoesNotExist:
+            continue
+    context.update({'includes': includes})
+    return context
+
 @register.inclusion_tag('waliki/navbar_links.html')
 def navbar_links():
     from waliki.plugins import get_navbar_links
