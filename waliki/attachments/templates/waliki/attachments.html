@@ -22,10 +22,10 @@ that reload the same view but in a popup window. The popup show the same view, b
     
            {% for attachment in page.attachments.all %}
            <tr>
-                <td><a href="#"> {{ attachment.file.name }}</a></td>
+                <td><a href="#">{{ attachment }}</a></td>
                 <td style="width: 30px">
-                    <a title="{% trans "Insert" %}" class="insert" data-file="{{ attachment.file.name }}" href="#"><i class="glyphicon glyphicon-download"></i></a>
-                    <a title="{% trans "Delete" %}" class="remove" data-file="{{ attachment.file.name }}" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+                    <a title="{% trans "Insert" %}" class="insert" data-file="{{ attachment }}" href="#"><i class="glyphicon glyphicon-download"></i></a>
+                    <a title="{% trans "Delete" %}" class="remove" data-file="{{ attachment }}" href="{% url "waliki_delete_attachment" page.slug attachment.id %}"><i class="glyphicon glyphicon-remove"></i></a>
                 </td>
             </tr>        
            {% endfor %}
@@ -194,27 +194,22 @@ that reload the same view but in a popup window. The popup show the same view, b
     });
 
 
-    {% comment %}
 
     $('.remove').on('click', function(event){
         var $link = $(this);
         event.preventDefault();
-        bootbox.dialog("Are you sure you want to delete " + $(this).attr('data-file'),
-                   [{"label": "Cancel"},
-                    {"label": "Yes, delete it",
-                     "callback": function(){
-                            $.post($link.attr('href'), function(data){
-                                console.log(data);
-                                if (data.removed){
-                                    $link.parents('tr').fadeOut(1000);
-                                }
-                            });
-                        },
-                    "class":"btn-danger"}]);
 
+        var r = confirm("{% trans "Are you sure you want to delete " %}" + $(this).attr('data-file'));
+        if (r == true) {
+            $.post($link.attr('href'), function(data){
+                                    console.log(data);
+                                    if (data.removed){
+                                        $link.parents('tr').fadeOut(1000);
+                                    }
+            });
+        }
     });
 
-    {% endcomment %}
 
     $(function(){
         $('input:file').change(function() {
