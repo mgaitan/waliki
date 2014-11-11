@@ -106,5 +106,5 @@ div.important, div.note, div.hint {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 5000;
+    z-index: 1030;  /* lower than bs's modals */
 }
