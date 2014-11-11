@@ -40,8 +40,8 @@ Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
 Sync database
 -------------
 
-Although Waliki stores page content as flat files, it use a model
-to store page titles, slugs and other field.
+Although Waliki stores page content as flat files, it uses a model
+to store page titles, slugs and other fields.
 
 Create this model table using::
 

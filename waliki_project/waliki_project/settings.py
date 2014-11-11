@@ -114,6 +114,8 @@ STATIC_URL = '/static/'
 
 
 SENDFILE_BACKEND = 'sendfile.backends.simple'
+SENDFILE_ROOT = 'protected_downloads/protected'
+SENDFILE_URL = '/protected'
 
 try:
     from .local_settings import *    # noqa

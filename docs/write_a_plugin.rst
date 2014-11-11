@@ -5,9 +5,9 @@ Write a plugin
 
 Waliki has a very little core designed to be extensible with **plugins**.
 
-At the moment, there are only two extensions available (`Git </git>`_ and `rst2pdf </get-as-pdf>`_) but you can create a new one very easily.
+At the moment, there are few plugins builtin but you can create a new one very easily.
 
-A plugin is a normal Django app, with a file named ``waliki_plugin.py`` with a subclass of ``BasePlugin``.
+A plugin is a normal Django app, with a file named ``waliki_plugin.py`` that defines a subclass of ``BasePlugin``.
 
 As an example, see the `waliki.git.waliki_plugin.py`.
 
@@ -15,15 +15,45 @@ As an example, see the `waliki.git.waliki_plugin.py`.
    :language: python
 
 
-The field ``extra_page_actions`` is a list ``('url_name', 'link text')`` tuples, where each ``url_name`` is reversed passing the page's `slug` as parameters. This actions appear in the dropdown of the * "Edit"* button.
+What a plugin cand do?
+----------------------
+
+In the first place, it's important to remark that a waliki plugin **is a django app**, so you can do with them anything an app can do: define new models, add or override templates, connect signals, etc.
+
+.. tip:: Moreover, you can override a waliki core view!. It's possible because the urls
+         registered by plugins take precedence over the core ones.
+
+In addition, you can register "actions" (views that receives a page slug as parameter).
+
+The field ``extra_page_actions`` is a list of tuples ``('url_name', 'link text')``, where each ``url_name`` is reversed passing the page's ``slug`` as parameter. These actions appear in the dropdown of the * "Edit"* button.
+
+Analogously, ``extra_edit_actions`` add "buttons" (links) to the editor toolbar.
+
+Extending blocks
+++++++++++++++++
+
+Another thing a plugin can do is to extend the core templates It leverage in the template tag ``extend_block``.
 
 
-What a plugin could do?
-------------------------
+For example, the block ``{% block content %}`` in ``edit.html`` ends like this::
 
-Everything you can do with and app: add views, add or override templates, etc.
+.. code-block:: html
 
-For connect receivers functions to the signals that Waliki sends when few actions happen. At the moment there is one:
+        ...
+
+        {% extend_block 'edit_content' %}
+    {% endblock content %}
+
+
+in that point, the template ``waliki/attachments_edit_content.html`` (and any other
+template with the ``waliki/<plugin_name>_edit_content.html``) will be included
+, using a standard template include_ that receive the whole context.
+
+
+Waliki signals
+++++++++++++++
+
+In addition to the `built-in model signals <https://docs.djangoproject.com/en/dev/ref/signals/#module-django.db.models.signals>`_, your plugin can connect receivers functions to the signals that Waliki sends when few actions happen. At the moment there is one:
 
 * ``page_saved`` is sent just after save a page. The parameters are the
   ``page`` instance, the ``user`` who edited the page,  and
