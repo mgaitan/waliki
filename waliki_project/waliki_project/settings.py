@@ -112,6 +112,9 @@ SITE_ID = 1
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
+
+SENDFILE_BACKEND = 'sendfile.backends.simple'
+
 try:
     from .local_settings import *    # noqa
 except:

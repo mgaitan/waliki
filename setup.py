@@ -27,12 +27,14 @@ install_requires = ['django', 'markups', 'sh', 'docutils', 'rst2html5']
 
 extras_require = {                                      # noqa
         'restructuredtext': [],
-        'markdown': ['markdown']
+        'markdown': ['markdown'],
+        'attachments': ['django-sendfile']
     }
 
 everything = set()
 for deps in extras_require.copy().values():
     everything.update(deps)
+
 
 extras_require['all'] = everything
 

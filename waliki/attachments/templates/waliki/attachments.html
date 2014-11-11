@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% comment %}
-    
+
 This is a bit hacky in order to give support IE 7-9 lack of FormData support.
 
 The template is used both as an ajax request and directly in a popup window.
@@ -19,15 +19,15 @@ that reload the same view but in a popup window. The popup show the same view, b
     {% if page.attachments.all %}
     <table class="table table-striped">
         <tbody>
-    
+
            {% for attachment in page.attachments.all %}
            <tr>
-                <td><a href="#">{{ attachment }}</a></td>
+                <td><a href="{{ attachment.get_absolute_url }}">{{ attachment }}</a></td>
                 <td style="width: 30px">
-                    <a title="{% trans "Insert" %}" class="insert" data-file="{{ attachment }}" href="#"><i class="glyphicon glyphicon-download"></i></a>
+                    <a title="{% trans "Insert" %}" class="insert" data-file="{{ attachment }}" href="{{ attachment.get_absolute_url }}"><i class="glyphicon glyphicon-download"></i></a>
                     <a title="{% trans "Delete" %}" class="remove" data-file="{{ attachment }}" href="{% url "waliki_delete_attachment" page.slug attachment.id %}"><i class="glyphicon glyphicon-remove"></i></a>
                 </td>
-            </tr>        
+            </tr>
            {% endfor %}
     </tbody>
     </table>
@@ -46,7 +46,7 @@ that reload the same view but in a popup window. The popup show the same view, b
         <link rel="stylesheet" type="text/css" href="{% static 'css/waliki.css'%}">
 </head>
 <body>
-        
+
 {% endif %}
 
  {% include "_messages.html" %}
@@ -60,8 +60,8 @@ that reload the same view but in a popup window. The popup show the same view, b
     <div id="ajax_form">
 
 
-        <div class="progress">
-            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-success active hide" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+        <div class="progress hide">
+            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
         </div>
 
 
@@ -124,7 +124,6 @@ that reload the same view but in a popup window. The popup show the same view, b
                         var myXhr = $.ajaxSettings.xhr();
                         if(myXhr.upload){ // check if upload property exists
                             myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // for handling the progress of the upload
-                            $('#progress-bar').show();
                         }
                         return myXhr;
                     },
@@ -152,10 +151,11 @@ that reload the same view but in a popup window. The popup show the same view, b
         var cursorPos = editor.getCursor();
         var isImg = new RegExp('(jpg|png|gif)$', 'i');
 
+
         if ( isImg.test($link.attr('data-file')) ) {
             // insert as an embeded image
 
-            var insert = "{{ page.markup.IMAGE_LINE|escapejs|safe }}"
+            var insert = "{{ page.markup_.IMAGE_LINE|escapejs|safe }}"
 
            /*
                 // ensure good spacing
@@ -169,7 +169,7 @@ that reload the same view but in a popup window. The popup show the same view, b
 
         } else {
             // insert as an inline link
-            var insert = "{{ page.markup.LINK_LINE|escapejs|safe }}"
+            var insert = "{{ page.markup_.LINK_LINE|escapejs|safe }}"
             /*
 
             if (textBefore.substr(textBefore.length - 1, 1) !== ' '){
@@ -189,6 +189,7 @@ that reload the same view but in a popup window. The popup show the same view, b
         event.preventDefault();
         $('#attachments-modal').modal('hide');
         var insert = get_code($(this));
+        console.log(insert);
         editor.replaceSelection(insert);
         editor.focus();
     });

@@ -85,4 +85,4 @@ WALIKI_COMMITTER_NAME = getattr(settings, 'WALIKI_COMMITTER_NAME', 'Waliki')
 WALIKI_CACHE_TIMEOUT = 60*60*24
 
 def WALIKI_UPLOAD_TO(instance, filename):
-    return os.path.join('attachments', instance.page.slug, filename)
+    return os.path.join('waliki_attachments', instance.page.slug, filename)
