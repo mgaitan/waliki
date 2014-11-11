@@ -65,7 +65,8 @@ class TestGitWebhook(TestCase):
         Git().commit(self.page)
         response = self.client.post(self.url, {})
         # local wins
-        self.assertEqual(self.page.raw, self.content + '\nlocal line\n')
+        # Note: newer versions of git don't leave a blank line at the end
+        self.assertRegexpMatches(self.content + "\nlocal line\n?$", self.page.raw)
 
     def test_create_page_if_remote_added_files(self):
         assert not Page.objects.filter(path="newpage.rst").exists()

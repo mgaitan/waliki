@@ -82,7 +82,9 @@ class TestGit(TestCase):
         # there is a message
         self.assertTrue(messages.warning.called)
         self.assertIn('There were changes', messages.warning.call_args[0][1])
-        self.assertEqual(self.page.raw, "- item0\n\n- item1\n\n- item2\n")
+
+        # newer versions of git don't leave a blank line at the end
+        self.assertRegexpMatches("- item0\n\n- item1\n\n- item2\n?$", self.page.raw)
 
     def test_concurrent_edition_with_conflict(self):
         self.page.raw = "- item1"
