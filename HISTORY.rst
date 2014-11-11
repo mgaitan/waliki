@@ -3,11 +3,13 @@
 Changelog
 ---------
 
-0.3dev
-++++++
+0.3 (2014-11-11)
+++++++++++++++++
 
-- Added the ``waliki_box`` templatetag
+- Plugin *attachments*
 - Implemented *per namespace* ACL rules
+- Added the ``waliki_box`` templatetag: use waliki content in any app
+- Added ``entry_point`` to extend templates from plugins
 - Added a webhook to pull and sync change from a remote repository (Git)
 
 

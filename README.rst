@@ -2,7 +2,7 @@
 **Waliki** is an extensible wiki app for Django with a Git backend.
 
 
-.. attention:: It's usable but not production ready yet. I'll appreciate your feedback and help.
+.. attention:: It's usable but in an early development stage. I'll appreciate your feedback and help.
 
 
 .. image:: https://badge.fury.io/py/waliki.png
@@ -36,7 +36,7 @@ At a glance, Waliki has this features:
 - Extensible architecture with plugins
 - Markdown or reStructuredText. Easy to add more.
 - A simple ACL system
-- Attachments handling with permissions checking
+- Attachments
 - UI based on Twitter's Bootstrap and Codemirror.
 - Works with Python 2.7, 3.3+ or PyPy in Django 1.5 or newer
 
@@ -52,7 +52,7 @@ Or the development version::
     $ pip install https://github.com/mgaitan/waliki/tarball/master
 
 
-Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
+Add ``waliki`` and the optionals plugins to your INSTALLED_APPS::
 
     INSTALLED_APPS = (
         ...
