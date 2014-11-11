@@ -3,7 +3,7 @@
 Changelog
 ---------
 
-0.3 (2014-11-11)
+0.3.1 (2014-11-11)
 ++++++++++++++++
 
 - Plugin *attachments*
@@ -11,7 +11,7 @@ Changelog
 - Added the ``waliki_box`` templatetag: use waliki content in any app
 - Added ``entry_point`` to extend templates from plugins
 - Added a webhook to pull and sync change from a remote repository (Git)
-
+- Fixed a bug in git that left the repo unclean
 
 0.2 (2014-09-29)
 ++++++++++++++++
