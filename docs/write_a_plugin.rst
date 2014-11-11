@@ -15,8 +15,8 @@ As an example, see the `waliki.git.waliki_plugin.py`.
    :language: python
 
 
-What a plugin cand do?
-----------------------
+What a plugin can do?
+---------------------
 
 In the first place, it's important to remark that a waliki plugin **is a django app**, so you can do with them anything an app can do: define new models, add or override templates, connect signals, etc.
 
@@ -29,10 +29,12 @@ The field ``extra_page_actions`` is a list of tuples ``('url_name', 'link text')
 
 Analogously, ``extra_edit_actions`` add "buttons" (links) to the editor toolbar.
 
-Extending blocks
-++++++++++++++++
+Extending templates with entry points
++++++++++++++++++++++++++++++++++++++
 
-Another thing a plugin can do is to extend the core templates It leverage in the template tag ``extend_block``.
+Another thing a plugin can do is to extend the core templates. It leverage in the template tag ``entry_point``.
+
+Wherever a tag ``{% entry_point 'name' %}`` is present, this templatetag will look for templates named ``waliki/<plugin_slug>_name`` for each plugin registered and include those who find.
 
 
 For example, the block ``{% block content %}`` in ``edit.html`` ends like this::
@@ -41,14 +43,19 @@ For example, the block ``{% block content %}`` in ``edit.html`` ends like this::
 
         ...
 
-        {% extend_block 'edit_content' %}
+        {% entry_point 'edit_content' %}
     {% endblock content %}
 
 
 in that point, the template ``waliki/attachments_edit_content.html`` (and any other
-template with the ``waliki/<plugin_name>_edit_content.html``) will be included
-, using a standard template include_ that receive the whole context.
+template with the ``waliki/<plugin_slug>_edit_content.html``) will be appended
+, using a standard include_ that receives the whole context.
 
+
+.. tip:: you can `search the code <https://github.com/mgaitan/waliki/search?utf8=%E2%9C%93&q=entry_point+extension%3Ahtml>`_ to know every template entry point available
+
+
+.. _include: https://docs.djangoproject.com/en/dev/ref/templates/builtins/#include
 
 Waliki signals
 ++++++++++++++

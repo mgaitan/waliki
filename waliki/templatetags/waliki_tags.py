@@ -20,15 +20,15 @@ def extra_edit_actions(page):
     return {'page': page, 'extra_edit_actions': get_extra_edit_actions()}
 
 
-@register.inclusion_tag('waliki/extend_block.html', takes_context=True)
-def extend_block(context, block_name):
-    """include an snippet at the bottom of a block, if it exists 
-        
+@register.inclusion_tag('waliki/entry_point.html', takes_context=True)
+def entry_point(context, block_name):
+    """include an snippet at the bottom of a block, if it exists
+
     For example, if the plugin with slug 'attachments' is registered
 
        waliki/attachments_edit_content.html  will be included with
 
-        {% extend_block 'edit_content' %}
+        {% entry_point 'edit_content' %}
 
     which is declared at the bottom of the block 'content' in edit.html
     """
@@ -36,7 +36,7 @@ def extend_block(context, block_name):
     includes = []
     for plugin in get_plugins():
         template_name = 'waliki/%s_%s.html' % (plugin.slug, block_name)
-        try: 
+        try:
             # template exists
             template.loader.get_template(template_name)
             includes.append(template_name)
