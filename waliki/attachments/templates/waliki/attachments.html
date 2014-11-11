@@ -13,9 +13,11 @@ to upload files via ajax and replace the inline form with a link
 that reload the same view but in a popup window. The popup show the same view, but as won't be ajax, it'll only show the form.
 {% endcomment %}
 
+<div>
+{% include "_messages.html" %}
+
 {% if request.is_ajax %}
     {# show list only if it is ajax #}
-<div>
     {% if page.attachments.all %}
     <table class="table table-striped">
         <tbody>
@@ -23,9 +25,13 @@ that reload the same view but in a popup window. The popup show the same view, b
            {% for attachment in page.attachments.all %}
            <tr>
                 <td><a href="{{ attachment.get_absolute_url }}">{{ attachment }}</a></td>
-                <td style="width: 30px">
-                    <a title="{% trans "Insert" %}" class="insert" data-file="{{ attachment }}" href="{{ attachment.get_absolute_url }}"><i class="glyphicon glyphicon-download"></i></a>
-                    <a title="{% trans "Delete" %}" class="remove" data-file="{{ attachment }}" href="{% url "waliki_delete_attachment" page.slug attachment.id %}"><i class="glyphicon glyphicon-remove"></i></a>
+                <td>
+
+                    <div class="btn-group btn-group-xs pull-right">
+
+                    <a title="{% trans "Insert" %}" class="insert btn btn-default" data-file="{{ attachment }}" href="{{ attachment.get_absolute_url }}"><i class="glyphicon glyphicon-download"></i></a>
+                    <a title="{% trans "Delete" %}" class="remove btn btn-default" data-file="{{ attachment }}" href="{% url "waliki_delete_attachment" page.slug attachment.id %}"><i class="glyphicon glyphicon-remove"></i></a>
+                    </div>
                 </td>
             </tr>
            {% endfor %}
@@ -49,12 +55,12 @@ that reload the same view but in a popup window. The popup show the same view, b
 
 {% endif %}
 
- {% include "_messages.html" %}
+
 
 <h3>{% trans "Upload a new file" %}</h3>
 
     <div id="upload_popup" class="hide">
-        <a href="#" class="btn btn-success special">{% trans "Upload" %}</a>
+        <a href="{% url 'waliki_attachments' page.slug %}" class="btn btn-success special">{% trans "Upload" %}</a>
     </div>
 
     <div id="ajax_form">
@@ -66,27 +72,27 @@ that reload the same view but in a popup window. The popup show the same view, b
 
 
         <form id="form-attach" method="POST" enctype="multipart/form-data" data-async="" data-target="#attachments-body" action="{% url 'waliki_attachments' page.slug %}">
-            <input class="form-control" name="attach" type="file">
+            <input name="attach" type="file">
             <input class="btn btn-success special disabled form-control" disabled="disabled" value="{% trans "upload" %}" type="submit">
         </form>
     </div>
 
 {% if not request.is_ajax %}
     <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
-        <script type="text/javascript">
-            function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                    }
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script type="text/javascript">
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                 }
-            });
-        </script>
-        <script src="{% static 'js/bootstrap.min.js'%}"></script>
+            }
+        });
+    </script>
 {% else %}
 </div>
 {% endif %}
@@ -96,7 +102,7 @@ that reload the same view but in a popup window. The popup show the same view, b
     if (FormData === undefined) {
 
         $("#ajax_form").hide();
-        $("#upload_popup").show();
+        $("#upload_popup").removeClass('hide');
         $("#upload_popup a").click( function(event){
              event.preventDefault();
              var height=300,
@@ -116,7 +122,7 @@ that reload the same view but in a popup window. The popup show the same view, b
             var $form = $(this);
             var $form_data = new FormData($form[0]);
             var $target = $($form.attr('data-target'));
-            $('div.progress').show();
+            $('div.progress').removeClass('hide');
             $.ajax({
                 type: $form.attr('method'),
                 url: $form.attr('action'),
@@ -134,6 +140,7 @@ that reload the same view but in a popup window. The popup show the same view, b
                 processData: false,
                 success: function(data, status) {
                     $('#attachments-modal .modal-body').empty().append(data);
+                    $('.alert').delay(4000).fadeOut(1000);
                 }
             });
         });
