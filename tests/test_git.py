@@ -101,12 +101,14 @@ class TestGit(TestCase):
         self.assertRedirects(r, reverse('waliki_detail', args=(self.page.slug,)))
         r = self.client.post(self.edit_url, data2)
         self.assertRedirects(r, self.edit_url)
-        self.assertEqual('UU', git.status('--porcelain', self.page.path).stdout.decode('utf8')[:2])
+
+        self.assertEqual('', git.status('--porcelain', self.page.path).stdout.decode('utf8'))
+        self.assertIn('Merged with conflict', git.log("--no-color", "--pretty=format:%s", "-n 1", self.page.path).stdout.decode('utf8'))
         self.assertRegexpMatches(self.page.raw,'<<<<<<< HEAD\n- item2\n=======\n- item0\n>>>>>>> [0-9a-f]{7}\n')
 
         # can edit in conflict
         response = self.client.get(self.edit_url)
-        data1 = response1.context[0]['form'].initial
+        data1 = response.context[0]['form'].initial
         data1["raw"] = '- item0\n- item2'
         data1["message"] = "fixing :)"
         response = self.client.post(self.edit_url, data1)
@@ -140,8 +142,10 @@ class TestGit(TestCase):
         # redirect
         self.assertRedirects(response, url)
 
-        # file in conflict
-        self.assertEqual('UU', git.status('--porcelain', page.path).stdout.decode('utf8')[:2])
+        # file committed with conflict
+        self.assertEqual('', git.status('--porcelain', page.path).stdout.decode('utf8'))
+        self.assertIn('Merged with conflict', git.log("--pretty=format:%s", "-n 1", page.path).stdout.decode('utf8'))
+
         self.assertRegexpMatches(page.raw, r"""<<<<<<< HEAD\n- item2
 =======\n- item0\n>>>>>>> [0-9a-f]{7}\n""")
         page = Page.objects.get(slug='test2')       # refresh
@@ -150,7 +154,7 @@ class TestGit(TestCase):
         # can edit in conflict
         response = self.client.get(url)
 
-        data1 = response1.context[0]['form'].initial
+        data1 = response.context[0]['form'].initial
         data1["raw"] = '- item0\n- item2\n'
         data1["message"] = "fixing :)"
         response = self.client.post(url, data1)

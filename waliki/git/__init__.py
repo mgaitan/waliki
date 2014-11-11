@@ -59,6 +59,8 @@ class Git(object):
             # TODO: make this more robust!
             error = e.stdout.decode('utf8')
             if 'CONFLICT' in error:
+                # For '-i' attribute see http://stackoverflow.com/q/5827944/811740
+                git.commit(path, allow_empty_message=True, m=_('Merged with conflict'), i=True, **kwargs)
                 raise Page.EditionConflict(_('Automatic merge failed. Please, fix the conflict and save the page.'))
             else:
                 raise
