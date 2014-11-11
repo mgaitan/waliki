@@ -9,6 +9,9 @@ from waliki.settings import WALIKI_AVAILABLE_MARKUPS
 
 class MarkdownMarkup(MarkdownMarkupBase):
     codemirror_mode_name = codemirror_mode = 'markdown'
+    IMAGE_LINE = '![](%(url)s)'
+    LINK_LINE = '[%(filename)s](<%(url)s>)'
+
 
     def __init__(self, filename=None, extensions=None, extension_configs=None):
         super(MarkdownMarkupBase, self).__init__(filename)
@@ -50,6 +53,9 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
+
+    IMAGE_LINE = '.. image:: %(url)s'
+    LINK_LINE = '`%(filename)s <%(url)s>`_'
 
     codemirror_mode = codemirror_mode_name = 'rst'
 

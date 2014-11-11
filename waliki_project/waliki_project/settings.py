@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'waliki.git',
     'waliki.pdf',
     'waliki.slides',
+    'waliki.attachments',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -110,6 +111,11 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+
+SENDFILE_BACKEND = 'sendfile.backends.simple'
+SENDFILE_ROOT = 'protected_downloads/protected'
+SENDFILE_URL = '/protected'
 
 try:
     from .local_settings import *    # noqa

@@ -18,6 +18,7 @@ Contents:
    settings
    git
    acl
+   attachments
    boxes
    autolinking
    get_as_pdf

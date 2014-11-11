@@ -34,8 +34,9 @@ At a glance, Waliki has this features:
 - File based content storage.
 - Version control and concurrent edition for your content using Git
 - Extensible architecture with plugins
-- Markdown, reStructuredText or Textile markups. Easy to add more.
+- Markdown or reStructuredText. Easy to add more.
 - A simple ACL system
+- Attachments handling with permissions checking
 - UI based on Twitter's Bootstrap and Codemirror.
 - Works with Python 2.7, 3.3+ or PyPy in Django 1.5 or newer
 
@@ -56,8 +57,10 @@ Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
     INSTALLED_APPS = (
         ...
         'waliki',
-        'waliki.git',   # optional but recommended
-        'waliki.pdf',   # optional
+        'waliki.git',           # optional but recommended
+        'waliki.attachments',   # optional but recommended
+        'waliki.pdf',           # optional
+        'waliki.slides',        # optional
         ...
     )
 

@@ -49,7 +49,7 @@ class Page(models.Model):
     def save(self, *args, **kwargs):
         self.slug = self.slug.strip('/')
         if not self.path:
-            self.path = self.slug + self._markup.file_extensions[0]
+            self.path = self.slug + self.markup_.file_extensions[0]
         super(Page, self).save(*args, **kwargs)
 
     @classmethod
@@ -97,13 +97,13 @@ class Page(models.Model):
         return Page.get_markup_instance(markup).get_document_body(text)
 
     @property
-    def _markup(self):
+    def markup_(self):
         if not hasattr(self, '__markup_instance'):
             self.__markup_instance = Page.get_markup_instance(self.markup)
         return self.__markup_instance
 
     def _get_part(self, part):
-        return getattr(self._markup, part)(self.raw)
+        return getattr(self.markup_, part)(self.raw)
 
     @property
     def body(self):
