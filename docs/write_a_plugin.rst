@@ -37,7 +37,7 @@ Another thing a plugin can do is to extend the core templates. It leverage in th
 Wherever a tag ``{% entry_point 'name' %}`` is present, this templatetag will look for templates named ``waliki/<plugin_slug>_name`` for each plugin registered and include those who find.
 
 
-For example, the block ``{% block content %}`` in ``edit.html`` ends like this::
+For example, the block ``{% block content %}`` in ``edit.html`` ends like this:
 
 .. code-block:: html
 
@@ -47,7 +47,7 @@ For example, the block ``{% block content %}`` in ``edit.html`` ends like this::
     {% endblock content %}
 
 
-in that point, the template ``waliki/attachments_edit_content.html`` (and any other
+In that point, the template ``waliki/attachments_edit_content.html`` (and any other
 template with the ``waliki/<plugin_slug>_edit_content.html``) will be appended
 , using a standard include_ that receives the whole context.
 
