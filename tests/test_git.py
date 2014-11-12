@@ -163,7 +163,11 @@ class TestGit(TestCase):
         self.assertRedirects(response, reverse('waliki_detail', args=(page.slug,)))
         self.assertEqual(page.raw, '- item0\n- item2\n')
 
-
-
-
-
+    def test_unicode_content(self):
+        response = self.client.get(self.edit_url)
+        data = response.context[0]['form'].initial
+        data['raw'] = u'Ω'
+        data['message'] = 'testing :)'
+        response = self.client.post(self.edit_url, data)
+        self.assertRedirects(response, reverse('waliki_detail', args=(self.page.slug,)))
+        self.assertEqual(Git().version(self.page, 'HEAD'), u'Ω')
