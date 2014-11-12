@@ -5,12 +5,12 @@ urlpatterns = patterns('waliki.git.views',
     url(r'^_hooks/pull/(?P<remote>[a-zA-Z0-9]+)$', 'webhook_pull', name='waliki_webhook_pull'),
     url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/history$', 'history', name='waliki_history'),
 
-    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/version/(?P<version>.{4,40})/raw$', 'version', {'raw': True},
+    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/version/(?P<version>[0-9a-f\^]{4,40})/raw$', 'version', {'raw': True},
         name='waliki_version_raw'),
-    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/version/(?P<version>.{4,40})$', 'version', name='waliki_version'),
+    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/version/(?P<version>[0-9a-f\^]{4,40})$', 'version', name='waliki_version'),
 
-    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/diff/(?P<old>.{4,40})\.\.(?P<new>.{4,40})/raw$',
+    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/diff/(?P<old>[0-9a-f\^]{4,40})\.\.(?P<new>[0-9a-f\^]{4,40})/raw$',
         'diff', {'raw': True}, name='waliki_diff_raw'),
 
-    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/diff/(?P<old>.{4,40})\.\.(?P<new>.{4,40})$', 'diff', name='waliki_diff'),
+    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/diff/(?P<old>[0-9a-f\^]{4,40})\.\.(?P<new>[0-9a-f\^]{4,40})$', 'diff', name='waliki_diff'),
 )
