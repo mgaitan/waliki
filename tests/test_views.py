@@ -24,7 +24,7 @@ class TestPageView(TestCase):
     def test_view_raw(self):
         response = self.client.get(self.page.get_absolute_url() + '/raw')
         self.assertContains(response, self.page.raw)
-        self.assertEqual(response['Content-Type'], 'text/plain')
+        self.assertEqual(response['Content-Type'], 'text/plain; charset=utf-8')
 
     def test_view_no_perm_no_auth(self):
         with mock.patch('waliki.acl.WALIKI_ANONYMOUS_USER_PERMISSIONS', return_value=()):
