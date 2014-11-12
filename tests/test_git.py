@@ -4,6 +4,7 @@ from sh import git
 from mock import patch
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from waliki.models import Page
 from waliki.git import Git
 from waliki.settings import WALIKI_DATA_DIR, WALIKI_COMMITTER_EMAIL, WALIKI_COMMITTER_NAME
@@ -163,7 +164,19 @@ class TestGit(TestCase):
         self.assertRedirects(response, reverse('waliki_detail', args=(page.slug,)))
         self.assertEqual(page.raw, '- item0\n- item2\n')
 
+    def test_commit_page_with_no_changes(self):
+        self.page.raw = 'lala'
+        Git().commit(self.page, message='previous commit')
 
+        response = self.client.get(self.edit_url)
+        data = response.context[0]['form'].initial
+        data['raw'] = self.page.raw
+        data['message'] = 'testing :)'
+        response = self.client.post(self.edit_url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['form'].is_valid())
+        self.assertIn('raw', response.context['form'].errors)
+        self.assertContains(response, _('There were no changes in the page to commit.'))
 
-
-
+        self.assertEqual(self.page.raw, 'lala')
+        self.assertEqual(Git().version(self.page, 'HEAD'), 'lala')

@@ -34,6 +34,13 @@ class PageForm(forms.ModelForm):
             for field in self.fields.values():
                 field.widget = forms.HiddenInput()
 
+    def clean_raw(self):
+        if self.instance.raw == self.cleaned_data['raw']:
+            raise forms.ValidationError(
+                _('There were no changes in the page to commit.')
+            )
+        return self.cleaned_data['raw']
+
     def save(self, commit=True):
         instance = super(PageForm, self).save(commit)
         if commit:
