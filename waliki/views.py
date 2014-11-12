@@ -23,7 +23,7 @@ def detail(request, slug, raw=False):
     except Page.DoesNotExist:
         page = None
     if raw and page:
-        return HttpResponse(page.raw, content_type='text/plain')
+        return HttpResponse(page.raw, content_type='text/plain; charset=utf-8')
     elif raw:
         raise Http404
 
