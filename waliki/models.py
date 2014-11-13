@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import codecs
 import os.path
 from django.db import models
 from django.db.models import Q
@@ -70,7 +71,7 @@ class Page(models.Model):
         filename = self.abspath
         if not os.path.exists(filename) or os.path.isdir(filename):
             return ""
-        return open(filename, "r").read()
+        return codecs.open(filename, "r", encoding="utf-8").read()
 
     @raw.setter
     def raw(self, value):
@@ -79,7 +80,7 @@ class Page(models.Model):
             os.makedirs(os.path.dirname(filename))
         except OSError:
             pass
-        with open(filename, "w") as f:
+        with codecs.open(filename, "w", encoding="utf-8") as f:
             f.write(value)
 
     @property
