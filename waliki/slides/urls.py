@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, url
+from waliki.settings import WALIKI_SLUG_PATTERN
+
 
 urlpatterns = patterns('waliki.slides.views',
-    url(r'^(?P<slug>[a-zA-Z0-9-\/]+)/slides$', 'slides', name='waliki_slides'),
+    url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/slides$', 'slides', name='waliki_slides'),
 )
