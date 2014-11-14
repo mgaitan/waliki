@@ -7,10 +7,10 @@ from waliki.rst2html5 import HTML5Writer
 from waliki.plugins import str2object
 
 
-def _get_default_data_dir():
+def _get_default_data_dir(directory):
     settings_mod = importlib.import_module(settings.SETTINGS_MODULE)
     project_dir = os.path.abspath(os.path.dirname(settings_mod.__name__))
-    return os.path.join(project_dir, 'waliki_data')
+    return os.path.join(project_dir, directory)
 
 
 def deep_update(d, u):
@@ -63,7 +63,7 @@ get_slug = str2object(WALIKI_SLUGIFY_FUNCTION)
 
 
 # your content folder. by default it's <project_root>/waliki_data
-WALIKI_DATA_DIR = getattr(settings, 'WALIKI_DATA_DIR', None) or _get_default_data_dir()
+WALIKI_DATA_DIR = getattr(settings, 'WALIKI_DATA_DIR', None) or _get_default_data_dir('waliki_data')
 
 # wich page is shown as the wiki index?
 WALIKI_INDEX_SLUG = getattr(settings, 'WALIKI_INDEX_SLUG', "home")
@@ -91,7 +91,16 @@ WALIKI_COMMITTER_EMAIL = getattr(settings, 'WALIKI_COMMITTER_EMAIL', 'waliki@wal
 
 WALIKI_COMMITTER_NAME = getattr(settings, 'WALIKI_COMMITTER_NAME', 'Waliki')
 
-WALIKI_CACHE_TIMEOUT = 60*60*24
+WALIKI_CACHE_TIMEOUT = getattr(settings, 'WALIKI_CACHE_TIMEOUT', 60*60*24)
+
+WALIKI_ATTACHMENTS_DIR = getattr(settings, 'WALIKI_ATTACHMENTS_DIR', None)  or _get_default_data_dir('waliki_attachments')
+
+WALIKI_UPLOAD_TO_PATTERN = '%(slug)s/%(filename)s'
+
 
 def WALIKI_UPLOAD_TO(instance, filename):
-    return os.path.join('waliki_attachments', instance.page.slug, filename)
+    return os.path.abspath(os.path.join(WALIKI_ATTACHMENTS_DIR,
+                                        WALIKI_UPLOAD_TO_PATTERN % {'slug': instance.page.slug,
+                                                       'page_id': instance.page.id,
+                                                       'filename': filename,
+                                                       'filename_extension': os.path.splitext(filename)[1]}))

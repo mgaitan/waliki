@@ -74,7 +74,7 @@ class Page(models.Model):
                 page.save()
                 break
             except IntegrityError:
-                page.slug += '-new'
+                page.slug += '-'
 
         return page
 

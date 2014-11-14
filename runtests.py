@@ -23,7 +23,8 @@ try:
             "django.contrib.sites",
             "django.contrib.staticfiles",
             "waliki",
-            "waliki.git"
+            "waliki.git",
+            "waliki.attachments"
         ],
         MIDDLEWARE_CLASSES=(
             'django.contrib.sessions.middleware.SessionMiddleware',
@@ -38,6 +39,8 @@ try:
         NOSE_ARGS=['-s', '--nologcapture', '--nocapture',
                    '--with-id', '--logging-clear-handlers'],
         WALIKI_DATA_DIR=WALIKI_DATA_DIR,
+        WALIKI_ATTACHMENTS_DIR=WALIKI_DATA_DIR + '/_attachments',
+
         WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page')
     )
 
