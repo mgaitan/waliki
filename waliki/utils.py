@@ -10,7 +10,7 @@ def get_slug(text):
     if PY2:
         from django.utils.encoding import force_unicode
         text = force_unicode(text)
-    return '/'.join(slugify(t) for t in text.split('/')).strip('/')
+    return '/'.join(slugify(t).replace('_', '-') for t in text.split('/')).strip('/')
 
 
 def get_url(text, *args):
