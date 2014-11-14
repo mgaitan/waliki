@@ -58,7 +58,6 @@ class Page(models.Model):
 
     @classmethod
     def from_path(cls, path, markup=None):
-
         filename, ext = os.path.splitext(path)
         if markup and isinstance(markup, string_types):
             markup = _markups.find_markup_class_by_name(markup)

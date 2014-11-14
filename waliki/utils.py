@@ -1,16 +1,31 @@
 import os
+import re
 import mimetypes
+import unicodedata
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-from django.utils.text import slugify
 from django.utils.six import PY2
+from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
 
 
 def get_slug(text):
+
+    def slugify(value):
+        """
+        same than django slugify but allowing uppercase and underscore
+        """
+        value = force_text(value)
+        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = re.sub('[^\w\s-]', '', value).strip()
+        return mark_safe(re.sub('[-\s]+', '-', value))
+
     if PY2:
         from django.utils.encoding import force_unicode
         text = force_unicode(text)
-    return '/'.join(slugify(t) for t in text.split('/')).strip('/')
+    for sep in ('_', '/'):
+        text = sep.join(slugify(t) for t in text.split(sep))
+    return text.strip('/')
 
 
 def get_url(text, *args):
