@@ -3,6 +3,7 @@ import codecs
 import os.path
 from django.db import models
 from django.db.models import Q
+from django.db.utils import IntegrityError
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
@@ -12,6 +13,7 @@ from django.contrib.auth.models import Permission, Group, AnonymousUser
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db.models.signals import post_save
+import docutils.utils
 from . import _markups
 from .utils import get_slug
 from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR, WALIKI_CACHE_TIMEOUT
@@ -62,8 +64,18 @@ class Page(models.Model):
         else:
             markup = _markups.find_markup_class_by_extension(ext)
         page = Page(path=path, slug=get_slug(filename), markup=markup.name)
-        page.title = page._get_part('get_document_title')
-        page.save()
+        try:
+            page.title = page._get_part('get_document_title')
+        except docutils.utils.SystemMessage:
+            pass
+
+        while True:
+            try:
+                page.save()
+                break
+            except IntegrityError:
+                page.slug += '-new'
+
         return page
 
     @property
