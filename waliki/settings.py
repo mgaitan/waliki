@@ -53,6 +53,9 @@ WALIKI_AVAILABLE_MARKUPS = getattr(settings, 'WALIKI_AVAILABLE_MARKUPS', ['reStr
 # options: reStructuredText, Markdown, Textile
 WALIKI_DEFAULT_MARKUP = WALIKI_AVAILABLE_MARKUPS[0]
 
+
+WALIKI_SLUG_PATTERN = '[a-zA-Z0-9-_\/]+'
+
 # your content folder. by default it's <project_root>/waliki_data
 WALIKI_DATA_DIR = getattr(settings, 'WALIKI_DATA_DIR', None) or _get_default_data_dir()
 
