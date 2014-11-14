@@ -8,7 +8,6 @@ from django.utils.six import PY2
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
-
 def get_slug(text):
 
     def slugify(value):
@@ -30,11 +29,12 @@ def get_slug(text):
 
 def get_url(text, *args):
     # *args needed to receive prefix and suffix for markdowns wikilinks ext
+    from waliki.settings import get_slug
     return reverse('waliki_detail', args=(get_slug(text),))
 
 
 def send_file(path, filename=None, content_type=None):
-    # TODO : remove it and user django-sendfile instead
+    # TODO : remove it and use django-sendfile instead
     if filename is None:
         filename = os.path.basename(path)
     if content_type is None:
