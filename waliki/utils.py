@@ -19,6 +19,7 @@ def get_url(text, *args):
 
 
 def send_file(path, filename=None, content_type=None):
+    # TODO : remove it and user django-sendfile instead
     if filename is None:
         filename = os.path.basename(path)
     if content_type is None:

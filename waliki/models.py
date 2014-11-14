@@ -15,8 +15,9 @@ from django.core.cache import cache
 from django.db.models.signals import post_save
 import docutils.utils
 from . import _markups
-from .utils import get_slug
-from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR, WALIKI_CACHE_TIMEOUT
+from waliki.settings import (get_slug, WALIKI_DEFAULT_MARKUP,
+                             WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR,
+                             WALIKI_CACHE_TIMEOUT)
 
 
 class Page(models.Model):
