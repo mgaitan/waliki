@@ -13,7 +13,7 @@ from django.contrib.auth.models import Permission, Group, AnonymousUser
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db.models.signals import post_save
-import docutils.utils
+from docutils.utils import SystemMessage
 from . import _markups
 from waliki.settings import (get_slug, WALIKI_DEFAULT_MARKUP,
                              WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR,
@@ -64,10 +64,7 @@ class Page(models.Model):
         else:
             markup = _markups.find_markup_class_by_extension(ext)
         page = Page(path=path, slug=get_slug(filename), markup=markup.name)
-        try:
-            page.title = page._get_part('get_document_title')
-        except docutils.utils.SystemMessage:
-            pass
+        page.title = page._get_part('get_document_title')
 
         while True:
             try:
@@ -116,7 +113,10 @@ class Page(models.Model):
         return self.__markup_instance
 
     def _get_part(self, part):
-        return getattr(self.markup_, part)(self.raw)
+        try:
+            return getattr(self.markup_, part)(self.raw)
+        except SystemMessage:
+            return ''
 
     @property
     def body(self):

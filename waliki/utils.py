@@ -9,7 +9,6 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
 def get_slug(text):
-
     def slugify(value):
         """
         same than django slugify but allowing uppercase and underscore
