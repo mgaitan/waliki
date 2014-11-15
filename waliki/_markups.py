@@ -82,6 +82,8 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         #   Something_ will link to '/something'
         #  `something great`_  to '/something_great'
         #  `another thing <thing>`_  '/thing'
+        if not html:
+            return html
         refs = [a.text[:-1] for a in PyQuery(html)('a.problematic')]
         if refs:
             refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
