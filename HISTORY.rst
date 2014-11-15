@@ -3,8 +3,18 @@
 Changelog
 ---------
 
+0.4dev
+++++++
+
+- Url pattern configurable
+- Added ``moin_migration_cleanup``, a tool to cleanup the result of moin2git_
+
+
+.. _moin2git: https://github.com/mgaitan/moin2git
+
+
 0.3.1 (2014-11-11)
-++++++++++++++++
+++++++++++++++++++
 
 - Plugin *attachments*
 - Implemented *per namespace* ACL rules

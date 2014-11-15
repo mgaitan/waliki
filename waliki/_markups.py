@@ -3,6 +3,7 @@ import sys
 from markups import (MarkdownMarkup as MarkdownMarkupBase,
                      TextileMarkup as TextileMarkupBase,
                      ReStructuredTextMarkup as ReStructuredTextMarkupBase)
+from pyquery import PyQuery
 from .utils import get_url
 from waliki.settings import WALIKI_AVAILABLE_MARKUPS
 
@@ -81,12 +82,12 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         #   Something_ will link to '/something'
         #  `something great`_  to '/something_great'
         #  `another thing <thing>`_  '/thing'
-        refs = re.findall(r'Unknown target name: [\&quot;|"](.*)[\&quot;|"]', html)
+        refs = [a.text[:-1] for a in PyQuery(html)('a.problematic')]
         if refs:
             refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
                              for ref in refs)
             html = super(ReStructuredTextMarkup, self).get_document_body(
-                text + '\n\n' + refs)
+                        text + '\n\n' + refs)
         return html
 
 
