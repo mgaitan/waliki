@@ -190,3 +190,22 @@ class TestGit(TestCase):
 
         self.assertEqual(self.page.raw, 'lala')
         self.assertEqual(Git().version(self.page, 'HEAD'), 'lala')
+
+
+    def test_history_log(self):
+        self.page.raw = 'line\n' * 10
+        Git().commit(self.page, message=u'"10 lines ñoñas"')       # include quotes and non ascii
+
+        self.page.raw = 'another line2\n' * 2
+        Git().commit(self.page, message=u'changed 20%')             # include quotes and non ascii
+
+        response = self.client.get(reverse('waliki_history', args=(self.page.slug,)))
+        self.assertEqual(response.status_code, 200)
+
+        history = response.context[0].get('history')
+
+        self.assertEqual(history[0]['message'], u'changed 20%')
+        self.assertEqual(history[0]['deletion'], 10)
+        self.assertEqual(history[0]['insertion'], 2)
+        self.assertTrue(str(history[0]['insertion_relative']).startswith('16.6'))
+        self.assertEqual(history[1]['message'], u'"10 lines ñoñas"')

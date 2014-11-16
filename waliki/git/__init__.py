@@ -68,18 +68,15 @@ class Git(object):
 
 
     def history(self, page):
-        data = [("commit", "%h"),
-                ("author", "%an"),
-                ("date", "%ad"),
-                ("date_relative", "%ar"),
-                ("message", "%s")]
-        format = "{%s}" % ','.join([""" \"%s\": \"%s\" """ % item for item in data])
-        output = git.log('--format=%s' % format, '-z', '--shortstat', page.abspath)
-        output = output.replace('\x00', '').replace('}{', '}\n\n{').split('\n')[:-1]
+        GIT_COMMIT_FIELDS = ['commit', 'author', 'date', 'date_relative', 'message']
+        GIT_LOG_FORMAT = '%x1f'.join(['%h', '%an', '%ad', '%ar', '%s']) + '%x1e'
+        output = git.log('--format=%s' % GIT_LOG_FORMAT, '-z', '--shortstat', page.abspath)
+        output = output.split('\n')
         history = []
         for line in output:
-            if line.startswith('{'):
-                history.append(json.loads(line))
+            if '\x1f' in line:
+                log = line.strip('\x1e\x00').split('\x1f')
+                history.append(dict(zip(GIT_COMMIT_FIELDS, log)))
             else:
                 insertion = re.match(r'.* (\d+) insertion', line)
                 deletion = re.match(r'.* (\d+) deletion', line)
