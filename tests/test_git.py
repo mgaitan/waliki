@@ -210,17 +210,35 @@ class TestGit(TestCase):
         self.assertTrue(str(history[0]['insertion_relative']).startswith('16.6'))
         self.assertEqual(history[1]['message'], u'"10 lines ñoñas"')
 
-
     def test_whatchanged(self):
         self.page.raw = 'line\n'
-        Git().commit(self.page, message=u'//')
+        Git().commit(self.page, message=u'"//"')
+        another_page = PageFactory(path='another-page.rst')
+        another_page.raw = "hello!"
+        Git().commit(another_page, message=u'hello history')
         response = self.client.get(reverse('waliki_whatchanged'))
-        import ipdb; ipdb.set_trace()
+        changes = response.context[0]['changes']
 
-    def test_whatchanged_multiples_files_in_commit(self):
+        self.assertEqual(len(changes), 2)
+        self.assertEqual(changes[0]['page'], another_page)
+        self.assertEqual(changes[1]['page'], self.page)
+        self.assertEqual(changes[0]['message'], 'hello history')
+        self.assertEqual(changes[1]['message'], '"//"')
+
+    def test_whatchanged_multiples_files_in_one_commit(self):
+        git_dir = os.path.join(WALIKI_DATA_DIR, '.git')
+        shutil.rmtree(git_dir)
+        Git()
+
         self.page.raw = 'line\n'
         another_page = PageFactory(path='another-page.rst')
         another_page.raw = "hello!"
-        git.commit('-am', 'commit todo')
+        git.add('.')
+        git.commit('-am', 'commit all')
         response = self.client.get(reverse('waliki_whatchanged'))
-        import ipdb; ipdb.set_trace()
+        changes = response.context[0]['changes']
+        self.assertEqual(len(changes), 2)
+        self.assertEqual(changes[0]['page'], another_page)
+        self.assertEqual(changes[1]['page'], self.page)
+        self.assertEqual(changes[0]['message'], 'commit all')
+        self.assertEqual(changes[1]['message'], 'commit all')

@@ -107,8 +107,12 @@ class Git(object):
         raw_log = git.whatchanged("--pretty=format:%s" % GIT_LOG_FORMAT).stdout.decode('utf8')
         logs = re.findall(r'((.*)\x1f(.*)\x1f(.*)\x1f(.*)\x1f(.*))?\n:.*\t(.*)', raw_log, flags=re.MULTILINE | re.UNICODE)
         for log in logs:
-            import ipdb; ipdb.set_trace()
-            pages.append(log[1:])
+            if log[0]:
+                log = list(log[1:])
+                log[-1] = [log[-1]]
+                pages.append(list(log))
+            else:
+                pages[-1][-1].append(log[-1])
         return pages
 
     def pull(self, remote):
