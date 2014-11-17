@@ -1,4 +1,4 @@
-{% extends "site_base.html" %}
+{% extends "waliki/base.html" %}
 {% load i18n %}
 {% load waliki_tags %}
 {% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
