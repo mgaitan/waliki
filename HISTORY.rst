@@ -4,11 +4,17 @@ Changelog
 ---------
 
 0.4dev
-++++++
++++++++
 
-- Url pattern configurable
-- Added ``moin_migration_cleanup``, a tool to cleanup the result of moin2git_
+in development
 
+
+0.3.2 (2014-11-17)
+++++++++++++++++++
+
+- Url pattern is configurable now. By default allow uppercase and underscores
+- Added ``moin_migration_cleanup``, a tool to cleanup the result of a moin2git_ import
+- Improve git parsers for *page history* and *what changed*
 
 .. _moin2git: https://github.com/mgaitan/moin2git
 
