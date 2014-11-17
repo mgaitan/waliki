@@ -220,6 +220,7 @@ class TestGit(TestCase):
     def test_whatchanged_multiples_files_in_commit(self):
         self.page.raw = 'line\n'
         another_page = PageFactory(path='another-page.rst')
+        another_page.raw = "hello!"
         git.commit('-am', 'commit todo')
         response = self.client.get(reverse('waliki_whatchanged'))
         import ipdb; ipdb.set_trace()
