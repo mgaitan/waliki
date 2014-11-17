@@ -209,3 +209,17 @@ class TestGit(TestCase):
         self.assertEqual(history[0]['insertion'], 2)
         self.assertTrue(str(history[0]['insertion_relative']).startswith('16.6'))
         self.assertEqual(history[1]['message'], u'"10 lines ñoñas"')
+
+
+    def test_whatchanged(self):
+        self.page.raw = 'line\n'
+        Git().commit(self.page, message=u'//')
+        response = self.client.get(reverse('waliki_whatchanged'))
+        import ipdb; ipdb.set_trace()
+
+    def test_whatchanged_multiples_files_in_commit(self):
+        self.page.raw = 'line\n'
+        another_page = PageFactory(path='another-page.rst')
+        git.commit('-am', 'commit todo')
+        response = self.client.get(reverse('waliki_whatchanged'))
+        import ipdb; ipdb.set_trace()
