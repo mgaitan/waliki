@@ -1,6 +1,6 @@
 import factory
 from django.contrib.auth.models import User, Group, Permission
-from waliki.models import ACLRule, Page
+from waliki.models import ACLRule, Page, Redirect
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -99,3 +99,13 @@ class PageFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Page
+
+
+class RedirectFactory(factory.django.DjangoModelFactory):
+    old_slug = factory.Sequence(lambda n: u'old-page{0}'.format(n))
+    new_slug = factory.Sequence(lambda n: u'new-page{0}'.format(n))
+
+
+    class Meta:
+        model = Redirect
+
