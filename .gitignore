@@ -4,6 +4,7 @@ datasets
 backups
 local_settings.py
 waliki_data
+waliki_attachments
 .nose*
 .noseids
 *.db
