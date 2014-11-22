@@ -6,7 +6,7 @@ Changelog
 0.4dev
 +++++++
 
-in development
+- Tracking page redirections
 
 
 0.3.2 (2014-11-17)
