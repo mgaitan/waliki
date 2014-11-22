@@ -39,21 +39,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-12 col-md-12"><div class="navbar-header"><a href="{% url 'waliki_home' %}" class="navbar-brand">{{ site_name|default:"Waliki" }}</a></div>
-
                             {% navbar_links %}
-
-                            {% comment %}
-
-                            <ul class="nav pull-right navbar-nav">
-                                {% if current_user.is_anonymous() %}
-                                    <li><a href="{{ url_for('user_login') }}">Login</a></li>
-                                    <li><a href="{{ url_for('user_signup') }}">Signup</a></li>
-
-                                {% else %}
-                                    <li><a href="{{ url_for('user_logout') }}">Logout</a></li>
-                                {% endif %}
-                            </ul>
-                            {% endcomment %}
                         </div>
                     </div>
                 </div>

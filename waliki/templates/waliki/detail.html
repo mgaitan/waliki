@@ -4,8 +4,19 @@
 {% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
 
 
+{% block extra_head %}
+  {{ block.super }}
+ {% entry_point 'detail_extra_head' %}
+{% endblock %}
+
+
+
 {% block header %}
+    {% entry_point 'detail_pre_header' %}
+
     <div class="pull-right">
+    {% entry_point 'detail_actions' %}
+
     {% block actions %}
         <div class="btn-group">
 
@@ -36,6 +47,7 @@
 {% endblock header %}
 
 {% block content %}
+    {% entry_point 'detail_pre_content' %}
 
     {% if page %}
         {{ page.body|safe }}
@@ -44,34 +56,7 @@
         <p><a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-success">{% trans "Create it" %}</a></p>
     {% endif %}
 
- {% if page.footer %}
-   <div id="footer">
-   <hr>
-   <div class="pull-right"><em><small>{{ page.footer|safe }}</small></em></div>
-</div>
-{% endif %}
 
-{% if can_delete %}
-
-
-<div id="myModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- dialog body -->
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                Hello world!
-            </div>
-            <!-- dialog buttons -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-{% endif %}
-
+    {% entry_point 'detail_post_content' %}
 {% endblock content %}
 
