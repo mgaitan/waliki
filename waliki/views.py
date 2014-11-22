@@ -1,9 +1,9 @@
 import json
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
-from .models import Page
+from .models import Page, Redirect
 from .forms import PageForm
 from .signals import page_saved, page_preedit
 from ._markups import get_all_markups
@@ -18,6 +18,15 @@ def home(request):
 @permission_required('view_page')
 def detail(request, slug, raw=False):
     slug = slug.strip('/')
+
+    # handle redirects first
+    try:
+        redirect = Redirect.objects.get(old_slug=slug)
+        RedirectResponseClass = HttpResponseRedirect if redirect.status_code == 302 else HttpResponsePermanentRedirect
+        return RedirectResponseClass(redirect.get_absolute_url())
+    except Redirect.DoesNotExist:
+        pass
+
     try:
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:

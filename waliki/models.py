@@ -234,6 +234,15 @@ class ACLRule(models.Model):
         return get_user_model().objects.filter(id__in=allowed).distinct()
 
 
+class Redirect(models.Model):
+    old_slug = models.CharField(max_length=200, unique=True)
+    new_slug = models.CharField(max_length=200)
+    status_code = models.IntegerField(max_length=3, default=302, choices=((302, '302 Found'), (301, '301 Moved Permanently')))
+
+    def get_absolute_url(self):
+        return reverse('waliki_detail', args=(self.new_slug,))
+
+
 ######################################################
 # SIGNAL HANDLERS
 ######################################################
