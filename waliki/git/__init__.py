@@ -91,7 +91,7 @@ class Git(object):
 
     def version(self, page, version):
         try:
-            return six.text_type(git.show('%s:%s' % (version, page.path)))
+            return git.show('%s:%s' % (version, page.path)).stdout.decode('utf8')
         except:
             return ''
 

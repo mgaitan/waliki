@@ -53,8 +53,8 @@ def diff(request, slug, old, new, raw=False):
     if raw:
         content = Git().diff(page, new, old)
         return HttpResponse(content, content_type='text/plain')
-    old_content = Git().version(page, old)
-    new_content = Git().version(page, new)
+    old_content = Git().version(page, old).replace('\t', '    ').replace(' ', '\xA0')
+    new_content = Git().version(page, new).replace('\t', '    ').replace(' ', '\xA0')
     return render(request, 'waliki/diff.html', {'page': page,
                                                 'old_content': old_content,
                                                 'new_content': new_content,
