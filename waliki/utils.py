@@ -28,7 +28,6 @@ def get_slug(text):
 
 def get_url(text, *args):
     # *args needed to receive prefix and suffix for markdowns wikilinks ext
-    import ipdb; ipdb.set_trace()
     from waliki.settings import get_slug
     return reverse('waliki_detail', args=(get_slug(text),))
 
