@@ -15,7 +15,7 @@ def get_slug(text):
         """
         value = force_text(value)
         value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
-        value = re.sub('[^\w\s-]', '', value).strip()
+        value = re.sub('[^\w\s\/_-]', '', value).strip()
         return mark_safe(re.sub('[-\s]+', '-', value))
 
     if PY2:
@@ -28,6 +28,7 @@ def get_slug(text):
 
 def get_url(text, *args):
     # *args needed to receive prefix and suffix for markdowns wikilinks ext
+    import ipdb; ipdb.set_trace()
     from waliki.settings import get_slug
     return reverse('waliki_detail', args=(get_slug(text),))
 

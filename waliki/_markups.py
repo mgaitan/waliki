@@ -77,10 +77,10 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
     def get_document_body(self, text):
         html = super(ReStructuredTextMarkup, self).get_document_body(text)
-        # Convert unknow links to internal wiki links.
+        # Convert unknown links to internal wiki links.
         # Examples:
         #   Something_ will link to '/something'
-        #  `something great`_  to '/something_great'
+        #  `something great`_  to '/something-great'
         #  `another thing <thing>`_  '/thing'
         if not html:
             return html
