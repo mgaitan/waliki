@@ -108,3 +108,7 @@ div.important, div.note, div.hint {
     width: 100%;
     z-index: 1030;  /* lower than bs's modals */
 }
+
+.strike {
+  text-decoration: line-through;
+}

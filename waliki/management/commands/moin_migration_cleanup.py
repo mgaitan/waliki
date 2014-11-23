@@ -43,18 +43,39 @@ def attachments(rst_content, slug):
     return re.sub(r'`attachment:(.*)`_', rep, rst_content, flags=re.MULTILINE)
 
 
+def strike(rst_content):
+    if re.findall(r':strike:`.*`', rst_content, flags=re.MULTILINE):
+        return rst_content + """
 
+.. role:: strike
+   :class: strike
+"""
+    return rst_content
 
 
 class Command(BaseCommand):
     help = 'Cleanups for a moin2git import'
 
+    option_list = (
+        make_option('--limit-to',
+                    dest='slug',
+                    default='',
+                    help="optional slug namespace"),
+    ) + BaseCommand.option_list
+
     def handle(self, *args, **options):
-        for page in Page.objects.all():
+        slug = options['slug']
+        if slug:
+            pages = Page.objects.filter(slug__startswith=slug)
+        else:
+            pages = Page.objects.all()
+
+        for page in pages:
             print('Cleaning up %s' % page.slug)
             raw = clean_meta(page.raw)
             raw = delete_relative_links(raw)
             raw = attachments(raw, page.slug)
+            raw = strike(raw)
             page.raw = raw
             if not page.title:
                 page.title = page._get_part('get_document_title')
