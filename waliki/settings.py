@@ -7,9 +7,12 @@ from waliki.rst2html5 import HTML5Writer
 from waliki.plugins import str2object
 
 
-def _get_default_data_dir(directory):
+def _get_default_data_dir(directory, abspath=True):
     settings_mod = importlib.import_module(settings.SETTINGS_MODULE)
-    project_dir = os.path.abspath(os.path.dirname(settings_mod.__name__))
+
+    project_dir = os.path.dirname(settings_mod.__name__)
+    if abspath:
+        project_dir = os.path.abspath(project_dir)
     return os.path.join(project_dir, directory)
 
 
@@ -93,14 +96,14 @@ WALIKI_COMMITTER_NAME = getattr(settings, 'WALIKI_COMMITTER_NAME', 'Waliki')
 
 WALIKI_CACHE_TIMEOUT = getattr(settings, 'WALIKI_CACHE_TIMEOUT', 60*60*24)
 
-WALIKI_ATTACHMENTS_DIR = getattr(settings, 'WALIKI_ATTACHMENTS_DIR', None)  or _get_default_data_dir('waliki_attachments')
+WALIKI_ATTACHMENTS_DIR = getattr(settings, 'WALIKI_ATTACHMENTS_DIR', None)  or _get_default_data_dir('waliki_attachments', False)
 
 WALIKI_UPLOAD_TO_PATTERN = '%(slug)s/%(filename)s'
 
 
 def WALIKI_UPLOAD_TO(instance, filename):
-    return os.path.abspath(os.path.join(WALIKI_ATTACHMENTS_DIR,
-                                        WALIKI_UPLOAD_TO_PATTERN % {'slug': instance.page.slug,
-                                                       'page_id': instance.page.id,
+    return os.path.join(WALIKI_ATTACHMENTS_DIR,
+                        WALIKI_UPLOAD_TO_PATTERN % {'slug': instance.page.slug,
+                                                       'page_id': getattr(instance.page, 'id', ''),
                                                        'filename': filename,
-                                                       'filename_extension': os.path.splitext(filename)[1]}))
+                                                       'filename_extension': os.path.splitext(filename)[1]})

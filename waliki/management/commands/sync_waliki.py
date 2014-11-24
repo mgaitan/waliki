@@ -51,20 +51,19 @@ class Command(BaseCommand):
                     self.page = page
 
             for page in Page.objects.all():
-                path = WALIKI_UPLOAD_TO(FakeAttachment(page), '')
-                for root, dirs, files in os.walk(path):
-
-                    for filename in files:
-                        if page.attachments.filter(file__endswith=filename):
-                            continue
-
-                        #file = File(open(os.path.join(root, filename)))
-                        file = os.path.join(root, filename)
-                        attachment = Attachment.objects.create(page=page, file=file)
-                        self.stdout.write('Created attachment %s for %s' % (attachment, page.slug))
-
+                path = os.path.join(settings.MEDIA_ROOT, WALIKI_UPLOAD_TO(FakeAttachment(page), ''))
+                if not os.path.exists(path):
+                    continue
+                for filename in os.listdir(path):
+                    if not os.path.isfile(os.path.join(path, filename)):
+                        continue
+                    file = WALIKI_UPLOAD_TO(FakeAttachment(page), filename)
+                    if page.attachments.filter(file=filename):
+                        continue
+                    attachment = Attachment.objects.create(page=page, file=file)
+                    self.stdout.write('Created attachment %s for %s' % (attachment, page.slug))
 
             for attachment in Attachment.objects.all():
-                if not os.path.exists(attachment.file.name):
+                if not os.path.exists(os.path.join(settings.MEDIA_ROOT, attachment.file.name)):
                     self.stdout.write('Missing %s from %s. Deleted attachment object' % (attachment, attachment.page.slug))
                     attachment.delete()

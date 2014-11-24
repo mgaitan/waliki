@@ -28,10 +28,10 @@ class Attachment(models.Model):
         return reverse('waliki_attachment_file', args=(self.page.slug, self.id, text_type(self)))
 
 
-@receiver(pre_delete, sender=Attachment)
-def attachment_delete(sender, instance, **kwargs):
-    # Pass false so FileField doesn't save the model.
-    try:
-        instance.file.delete(False)
-    except SuspiciousFileOperation:
-        pass
+# @receiver(pre_delete, sender=Attachment)
+# def attachment_delete(sender, instance, **kwargs):
+#    try:
+#        # instance.file.delete(False)
+#        pass
+#    except SuspiciousFileOperation:
+#        pass

@@ -37,6 +37,6 @@ def get_file(request, slug, attachment_id, filename):
 	attachment = get_object_or_404(Attachment, id=attachment_id, page__slug=slug)
 	as_attachment = ((not imghdr.what(attachment.file.path) and 'embed' not in request.GET)
 					  or 'as_attachment' in request.GET)
-
 	# ref https://github.com/johnsensible/django-sendfile
-	return sendfile(request, attachment.file.path, attachment=as_attachment, attachment_filename=text_type(attachment))
+	return sendfile(request, attachment.file.path,
+					attachment=as_attachment, attachment_filename=text_type(attachment))
