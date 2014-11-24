@@ -4,9 +4,18 @@ Changelog
 ---------
 
 0.4dev
-+++++++
+++++++
+
+under development
+
+
+0.3.3 (2014-11-24)
+++++++++++++++++++
 
 - Tracking page redirections
+- fix bugs related to attachments in `sync_waliki`
+- The edition form uses crispy forms if it's installed
+- many small improvements to help the integration/customization
 
 
 0.3.2 (2014-11-17)
