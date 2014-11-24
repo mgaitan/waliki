@@ -22,7 +22,7 @@ from waliki.settings import (get_slug, WALIKI_DEFAULT_MARKUP,
 
 class Page(models.Model):
     MARKUP_CHOICES = [(m.name, m.name) for m in _markups.get_all_markups()]
-    title = models.CharField(verbose_name=_('Title'), max_length=200)
+    title = models.CharField(verbose_name=_('Title'), max_length=200, blank=True, null=True)
     slug = models.CharField(max_length=200, unique=True)
     path = models.CharField(max_length=200, unique=True)
     markup = models.CharField(verbose_name=_('Markup'), max_length=20,
