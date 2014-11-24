@@ -85,8 +85,8 @@ class Git(object):
 
         max_changes = float(max([(v['insertion'] + v['deletion']) for v in history])) or 1.0
         for v in history:
-            v.update({'insertion_relative': (v['insertion'] / max_changes) * 100,
-                      'deletion_relative': (v['deletion'] / max_changes) * 100})
+            v.update({'insertion_relative': str((v['insertion'] / max_changes) * 100),
+                      'deletion_relative': str((v['deletion'] / max_changes) * 100)})
         return history
 
     def version(self, page, version):
