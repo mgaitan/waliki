@@ -22,7 +22,7 @@ if sys.argv[-1] == 'publish':
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
-install_requires = ['django', 'markups', 'sh', 'docutils', 'rst2html5', 'pyquery']
+install_requires = ['django', 'Markups', 'sh', 'docutils', 'rst2html5', 'pyquery']
 
 
 extras_require = {                                      # noqa
