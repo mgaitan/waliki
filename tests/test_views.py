@@ -49,3 +49,25 @@ class TestPageView(TestCase):
                 response = self.client.get(self.page.get_absolute_url())
         self.assertTemplateUsed(response, 'waliki/403.html')
         self.assertEqual(response.status_code, 403)
+
+
+
+class TestPageEdit(TestCase):
+
+    def setUp(self):
+        self.page = PageFactory(raw="hello test!")
+        self.edit_url = reverse('waliki_edit', args=(self.page.slug,))
+
+    def test_edit_form_use_page_instance(self):
+        response = self.client.get(self.edit_url)
+        self.assertEqual(response.context[0]['form'].instance, self.page)
+
+    def test_get_edit_not_existent_page_raises_404(self):
+        response = self.client.get(reverse('waliki_edit', args=('unknown-page',)))
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_edit_not_existent_page_create_page(self):
+        assert not Page.objects.filter(slug='unknown-page').exists()
+        response = self.client.post(reverse('waliki_edit', args=('unknown-page',)))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Page.objects.filter(slug='unknown-page').count(), 1)

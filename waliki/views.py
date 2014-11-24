@@ -42,14 +42,20 @@ def detail(request, slug, raw=False):
 @permission_required('change_page')
 def edit(request, slug):
     slug = slug.strip('/')
-    page, created = Page.objects.get_or_create(slug=slug)
-    if created:
-        page.raw = ""
-        page_saved.send(sender=edit,
+    try:
+        page = Page.objects.get(slug=slug)
+    except Page.DoesNotExist:
+        if request.method == 'POST':
+            page = Page.objects.create(slug=slug)
+            page.raw = ""
+            page_saved.send(sender=edit,
                         page=page,
                         author=request.user,
                         message=_("Page created"),
                         form_extra_data={})
+        else:
+            raise Http404
+
     data = request.POST if request.method == 'POST' else None
     form_extra_data = {}
     receivers_responses = page_preedit.send(sender=edit, page=page)

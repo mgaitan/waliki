@@ -53,7 +53,7 @@
         {{ page.body|safe }}
     {% else %}
         <p>{% trans "This page doesn't exist yet." %}</p>
-        <p><a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-success">{% trans "Create it" %}</a></p>
+        <p><form action="{% url 'waliki_edit' slug=page.slug|default:slug %}" method="post">{% csrf_token %}<button type="submit" class="btn btn-success">{% trans "Create it" %}</button></form></p>
     {% endif %}
 
 

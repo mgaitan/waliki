@@ -51,7 +51,7 @@ class TestGit(TestCase):
     def test_commit_new_page(self):
         assert not Page.objects.filter(slug='test').exists()
         url = reverse('waliki_edit', args=('test',))
-        response = self.client.get(url)
+        response = self.client.post(url)
         # it exists now
         self.assertTrue(Page.objects.filter(slug='test').exists())
         data = response.context[0]['form'].initial
@@ -122,8 +122,8 @@ class TestGit(TestCase):
     def test_concurrent_edition_no_existent_page(self):
         assert not Page.objects.filter(slug='test2').exists()
         url = reverse('waliki_edit', args=('test2',))
-        response1 = self.client.get(url)
-        response2 = self.client.get(url)
+        response1 = self.client.post(url)
+        response2 = self.client.post(url)
         page = Page.objects.get(slug='test2')
 
         data1 = response1.context[0]['form'].initial
