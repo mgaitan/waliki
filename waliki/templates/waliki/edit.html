@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap_tags %}
 {% load waliki_tags %}
-{% block title %}<h1>{% trans "Editing" %}: {{ page.title }}</h1>{% endblock title %}
+{% block title %}{% trans "Editing" %}: {{ page.slug }}{% endblock title %}
 
 {% block extra_head %}
  {{ form.media.css }}
