@@ -84,8 +84,9 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         #  `another thing <thing>`_  '/thing'
         if not html:
             return html
-        refs = [a.text[:-1] for a in PyQuery(html)('a.problematic')]
+        refs = [a.text[:-1] for a in PyQuery(html)('a.problematic') if not re.match(r'\|(.*)\|', a.text)]
         if refs:
+
             refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
                              for ref in refs)
             html = super(ReStructuredTextMarkup, self).get_document_body(
