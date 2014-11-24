@@ -43,13 +43,14 @@ def attachments(rst_content, slug):
     return re.sub(r'`attachment:(.*)`_', rep, rst_content, flags=re.MULTILINE)
 
 
-def strike(rst_content):
-    if re.findall(r':strike:`.*`', rst_content, flags=re.MULTILINE):
-        return rst_content + """
+def directives(rst_content):
+    for directive in re.findall(r':(\w+):`.*`', rst_content, flags=re.MULTILINE):
+        rst_content += """
 
-.. role:: strike
-   :class: strike
-"""
+.. role:: {directive}
+   :class: {directive}
+
+""".format(directive=directive)
     return rst_content
 
 
@@ -75,7 +76,7 @@ class Command(BaseCommand):
             raw = clean_meta(page.raw)
             raw = delete_relative_links(raw)
             raw = attachments(raw, page.slug)
-            raw = strike(raw)
+            raw = directives(raw)
             page.raw = raw
             if not page.title:
                 page.title = page._get_part('get_document_title')
