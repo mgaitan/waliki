@@ -7,7 +7,6 @@ from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.six import text_type
 from django.core.urlresolvers import reverse
-from django.core.exceptions import SuspiciousFileOperation
 from waliki.models import Page
 from waliki.settings import WALIKI_UPLOAD_TO
 
