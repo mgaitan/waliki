@@ -7,6 +7,7 @@ from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.six import text_type
 from django.core.urlresolvers import reverse
+from django.core.exceptions import SuspiciousFileOperation
 from waliki.models import Page
 from waliki.settings import WALIKI_UPLOAD_TO
 
@@ -30,4 +31,7 @@ class Attachment(models.Model):
 @receiver(pre_delete, sender=Attachment)
 def attachment_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
-    instance.file.delete(False)
+    try:
+        instance.file.delete(False)
+    except SuspiciousFileOperation:
+        pass
