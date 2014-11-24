@@ -4,6 +4,7 @@
 # https://github.com/pinax/django-forms-bootstrap
 
 from django import template
+from django.conf import settings
 from django.template import Context
 from django.template.loader import get_template
 
@@ -23,7 +24,14 @@ def _preprocess_fields(form):
 
 
 @register.filter
-def as_bootstrap(form):
+def render_form(form):
+    """same than  {{ form|crispy }} if crispy_forms is installed.
+    render using a bootstrap3 templating otherwise"""
+
+    if 'crispy_forms' in settings.INSTALLED_APPS:
+        from crispy_forms.templatetags.crispy_forms_filters import as_crispy_form
+        return as_crispy_form(form)
+
     template = get_template("bootstrap/form.html")
     form = _preprocess_fields(form)
 

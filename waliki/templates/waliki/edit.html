@@ -50,7 +50,7 @@
 
         <form method="post" class="form">
             {% csrf_token %}
-            {{ form|as_bootstrap }}
+            {{ form|render_form }}
 
             <div class="row">
                 <div class="col-sm-12 col-md-12">
