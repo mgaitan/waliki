@@ -1,7 +1,8 @@
 import os
 from optparse import make_option
 from django.conf import settings
-from django.core.management.base import BaseCommand  # CommandError
+from django.core.management.base import BaseCommand
+from django.core.files import File
 from waliki.settings import WALIKI_DATA_DIR, WALIKI_UPLOAD_TO
 from waliki.models import Page
 if 'waliki.attachments' in settings.INSTALLED_APPS:
@@ -57,11 +58,13 @@ class Command(BaseCommand):
                         if page.attachments.filter(file__endswith=filename):
                             continue
 
-                        attachment = Attachment.objects.create(page=page, file=os.path.join(root, filename))
+                        #file = File(open(os.path.join(root, filename)))
+                        file = os.path.join(root, filename)
+                        attachment = Attachment.objects.create(page=page, file=file)
                         self.stdout.write('Created attachment %s for %s' % (attachment, page.slug))
 
 
             for attachment in Attachment.objects.all():
-                if not os.path.exists(attachment.file.path):
+                if not os.path.exists(attachment.file.name):
                     self.stdout.write('Missing %s from %s. Deleted attachment object' % (attachment, attachment.page.slug))
                     attachment.delete()
