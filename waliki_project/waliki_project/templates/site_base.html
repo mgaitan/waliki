@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load waliki_tags %}
 {% load i18n %}
 {% load account %}
 
+
+{% block extra_style %}
+ <link rel="stylesheet" type="text/css" href="{% static 'css/waliki_project.css' %}">
+{% endblock %}
 
 {% block navbar %}
         <div class="navbar navbar-fixed-top navbar-default">
