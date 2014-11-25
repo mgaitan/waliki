@@ -2,7 +2,7 @@
 import os
 import shutil
 from sh import git
-from mock import patch
+from mock import patch, PropertyMock
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -191,7 +191,6 @@ class TestGit(TestCase):
         self.assertEqual(self.page.raw, 'lala')
         self.assertEqual(Git().version(self.page, 'HEAD'), 'lala')
 
-
     def test_history_log(self):
         self.page.raw = 'line\n' * 10
         Git().commit(self.page, message=u'"10 lines ñoñas"')       # include quotes and non ascii
@@ -224,6 +223,32 @@ class TestGit(TestCase):
         self.assertEqual(changes[1]['page'], self.page)
         self.assertEqual(changes[0]['message'], 'hello history')
         self.assertEqual(changes[1]['message'], '"//"')
+
+    def test_whatchanged_pagination(self):
+        self.page.raw = 'line\n'
+        Git().commit(self.page, message=u'one')
+        self.page.raw += 'line 2\n'
+        Git().commit(self.page, message=u'two')
+        self.page.raw += 'line 3\n'
+        Git().commit(self.page, message=u'three')
+        with patch('waliki.git.views.settings') as s_mock:
+            type(s_mock).WALIKI_PAGINATE_BY = PropertyMock(return_value=2)
+            response1 = self.client.get(reverse('waliki_whatchanged'))
+            response2 = self.client.get(reverse('waliki_whatchanged', args=('2',)))
+
+        # first page has no previous page
+        self.assertIsNone(response1.context[0]['prev'])
+        self.assertEqual(response1.context[0]['next'], 2)
+        self.assertIsNone(response2.context[0]['next'])
+        self.assertEqual(response2.context[0]['prev'], 1)
+
+        changes1 = response1.context[0]['changes']
+        changes2 = response2.context[0]['changes']
+        self.assertEqual(len(changes1), 2)
+        self.assertEqual(len(changes2), 1)
+        self.assertEqual(changes1[0]['message'], 'three')
+        self.assertEqual(changes1[1]['message'], 'two')
+        self.assertEqual(changes2[0]['message'], 'one')
 
     def test_whatchanged_multiples_files_in_one_commit(self):
         git_dir = os.path.join(WALIKI_DATA_DIR, '.git')
