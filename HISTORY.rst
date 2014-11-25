@@ -6,7 +6,7 @@ Changelog
 0.4dev
 ++++++
 
-under development
+- Added pagination in *what changed* page
 
 
 0.3.3 (2014-11-24)

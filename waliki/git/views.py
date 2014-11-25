@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from waliki.models import Page
 from waliki.forms import PageForm
 from waliki.acl import permission_required
+from waliki import settings
 from . import Git
 
 
@@ -63,9 +64,13 @@ def diff(request, slug, old, new, raw=False):
                                                 'new_commit': new})
 
 
-def whatchanged(request):
+def whatchanged(request, pag=1):
     changes = []
-    for version in Git().whatchanged():
+    pag = int(pag or 1)
+    skip = (pag - 1) * settings.WALIKI_PAGINATE_BY
+    max_count = settings.WALIKI_PAGINATE_BY
+    total = int(Git().total_commits())
+    for version in Git().whatchanged(skip, max_count):
         for path in version[-1]:
             try:
                 page = Page.objects.get(path=path)
@@ -75,7 +80,9 @@ def whatchanged(request):
                             'version': version[2], 'message': version[3],
                             'date': version[4]})
 
-    return render(request, 'waliki/whatchanged.html', {'changes': changes})
+    return render(request, 'waliki/whatchanged.html', {'changes': changes,
+                                                       'prev': pag - 1 if pag > 1 else None,
+                                                       'next': pag + 1 if (total / settings.WALIKI_PAGINATE_BY) > pag else None})
 
 
 @csrf_exempt

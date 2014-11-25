@@ -101,10 +101,14 @@ class Git(object):
         except ErrorReturnCode:
             return None
 
-    def whatchanged(self):
+    def whatchanged(self, skip=0, max_count=None):
         GIT_LOG_FORMAT = '%x1f'.join(['%an', '%ae', '%h', '%s', '%ar'])
         pages = []
-        raw_log = git.whatchanged("--pretty=format:%s" % GIT_LOG_FORMAT).stdout.decode('utf8')
+
+        args = ["--pretty=format:%s" % GIT_LOG_FORMAT, '--skip=%d' % skip]
+        if max_count:
+            args.append('--max-count=%d' % max_count)
+        raw_log = git.whatchanged(*args).stdout.decode('utf8')
         logs = re.findall(r'((.*)\x1f(.*)\x1f(.*)\x1f(.*)\x1f(.*))?\n:.*\t(.*)', raw_log, flags=re.MULTILINE | re.UNICODE)
         for log in logs:
             if log[0]:
@@ -121,3 +125,9 @@ class Git(object):
 
     def diff(self, page, new, old):
         return git.diff('--no-color', new, old, '--', page.path).stdout.decode('utf8')
+
+    def total_commits(self, to='HEAD', page=None):
+        args = ['rev-list', to, '--count']
+        if page:
+            args += ['--', page.path]
+        return git(*args).stdout.decode('utf8')[:-1]
