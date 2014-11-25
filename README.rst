@@ -25,7 +25,7 @@
 :home: https://github.com/mgaitan/waliki/
 :demo: http://waliki.pythonanywhere.com
 :documentation: http://waliki.rtfd.org
-:twitter: `@Waliki_ <http://twitter.com/Waliki_`_ // `@tin_nqn_ <http://twitter.com/tin_nqn_`_
+:twitter: `@Waliki_ <http://twitter.com/Waliki_>`_ // `@tin_nqn_ <http://twitter.com/tin_nqn_>`_
 :group: https://groups.google.com/forum/#!forum/waliki-devs
 :license: `BSD <https://github.com/mgaitan/waliki/blob/master/LICENSE>`_
 
