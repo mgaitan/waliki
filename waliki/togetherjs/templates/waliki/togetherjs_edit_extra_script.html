@@ -1,0 +1,18 @@
+{% load i18n %}
+
+  <script type="text/javascript">
+
+    var TogetherJSConfig_toolName = "{% trans "Collaborate" %}";
+    var TogetherJSConfig_dontShowClicks = true;
+    var TogetherJSConfig_disableWebRTC = true;
+    var TogetherJSConfig_getUserName = function (){
+        {% if request.user.is_authenticated %}
+          return '{{ request.user.username }}';
+        {% else %}
+          return null;
+        {% endif %}
+    };
+
+  </script>
+
+  <script src="https://togetherjs.com/togetherjs-min.js"></script>
