@@ -16,14 +16,11 @@ Contents:
 
    installation
    settings
-   git
-   acl
-   attachments
-   boxes
    autolinking
-   get_as_pdf
-   slides
+   plugins
    write_a_plugin
+   boxes
+   acl
    history
    contributing
    authors

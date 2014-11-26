@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'waliki.pdf',
     'waliki.slides',
     'waliki.attachments',
+    'waliki.togetherjs',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

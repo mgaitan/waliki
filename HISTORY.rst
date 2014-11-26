@@ -6,6 +6,7 @@ Changelog
 0.4dev
 ++++++
 
+- Implemented real-time collaborative editing via together.js
 - Added pagination in *what changed* page
 
 
