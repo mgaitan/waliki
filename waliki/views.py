@@ -84,6 +84,7 @@ def move(request, slug):
 @permission_required('change_page')
 def edit(request, slug):
     slug = slug.strip('/')
+    just_created = False
     try:
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
@@ -95,10 +96,11 @@ def edit(request, slug):
                         author=request.user,
                         message=_("Page created"),
                         form_extra_data={})
+            just_created = True
         else:
             raise Http404
 
-    data = request.POST if request.method == 'POST' else None
+    data = request.POST if request.method == 'POST' and not just_created else None
     form_extra_data = {}
     receivers_responses = page_preedit.send(sender=edit, page=page)
     for r in receivers_responses:

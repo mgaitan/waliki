@@ -152,15 +152,15 @@ class TestMove(TestCase):
         # a couple of redirect exists to the page we'll move
         Redirect.objects.create(old_slug='an-old-page-redirected', new_slug='a-page')
         Redirect.objects.create(old_slug='another-old-page-redirected', new_slug='a-page')
-        self.client.post(self.move_url, {'slug': 'new-slug'})
+        self.client.post(self.move_url, {'slug': 'moved-slug'})
         self.assertEqual(Redirect.objects.all().count(), 3)
-        self.assertEqual(Redirect.objects.get(old_slug='an-old-page-redirected').new_slug, 'new-slug')
-        self.assertEqual(Redirect.objects.get(old_slug='another-old-page-redirected').new_slug, 'new-slug')
+        self.assertEqual(Redirect.objects.get(old_slug='an-old-page-redirected').new_slug, 'moved-slug')
+        self.assertEqual(Redirect.objects.get(old_slug='another-old-page-redirected').new_slug, 'moved-slug')
 
     def test_move_delete_redirections_targeting_new_page(self):
-        Redirect.objects.create(old_slug='new-slug', new_slug='any')
-        self.client.post(self.move_url, {'slug': 'new-slug'})
+        Redirect.objects.create(old_slug='the-new-slug', new_slug='any')
+        self.client.post(self.move_url, {'slug': 'the-new-slug'})
         self.assertEqual(Redirect.objects.all().count(), 1)
-        self.assertEqual(Redirect.objects.filter(old_slug='new-slug').count(), 0)
+        self.assertEqual(Redirect.objects.filter(old_slug='the-new-slug').count(), 0)
 
 
