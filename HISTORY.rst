@@ -8,6 +8,7 @@ Changelog
 
 - Implemented real-time collaborative editing via together.js
 - Added pagination in *what changed* page
+- Implemented page move
 
 
 0.3.3 (2014-11-24)

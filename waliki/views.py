@@ -1,11 +1,13 @@
 import json
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from .models import Page, Redirect
-from .forms import PageForm
-from .signals import page_saved, page_preedit
+from .forms import PageForm, MovePageForm
+from .signals import page_saved, page_preedit, page_moved
 from ._markups import get_all_markups
 from .acl import permission_required
 from . import settings
@@ -40,8 +42,49 @@ def detail(request, slug, raw=False):
 
 
 @permission_required('change_page')
+def move(request, slug):
+    page = get_object_or_404(Page, slug=slug)
+    data = request.POST if request.method == 'POST' else None
+    form = MovePageForm(data, instance=page)
+    if request.method == 'POST' and form.is_valid():
+        new_slug = form.cleaned_data['slug']
+
+        # remove redirections (now there is an actual page)
+        Redirect.objects.filter(old_slug=new_slug).delete()
+        # squash redirections to new destiny
+        Redirect.objects.filter(new_slug=slug).update(new_slug=new_slug)
+        # create the new redirection
+        Redirect.objects.create(old_slug=slug, new_slug=new_slug)
+
+        old_path = page.path
+        page.move(new_slug + page.markup_.file_extensions[0])
+        page.slug = new_slug
+        page.save()
+        msg = _("Page moved from %(old_slug)s") % {'old_slug': slug}
+        page_moved.send(sender=move,
+                        page=page,
+                        old_path=old_path,
+                        author=request.user,
+                        message=msg,
+                        )
+        messages.success(request, msg)
+        if request.is_ajax():
+            return HttpResponse(json.dumps({'redirect': page.get_absolute_url()}), content_type="application/json")
+        return redirect(page.get_absolute_url())
+
+    if request.is_ajax():
+        data = render_to_string('waliki/move.html', {'page': page, 'form': form},
+                                context_instance=RequestContext(request))
+        return HttpResponse(json.dumps({'data': data}), content_type="application/json")
+    return render(request, 'waliki/move.html', {'page': page, 'form': form})
+
+
+
+
+@permission_required('change_page')
 def edit(request, slug):
     slug = slug.strip('/')
+    just_created = False
     try:
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
@@ -53,10 +96,11 @@ def edit(request, slug):
                         author=request.user,
                         message=_("Page created"),
                         form_extra_data={})
+            just_created = True
         else:
             raise Http404
 
-    data = request.POST if request.method == 'POST' else None
+    data = request.POST if request.method == 'POST' and not just_created else None
     form_extra_data = {}
     receivers_responses = page_preedit.send(sender=edit, page=page)
     for r in receivers_responses:

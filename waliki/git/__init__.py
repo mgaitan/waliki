@@ -25,6 +25,7 @@ class Git(object):
             git.config("user.email", settings.WALIKI_COMMITTER_EMAIL)
             git.config("user.name", settings.WALIKI_COMMITTER_NAME)
 
+        self.git = git
 
     def commit(self, page, message='', author=None, parent=None):
         path = page.path
@@ -70,7 +71,7 @@ class Git(object):
     def history(self, page):
         GIT_COMMIT_FIELDS = ['commit', 'author', 'date', 'date_relative', 'message']
         GIT_LOG_FORMAT = '%x1f'.join(['%h', '%an', '%ad', '%ar', '%s']) + '%x1e'
-        output = git.log('--format=%s' % GIT_LOG_FORMAT, '-z', '--shortstat', page.abspath)
+        output = git.log('--format=%s' % GIT_LOG_FORMAT, '--follow', '-z', '--shortstat', page.abspath)
         output = output.split('\n')
         history = []
         for line in output:
@@ -131,3 +132,9 @@ class Git(object):
         if page:
             args += ['--', page.path]
         return git(*args).stdout.decode('utf8')[:-1]
+
+    def mv(self, page, old_path, author, message):
+        status = git.status('--porcelain', old_path).stdout.decode('utf8')[1:2]
+        if status == 'D':
+            git.rm(old_path)
+        self.commit(page, author=author, message=message)

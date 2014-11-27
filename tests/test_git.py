@@ -26,7 +26,6 @@ class TestGit(TestCase):
         self.assertEqual(git.config('user.name').stdout.decode('utf8')[:-1], WALIKI_COMMITTER_NAME)
         self.assertEqual(git.config('user.email').stdout.decode('utf8')[:-1], WALIKI_COMMITTER_EMAIL)
 
-
     def test_commit_existent_page_with_no_previous_commits(self):
         response = self.client.get(self.edit_url)
         data = response.context[0]['form'].initial
@@ -267,3 +266,23 @@ class TestGit(TestCase):
         self.assertEqual(changes[1]['page'], self.page)
         self.assertEqual(changes[0]['message'], 'commit all')
         self.assertEqual(changes[1]['message'], 'commit all')
+
+
+class TestGitMove(TestCase):
+
+    def setUp(self):
+        self.page = PageFactory()
+
+    def test_legacy_history(self):
+        original_slug = self.page.slug
+        self.page.raw = "\n- item1\n"
+        Git().commit(self.page, message="original")
+        self.page.raw = "\n- otra\n"
+        Git().commit(self.page, message="second version")
+        self.client.post(reverse('waliki_move', args=(self.page.slug,)), {'slug': 'new-slug'})
+
+        response = self.client.get(reverse('waliki_history', args=('new-slug',)))
+        history = response.context[0].get('history')
+        self.assertEqual(history[0]['message'], u'Page moved from %s' % original_slug)
+        self.assertEqual(history[1]['message'], u'second version')
+        self.assertEqual(history[2]['message'], u'original')

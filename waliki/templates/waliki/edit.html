@@ -10,6 +10,9 @@
   {% entry_point 'edit_extra_head' %}
 {% endblock %}
 
+    {% block main_action %}
+        <a id="btn-waliki_move" href="{% url 'waliki_move' slug=page.slug|default:slug %}" class="btn btn-default">{% trans "Move" %}</a>
+    {% endblock main_action %}
 
 
 {% block content %}
@@ -71,6 +74,29 @@
 </div>
 </div>
 </div>
+
+
+<div id="move-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="move-form" method="post" class="form" action="{% url 'waliki_move' slug=page.slug %}">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span></button>
+        <h4 class="modal-title" id="myModalLabel">{% trans "Move page" %}</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+       <input id='btn-move-submit' class="btn btn-success" value="{% trans "Move page" %}" type="submit">
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% entry_point 'edit_content' %}
 {% endblock content %}
