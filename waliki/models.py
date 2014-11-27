@@ -98,6 +98,10 @@ class Page(models.Model):
         return os.path.abspath(os.path.join(WALIKI_DATA_DIR, self.path))
 
     def move(self, new_path):
+        try:
+            os.makedirs(os.path.dirname(os.path.join(WALIKI_DATA_DIR, new_path)))
+        except OSError:
+            pass
         shutil.move(os.path.join(WALIKI_DATA_DIR, self.path), os.path.join(WALIKI_DATA_DIR, new_path))
         self.path = new_path
 
