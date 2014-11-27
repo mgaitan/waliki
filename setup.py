@@ -28,7 +28,9 @@ install_requires = ['django', 'Markups', 'sh', 'docutils', 'rst2html5', 'pyquery
 extras_require = {                                      # noqa
         'restructuredtext': [],
         'markdown': ['markdown'],
-        'attachments': ['django-sendfile']
+        'attachments': ['django-sendfile'],
+        'pdf': ['rst2pdf'],
+        'slides': ['hovercraft']
     }
 
 everything = set()

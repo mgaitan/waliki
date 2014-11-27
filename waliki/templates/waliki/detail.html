@@ -20,7 +20,9 @@
     {% block actions %}
         <div class="btn-group">
 
+            {% block main_action %}
             <a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-default">{% trans "Edit" %}</a>
+            {% endblock main_action %}
             <button class="btn dropdown-toggle btn-default" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
@@ -35,7 +37,6 @@
                 {% if can_delete %}
                 <li class="divider"></li>
                 <li><a id="confirmDelete" class="text-error">{% trans "Delete" %}</a></li>
-
                 {% endif %}
 
             {% endif %}

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import codecs
+import shutil
 import os.path
 from django.db import models
 from django.db.models import Q
@@ -95,6 +96,10 @@ class Page(models.Model):
     @property
     def abspath(self):
         return os.path.abspath(os.path.join(WALIKI_DATA_DIR, self.path))
+
+    def move(self, new_path):
+        shutil.move(os.path.join(WALIKI_DATA_DIR, self.path), os.path.join(WALIKI_DATA_DIR, new_path))
+        self.path = new_path
 
     @staticmethod
     def get_markup_instance(markup):

@@ -16,6 +16,7 @@ def waliki_urls():
 
     base += [url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/edit$', 'edit', name='waliki_edit'),
              url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/delete$', 'delete', name='waliki_delete'),
+             url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/move$', 'move', name='waliki_move'),
              url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/raw$', 'detail', {'raw': True}, name='waliki_detail_raw'),
              url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')$', 'detail', name='waliki_detail'),
              ]

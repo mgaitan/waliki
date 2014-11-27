@@ -52,3 +52,28 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     editor.focus();
   }
 });
+
+
+$('#btn-waliki_move').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        console.log(url);
+        $.get(url, function(data){
+            $('#move-modal .modal-body').empty().append(data.data);
+            $('#move-modal').modal('show');
+        });
+});
+
+$("#move-form" ).submit(function(e) {
+    e.preventDefault();
+    var url = $(this).attr('action');
+    $.post(url, $(this).serialize(), function(data){
+          if (data.redirect !== undefined){
+            window.location = data.redirect;
+          }else {
+              $('#move-modal .modal-body').empty().append(data.data);
+              $('#move-modal').modal('show');
+          }
+        });
+});
+
