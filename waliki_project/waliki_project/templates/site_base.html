@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load waliki_tags %}
 {% load i18n %}
 {% load account %}
 
+
+{% block extra_style %}
+ <link rel="stylesheet" type="text/css" href="{% static 'css/waliki_project.css' %}">
+{% endblock %}
 
 {% block navbar %}
         <div class="navbar navbar-fixed-top navbar-default">
@@ -14,6 +19,10 @@
                             {% navbar_links %}
 
                             <ul class="nav pull-right navbar-nav">
+
+                            <li><iframe src="http://ghbtns.com/github-btn.html?user=mgaitan&repo=waliki&type=watch&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="160px" height="50px" style="padding-top: 10px;"></iframe>
+                            </li>
+
                             {% if request.user.is_authenticated %}
                                 <li class="dropdown">
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">{% user_display request.user %}

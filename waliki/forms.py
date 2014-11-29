@@ -5,11 +5,30 @@ from ._markups import get_all_markups
 from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS
 
 
+class MovePageForm(forms.ModelForm):
+
+    class Meta:
+        model = Page
+        fields = ['slug']
+
+    def clean_slug(self):
+        slug = self.cleaned_data['slug']
+        if self.instance.slug == slug:
+            raise forms.ValidationError(_("The slug wasn't changed"))
+        if Page.objects.filter(slug=slug).exists():
+            raise forms.ValidationError(_("There is already a page with this slug"))
+        return slug
+
+
 class PageForm(forms.ModelForm):
     raw = forms.CharField(label="", widget=forms.Textarea)
     # Translators: log message
     message = forms.CharField(label=_('Log message'), max_length=200, required=False)
     extra_data = forms.CharField(widget=forms.HiddenInput, required=False)
+
+    class Meta:
+        model = Page
+        fields = ['title', 'markup', 'raw', 'message']
 
 
     class Media:
@@ -34,13 +53,16 @@ class PageForm(forms.ModelForm):
             for field in self.fields.values():
                 field.widget = forms.HiddenInput()
 
+    def clean_raw(self):
+        if self.instance.raw == self.cleaned_data['raw']:
+            raise forms.ValidationError(
+                _('There were no changes in the page to commit.')
+            )
+        return self.cleaned_data['raw']
+
     def save(self, commit=True):
         instance = super(PageForm, self).save(commit)
         if commit:
             instance.raw = self.cleaned_data['raw']
 
         return instance
-
-    class Meta:
-        model = Page
-        fields = ['title', 'markup', 'raw', 'message']

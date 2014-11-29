@@ -1,6 +1,6 @@
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from waliki.signals import page_saved, page_preedit
+from waliki.signals import page_saved, page_preedit, page_moved
 from . import Git
 
 
@@ -18,3 +18,8 @@ def commit(sender, page, author, message, form_extra_data, **kwargs):
 def get_last_version(sender, page, **kwargs):
     last = Git().last_version(page)
     return {'form_extra_data': {'parent': last}}
+
+
+@receiver(page_moved)
+def move(sender, page, old_path, author, message, **kwargs):
+    Git().mv(page, old_path, author, message)

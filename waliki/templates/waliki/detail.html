@@ -1,15 +1,28 @@
-{% extends "site_base.html" %}
+{% extends "waliki/base.html" %}
 {% load i18n %}
 {% load waliki_tags %}
 {% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
 
 
+{% block extra_head %}
+  {{ block.super }}
+ {% entry_point 'detail_extra_head' %}
+{% endblock %}
+
+
+
 {% block header %}
+    {% entry_point 'detail_pre_header' %}
+
     <div class="pull-right">
+    {% entry_point 'detail_actions' %}
+
     {% block actions %}
         <div class="btn-group">
 
+            {% block main_action %}
             <a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-default">{% trans "Edit" %}</a>
+            {% endblock main_action %}
             <button class="btn dropdown-toggle btn-default" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
@@ -24,7 +37,6 @@
                 {% if can_delete %}
                 <li class="divider"></li>
                 <li><a id="confirmDelete" class="text-error">{% trans "Delete" %}</a></li>
-
                 {% endif %}
 
             {% endif %}
@@ -32,46 +44,20 @@
         </div>
     {% endblock actions %}
     </div>
-    {% block title %}<h1>{{ page.title }}</h1>{% endblock title %}
+    {% block page_title %}<h1>{{ page.title|default:'' }}</h1>{% endblock page_title %}
 {% endblock header %}
 
 {% block content %}
+    {% entry_point 'detail_pre_content' %}
 
     {% if page %}
         {{ page.body|safe }}
     {% else %}
         <p>{% trans "This page doesn't exist yet." %}</p>
-        <p><a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-success">{% trans "Create it" %}</a></p>
+        <p><form action="{% url 'waliki_edit' slug=page.slug|default:slug %}" method="post">{% csrf_token %}<button type="submit" class="btn btn-success">{% trans "Create it" %}</button></form></p>
     {% endif %}
 
- {% if page.footer %}
-   <div id="footer">
-   <hr>
-   <div class="pull-right"><em><small>{{ page.footer|safe }}</small></em></div>
-</div>
-{% endif %}
 
-{% if can_delete %}
-
-
-<div id="myModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- dialog body -->
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                Hello world!
-            </div>
-            <!-- dialog buttons -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-{% endif %}
-
+    {% entry_point 'detail_post_content' %}
 {% endblock content %}
 

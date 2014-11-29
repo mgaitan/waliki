@@ -11,6 +11,7 @@ from django.utils.importlib import import_module
 
 _cache = {}
 _extra_page_actions = {}
+_extra_edit_actions = {}
 _navbar_links = []
 
 
@@ -24,10 +25,11 @@ class BasePlugin(object):
     urls_root = []   # General urlpatterns that will reside in waliki root
     urls_page = []    # urlpatterns that receive page slug  .../page/slug/
     extra_page_actions = {}   # Example: {'all': [('waliki_history', _('History'))]}
+    extra_edit_actions = {}
     navbar_links = ()   # (('waliki_whatchanged', _('What changed')),)
 
 
-def get_module(app, modname, verbose, failfast):
+def get_module(app, modname, verbose=False, failfast=False):
     """
     Internal function to load a module from a single app.
     """
@@ -43,6 +45,13 @@ def get_module(app, modname, verbose, failfast):
     if verbose:
         print("Loaded %r from %r" % (modname, app))
     return module
+
+
+def str2object(str_):
+    """receive 'mypackage.module.function' and return function (the object)"""
+    steps = str_.split('.')
+    module = get_module(steps[0], '.'.join(steps[1:-1]), failfast=True)
+    return getattr(module, steps[-1])
 
 
 def load(modname, verbose=False, failfast=False):
@@ -75,6 +84,13 @@ def register(PluginClass):
                 _extra_page_actions[key] = []
             _extra_page_actions[key].extend(plugin.extra_page_actions[key])
 
+    if getattr(PluginClass, 'extra_edit_actions', False):
+        for key in plugin.extra_edit_actions:
+            if key not in _extra_edit_actions:
+                _extra_edit_actions[key] = []
+            _extra_edit_actions[key].extend(plugin.extra_edit_actions[key])
+
+
     if getattr(PluginClass, 'navbar_links', False):
         _navbar_links.extend(list(plugin.navbar_links))
 
@@ -94,6 +110,10 @@ def get_plugins():
 
 def get_extra_page_actions():
     return _extra_page_actions
+
+
+def get_extra_edit_actions():
+    return _extra_edit_actions
 
 
 def get_navbar_links():

@@ -22,18 +22,21 @@ if sys.argv[-1] == 'publish':
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
-install_requires = ['django', 'markups', 'sh', 'docutils', 'rst2html5']
+install_requires = ['django', 'Markups', 'sh', 'docutils', 'rst2html5', 'pyquery']
 
 
 extras_require = {                                      # noqa
         'restructuredtext': [],
         'markdown': ['markdown'],
-        'textile': ['textile']
+        'attachments': ['django-sendfile'],
+        'pdf': ['rst2pdf'],
+        'slides': ['hovercraft']
     }
 
 everything = set()
 for deps in extras_require.copy().values():
     everything.update(deps)
+
 
 extras_require['all'] = everything
 
@@ -56,7 +59,7 @@ setup(
     zip_safe=False,
     keywords='django wiki git waliki restructuredtext markdown',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Framework :: Django',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',

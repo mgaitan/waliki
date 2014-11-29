@@ -3,13 +3,42 @@
 Changelog
 ---------
 
-0.3dev
+0.4dev
 ++++++
 
-- Added the ``waliki_box`` templatetag
-- Implemented *per namespace* ACL rules
-- Added a webhook to pull and sync change from a remote repository (Git)
+- Implemented real-time collaborative editing via together.js
+- Added pagination in *what changed* page
+- Implemented page move
 
+
+0.3.3 (2014-11-24)
+++++++++++++++++++
+
+- Tracking page redirections
+- fix bugs related to attachments in `sync_waliki`
+- The edition form uses crispy forms if it's installed
+- many small improvements to help the integration/customization
+
+
+0.3.2 (2014-11-17)
+++++++++++++++++++
+
+- Url pattern is configurable now. By default allow uppercase and underscores
+- Added ``moin_migration_cleanup``, a tool to cleanup the result of a moin2git_ import
+- Improve git parsers for *page history* and *what changed*
+
+.. _moin2git: https://github.com/mgaitan/moin2git
+
+
+0.3.1 (2014-11-11)
+++++++++++++++++++
+
+- Plugin *attachments*
+- Implemented *per namespace* ACL rules
+- Added the ``waliki_box`` templatetag: use waliki content in any app
+- Added ``entry_point`` to extend templates from plugins
+- Added a webhook to pull and sync change from a remote repository (Git)
+- Fixed a bug in git that left the repo unclean
 
 0.2 (2014-09-29)
 ++++++++++++++++

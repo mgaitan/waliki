@@ -10,4 +10,4 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Manuel Kaufmann (`@humitos <https://github.com/humitos/>`_)

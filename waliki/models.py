@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 import re
+=======
+import codecs
+import shutil
+>>>>>>> master
 import os.path
 from django.db import models
 from django.db.models import Q
+from django.db.utils import IntegrityError
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.dispatch import receiver
 from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group, AnonymousUser
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
+from django.db.models.signals import post_save
+from docutils.utils import SystemMessage
 from . import _markups
-from .utils import get_slug
-from .settings import WALIKI_DEFAULT_MARKUP, WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR
+from waliki.settings import (get_slug, WALIKI_DEFAULT_MARKUP,
+                             WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR,
+                             WALIKI_CACHE_TIMEOUT)
 
 
 class Page(models.Model):
@@ -47,12 +58,11 @@ class Page(models.Model):
     def save(self, *args, **kwargs):
         self.slug = self.slug.strip('/')
         if not self.path:
-            self.path = self.slug + self._markup.file_extensions[0]
+            self.path = self.slug + self.markup_.file_extensions[0]
         super(Page, self).save(*args, **kwargs)
 
     @classmethod
     def from_path(cls, path, markup=None):
-
         filename, ext = os.path.splitext(path)
         if markup and isinstance(markup, string_types):
             markup = _markups.find_markup_class_by_name(markup)
@@ -60,7 +70,14 @@ class Page(models.Model):
             markup = _markups.find_markup_class_by_extension(ext)
         page = Page(path=path, slug=get_slug(filename), markup=markup.name)
         page.title = page._get_part('get_document_title')
-        page.save()
+
+        while True:
+            try:
+                page.save()
+                break
+            except IntegrityError:
+                page.slug += '-'
+
         return page
 
     def _get_meta(self):
@@ -104,7 +121,7 @@ class Page(models.Model):
         filename = self.abspath
         if not os.path.exists(filename) or os.path.isdir(filename):
             return ""
-        return open(filename, "r").read()
+        return codecs.open(filename, "r", encoding="utf-8").read()
 
     @raw.setter
     def raw(self, value):
@@ -114,14 +131,27 @@ class Page(models.Model):
         except OSError:
             # file exists?
             pass
+<<<<<<< HEAD
         with open(filename, "w") as f:
             meta = self._get_meta()
             f.write(meta + '\n' + value)
 
+=======
+        with codecs.open(filename, "w", encoding="utf-8") as f:
+            f.write(value)
+>>>>>>> master
 
     @property
     def abspath(self):
         return os.path.abspath(os.path.join(WALIKI_DATA_DIR, self.path))
+
+    def move(self, new_path):
+        try:
+            os.makedirs(os.path.dirname(os.path.join(WALIKI_DATA_DIR, new_path)))
+        except OSError:
+            pass
+        shutil.move(os.path.join(WALIKI_DATA_DIR, self.path), os.path.join(WALIKI_DATA_DIR, new_path))
+        self.path = new_path
 
     @staticmethod
     def get_markup_instance(markup):
@@ -134,17 +164,20 @@ class Page(models.Model):
         return Page.get_markup_instance(markup).get_document_body(text)
 
     @property
-    def _markup(self):
+    def markup_(self):
         if not hasattr(self, '__markup_instance'):
             self.__markup_instance = Page.get_markup_instance(self.markup)
         return self.__markup_instance
 
     def _get_part(self, part):
-        return getattr(self._markup, part)(self.raw)
+        try:
+            return getattr(self.markup_, part)(self.raw)
+        except SystemMessage:
+            return ''
 
     @property
     def body(self):
-        return self._get_part('get_document_body')
+        return self.get_cached_content()
 
     @property
     def stylesheet(self):
@@ -153,6 +186,19 @@ class Page(models.Model):
     @property
     def javascript(self):
         return self._get_part('get_javascript')
+
+    def get_cache_key(self):
+        return "waliki:content:%s" % self.slug
+
+    def get_cached_content(self):
+        """Returns cached """
+        cache_key = self.get_cache_key()
+        cached_content = cache.get(cache_key)
+
+        if cached_content is None:
+            cached_content = self._get_part('get_document_body')
+            cache.set(cache_key, cached_content, WALIKI_CACHE_TIMEOUT)
+        return cached_content
 
 
 class ACLRule(models.Model):
@@ -241,5 +287,23 @@ class ACLRule(models.Model):
             else:
                 allowed += get_user_model().objects.filter(Q(aclrule=rule) |
                                                            Q(groups__aclrule=rule)).values_list('id',
-                                                                                                 flat=True)
+                                                                                                flat=True)
         return get_user_model().objects.filter(id__in=allowed).distinct()
+
+
+class Redirect(models.Model):
+    old_slug = models.CharField(max_length=200, unique=True)
+    new_slug = models.CharField(max_length=200)
+    status_code = models.IntegerField(max_length=3, default=302, choices=((302, '302 Found'), (301, '301 Moved Permanently')))
+
+    def get_absolute_url(self):
+        return reverse('waliki_detail', args=(self.new_slug,))
+
+
+######################################################
+# SIGNAL HANDLERS
+######################################################
+
+@receiver(post_save, sender=Page)
+def on_page_save_clear_cache(instance, **kwargs):
+    cache.delete(instance.get_cache_key())

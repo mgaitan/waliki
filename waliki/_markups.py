@@ -3,12 +3,16 @@ import sys
 from markups import (MarkdownMarkup as MarkdownMarkupBase,
                      TextileMarkup as TextileMarkupBase,
                      ReStructuredTextMarkup as ReStructuredTextMarkupBase)
+from pyquery import PyQuery
 from .utils import get_url
 from waliki.settings import WALIKI_AVAILABLE_MARKUPS
 
 
 class MarkdownMarkup(MarkdownMarkupBase):
     codemirror_mode_name = codemirror_mode = 'markdown'
+    IMAGE_LINE = '![](%(url)s)'
+    LINK_LINE = '[%(filename)s](<%(url)s>)'
+
 
     def __init__(self, filename=None, extensions=None, extension_configs=None):
         super(MarkdownMarkupBase, self).__init__(filename)
@@ -55,6 +59,9 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
+    IMAGE_LINE = '.. image:: %(url)s'
+    LINK_LINE = '`%(filename)s <%(url)s>`_'
+
     codemirror_mode = codemirror_mode_name = 'rst'
 
     def __init__(self, filename=None, **kwargs):
@@ -74,17 +81,20 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
     def get_document_body(self, text):
         html = super(ReStructuredTextMarkup, self).get_document_body(text)
-        # Convert unknow links to internal wiki links.
+        # Convert unknown links to internal wiki links.
         # Examples:
         #   Something_ will link to '/something'
-        #  `something great`_  to '/something_great'
+        #  `something great`_  to '/something-great'
         #  `another thing <thing>`_  '/thing'
-        refs = re.findall(r'Unknown target name: [\&quot;|"](.*)[\&quot;|"]', html)
+        if not html:
+            return html
+        refs = [a.text[:-1] for a in PyQuery(html)('a.problematic') if not re.match(r'\|(.*)\|', a.text)]
         if refs:
+
             refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
                              for ref in refs)
             html = super(ReStructuredTextMarkup, self).get_document_body(
-                text + '\n\n' + refs)
+                        text + '\n\n' + refs)
         return html
 
     def format_meta(self, **kwargs):

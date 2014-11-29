@@ -1,0 +1,232 @@
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment %}
+
+This is a bit hacky in order to give support IE 7-9 lack of FormData support.
+
+The template is used both as an ajax request and directly in a popup window.
+When is requested by ajax, it shows the list of attached files at the top.
+
+Also, it checks if the browser is not capable
+to upload files via ajax and replace the inline form with a link
+that reload the same view but in a popup window. The popup show the same view, but as won't be ajax, it'll only show the form.
+{% endcomment %}
+
+<div>
+{% include "_messages.html" %}
+
+{% if request.is_ajax %}
+    {# show list only if it is ajax #}
+    {% if page.attachments.all %}
+    <table class="table table-striped">
+        <tbody>
+
+           {% for attachment in page.attachments.all %}
+           <tr>
+                <td><a href="{{ attachment.get_absolute_url }}">{{ attachment }}</a></td>
+                <td>
+
+                    <div class="btn-group btn-group-xs pull-right">
+
+                    <a title="{% trans "Insert" %}" class="insert btn btn-default" data-file="{{ attachment }}" href="{{ attachment.get_absolute_url }}"><i class="glyphicon glyphicon-download"></i></a>
+                    <a title="{% trans "Delete" %}" class="remove btn btn-default" data-file="{{ attachment }}" href="{% url "waliki_delete_attachment" page.slug attachment.id %}"><i class="glyphicon glyphicon-remove"></i></a>
+                    </div>
+                </td>
+            </tr>
+           {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+      {% trans "There is no attached files yet" %}
+    {% endif %}
+
+
+{% else %}
+{# not ajax: just the form, but including css and js #}
+<!DOCTYPE html>
+<html>
+<head>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pygments.css'%}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/waliki.css'%}">
+</head>
+<body>
+
+{% endif %}
+
+
+
+<h3>{% trans "Upload a new file" %}</h3>
+
+    <div id="upload_popup" class="hide">
+        <a href="{% url 'waliki_attachments' page.slug %}" class="btn btn-success special">{% trans "Upload" %}</a>
+    </div>
+
+    <div id="ajax_form">
+
+
+        <div class="progress hide">
+            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+        </div>
+
+
+        <form id="form-attach" method="POST" enctype="multipart/form-data" data-async="" data-target="#attachments-body" action="{% url 'waliki_attachments' page.slug %}">
+            <input name="attach" type="file">
+            <input class="btn btn-success special disabled form-control" disabled="disabled" value="{% trans "upload" %}" type="submit">
+        </form>
+    </div>
+
+{% if not request.is_ajax %}
+    <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script type="text/javascript">
+        function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                }
+            }
+        });
+    </script>
+{% else %}
+</div>
+{% endif %}
+
+
+<script type="text/javascript">
+    if (FormData === undefined) {
+
+        $("#ajax_form").hide();
+        $("#upload_popup").removeClass('hide');
+        $("#upload_popup a").click( function(event){
+             event.preventDefault();
+             var height=300,
+                 width=400,
+                 left=Math.round((screen.width/2)-(width/2)),
+                 top=0;
+              if(screen.height>height) {
+                 top=Math.round((screen.height/2)-(height/2))
+              }
+             $('#attachments-modal').modal('hide');
+             window.open($(this).attr('href'), '{% trans "Upload" %}',
+                         'left='+left+',top='+top+',width='+width+',height='+height);
+        });
+    }else{
+        $('#form-attach').on('submit', function(event) {
+            event.preventDefault();
+            var $form = $(this);
+            var $form_data = new FormData($form[0]);
+            var $target = $($form.attr('data-target'));
+            $('div.progress').removeClass('hide');
+            $.ajax({
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                xhr: function() {  // custom xhr
+                        var myXhr = $.ajaxSettings.xhr();
+                        if(myXhr.upload){ // check if upload property exists
+                            myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // for handling the progress of the upload
+                        }
+                        return myXhr;
+                    },
+                enctype: $form.attr('enctype'),
+                data: $form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data, status) {
+                    $('#attachments-modal .modal-body').empty().append(data);
+                    $('.alert').delay(4000).fadeOut(1000);
+                }
+            });
+        });
+        function progressHandlingFunction(e){
+            if(e.lengthComputable){
+                var percent = (e.loaded / e.total) * 100;
+                $('#progress-bar').css("width", percent + "%");
+                $('#progress-bar').attr('aria-valuenow', percent);            }
+        }
+
+    }
+
+    function get_code($link){
+
+        var cursorPos = editor.getCursor();
+        var isImg = new RegExp('(jpg|png|gif)$', 'i');
+
+
+        if ( isImg.test($link.attr('data-file')) ) {
+            // insert as an embeded image
+
+            var insert = "{{ page.markup_.IMAGE_LINE|escapejs|safe }}"
+
+           /*
+                // ensure good spacing
+                while (textBefore.substr(textBefore.length - 2, 2) !== '\n\n'){
+                    textBefore += '\n';
+                }
+                while (textAfter.substr(0, 2) !== '\n\n'){
+                    textAfter = '\n' + textAfter;
+                }
+            */
+
+        } else {
+            // insert as an inline link
+            var insert = "{{ page.markup_.LINK_LINE|escapejs|safe }}"
+            /*
+
+            if (textBefore.substr(textBefore.length - 1, 1) !== ' '){
+                 textBefore += ' ';
+            }
+            if (textAfter.substr(0, 1) !== ' '){
+                textAfter = ' ' + textAfter;
+            }
+            */
+        }
+        insert = insert.replace('%(filename)s', $link.attr('data-file'));
+        insert = insert.replace('%(url)s', $link.attr('href'));
+        return insert;
+    }
+
+    $('.insert').on('click', function(event){
+        event.preventDefault();
+        $('#attachments-modal').modal('hide');
+        var insert = get_code($(this));
+        console.log(insert);
+        editor.replaceSelection(insert);
+        editor.focus();
+    });
+
+
+
+    $('.remove').on('click', function(event){
+        var $link = $(this);
+        event.preventDefault();
+
+        var r = confirm("{% trans "Are you sure you want to delete " %}" + $(this).attr('data-file'));
+        if (r == true) {
+            $.post($link.attr('href'), function(data){
+                                    console.log(data);
+                                    if (data.removed){
+                                        $link.parents('tr').fadeOut(1000);
+                                    }
+            });
+        }
+    });
+
+
+    $(function(){
+        $('input:file').change(function() {
+          if($(this).val()) {
+            $('input:submit').removeAttr("disabled").removeClass('disabled');
+          } else {
+            $('input:submit').attr("disabled","disabled").addClass("disabled");
+          }
+        });
+    });
+
+</script>

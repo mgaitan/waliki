@@ -24,12 +24,16 @@
             {% endfor %}
             </tbody>
         </table>
-{% if changes|length > 10 %}
 
-<div class="form-group">
-    <a class="btn btn-default btn-sm" href="#top"><i class="icon-chevron-up"></i>{% trans "Back to top" %}</a>
-</div>
-{% endif %}
+
+
+      <nav>
+        <ul class="pager">
+          <li class="previous {% if not prev %}disabled{% endif %}"><a href="{% if prev %}{% url 'waliki_whatchanged' prev %}{% else %}#{% endif %}">{% trans "Previous" %}</a></li>
+          <li class="next {% if not next %}disabled{% endif %}"><a href="{% if next %}{% url 'waliki_whatchanged' next %}{% else %}#{% endif %}">{% trans "Next" %}</a></li>
+        </ul>
+      </nav>
+
 
 </div>
 </div>

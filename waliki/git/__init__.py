@@ -25,6 +25,7 @@ class Git(object):
             git.config("user.email", settings.WALIKI_COMMITTER_EMAIL)
             git.config("user.name", settings.WALIKI_COMMITTER_NAME)
 
+        self.git = git
 
     def commit(self, page, message='', author=None, parent=None):
         path = page.path
@@ -59,6 +60,8 @@ class Git(object):
             # TODO: make this more robust!
             error = e.stdout.decode('utf8')
             if 'CONFLICT' in error:
+                # For '-i' attribute see http://stackoverflow.com/q/5827944/811740
+                git.commit(path, allow_empty_message=True, m=_('Merged with conflict'), i=True, **kwargs)
                 raise Page.EditionConflict(_('Automatic merge failed. Please, fix the conflict and save the page.'))
             else:
                 raise
@@ -66,18 +69,15 @@ class Git(object):
 
 
     def history(self, page):
-        data = [("commit", "%h"),
-                ("author", "%an"),
-                ("date", "%ad"),
-                ("date_relative", "%ar"),
-                ("message", "%s")]
-        format = "{%s}" % ','.join([""" \"%s\": \"%s\" """ % item for item in data])
-        output = git.log('--format=%s' % format, '-z', '--shortstat', page.abspath)
-        output = output.replace('\x00', '').replace('}{', '}\n\n{').split('\n')[:-1]
+        GIT_COMMIT_FIELDS = ['commit', 'author', 'date', 'date_relative', 'message']
+        GIT_LOG_FORMAT = '%x1f'.join(['%h', '%an', '%ad', '%ar', '%s']) + '%x1e'
+        output = git.log('--format=%s' % GIT_LOG_FORMAT, '--follow', '-z', '--shortstat', page.abspath)
+        output = output.split('\n')
         history = []
         for line in output:
-            if line.startswith('{'):
-                history.append(json.loads(line))
+            if '\x1f' in line:
+                log = line.strip('\x1e\x00').split('\x1f')
+                history.append(dict(zip(GIT_COMMIT_FIELDS, log)))
             else:
                 insertion = re.match(r'.* (\d+) insertion', line)
                 deletion = re.match(r'.* (\d+) deletion', line)
@@ -86,13 +86,13 @@ class Git(object):
 
         max_changes = float(max([(v['insertion'] + v['deletion']) for v in history])) or 1.0
         for v in history:
-            v.update({'insertion_relative': (v['insertion'] / max_changes) * 100,
-                      'deletion_relative': (v['deletion'] / max_changes) * 100})
+            v.update({'insertion_relative': str((v['insertion'] / max_changes) * 100),
+                      'deletion_relative': str((v['deletion'] / max_changes) * 100)})
         return history
 
     def version(self, page, version):
         try:
-            return six.text_type(git.show('%s:%s' % (version, page.path)))
+            return git.show('%s:%s' % (version, page.path)).stdout.decode('utf8')
         except:
             return ''
 
@@ -102,17 +102,22 @@ class Git(object):
         except ErrorReturnCode:
             return None
 
-    def whatchanged(self):
+    def whatchanged(self, skip=0, max_count=None):
+        GIT_LOG_FORMAT = '%x1f'.join(['%an', '%ae', '%h', '%s', '%ar'])
         pages = []
-        log = git.whatchanged("--pretty=format:%an//%ae//%h//%s//%ar").stdout.decode('utf8')
-        logs = re.findall(r'((.*)\/\/(.*)//(.*)//(.*)//(.*))?\n:.*\t(.*)', log, flags=re.MULTILINE)
+
+        args = ["--pretty=format:%s" % GIT_LOG_FORMAT, '--skip=%d' % skip]
+        if max_count:
+            args.append('--max-count=%d' % max_count)
+        raw_log = git.whatchanged(*args).stdout.decode('utf8')
+        logs = re.findall(r'((.*)\x1f(.*)\x1f(.*)\x1f(.*)\x1f(.*))?\n:.*\t(.*)', raw_log, flags=re.MULTILINE | re.UNICODE)
         for log in logs:
             if log[0]:
                 log = list(log[1:])
                 log[-1] = [log[-1]]
                 pages.append(list(log))
             else:
-                pages[-1].append(log[-1])
+                pages[-1][-1].append(log[-1])
         return pages
 
     def pull(self, remote):
@@ -121,3 +126,15 @@ class Git(object):
 
     def diff(self, page, new, old):
         return git.diff('--no-color', new, old, '--', page.path).stdout.decode('utf8')
+
+    def total_commits(self, to='HEAD', page=None):
+        args = ['rev-list', to, '--count']
+        if page:
+            args += ['--', page.path]
+        return git(*args).stdout.decode('utf8')[:-1]
+
+    def mv(self, page, old_path, author, message):
+        status = git.status('--porcelain', old_path).stdout.decode('utf8')[1:2]
+        if status == 'D':
+            git.rm(old_path)
+        self.commit(page, author=author, message=message)

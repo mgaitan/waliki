@@ -1,0 +1,14 @@
+<script type="text/javascript">
+	
+$('#btn-waliki_attachments').on('click', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        console.log(url);
+        $.get(url, function(data){
+
+                $('#attachments-modal .modal-body').empty().append(data);
+                $('#attachments-modal').modal('show');
+        });
+});
+
+</script>

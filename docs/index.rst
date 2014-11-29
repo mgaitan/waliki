@@ -16,12 +16,11 @@ Contents:
 
    installation
    settings
-   git
-   acl
-   boxes
    autolinking
-   get_as_pdf
+   plugins
    write_a_plugin
+   boxes
+   acl
    history
    contributing
    authors

@@ -18,7 +18,7 @@ With this simple logic you'll get:
 * Webhook/s (pull changes from a remote repository)
 
 
-To install it add ``'waliki.git'`` after ``'waliki'`` in you ``settings.INSTALLED_APPS``.
+To install it add ``'waliki.git'`` after ``'waliki'`` in your ``settings.INSTALLED_APPS``.
 
 .. tip:: This plugin is optional, but strongly recommended.
 
