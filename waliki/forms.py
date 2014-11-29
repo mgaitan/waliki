@@ -5,6 +5,13 @@ from ._markups import get_all_markups
 from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS
 
 
+class DeleteForm(forms.Form):
+    what = forms.ChoiceField(label=_('What do you want to delete?'),
+                             choices=(('this', _('Just this page')),
+                                      ('namespace', _('This page and all the namespace')))
+                             )
+
+
 class MovePageForm(forms.ModelForm):
 
     class Meta:
@@ -29,7 +36,6 @@ class PageForm(forms.ModelForm):
     class Meta:
         model = Page
         fields = ['title', 'markup', 'raw', 'message']
-
 
     class Media:
         modes = tuple('codemirror/mode/%s/%s.js' % (m.codemirror_mode, m.codemirror_mode)

@@ -64,7 +64,7 @@ $('#btn-waliki_move').on('click', function(e) {
         });
 });
 
-$("#move-form" ).submit(function(e) {
+$("#move-form").submit(function(e) {
     e.preventDefault();
     var url = $(this).attr('action');
     $.post(url, $(this).serialize(), function(data){

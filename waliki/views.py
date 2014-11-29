@@ -5,8 +5,9 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from .models import Page, Redirect
-from .forms import PageForm, MovePageForm
+from .forms import PageForm, MovePageForm, DeleteForm
 from .signals import page_saved, page_preedit, page_moved
 from ._markups import get_all_markups
 from .acl import permission_required
@@ -23,9 +24,10 @@ def detail(request, slug, raw=False):
 
     # handle redirects first
     try:
-        redirect = Redirect.objects.get(old_slug=slug)
-        RedirectResponseClass = HttpResponseRedirect if redirect.status_code == 302 else HttpResponsePermanentRedirect
-        return RedirectResponseClass(redirect.get_absolute_url())
+        redirect = Redirect.objects.get(old_slug=slug)      # noqa
+        if redirect.status_code == 302:
+            return HttpResponseRedirect(redirect.get_absolute_url())
+        return HttpResponsePermanentRedirect(redirect.get_absolute_url())
     except Redirect.DoesNotExist:
         pass
 
@@ -77,7 +79,6 @@ def move(request, slug):
                                 context_instance=RequestContext(request))
         return HttpResponse(json.dumps({'data': data}), content_type="application/json")
     return render(request, 'waliki/move.html', {'page': page, 'form': form})
-
 
 
 
@@ -148,6 +149,25 @@ def preview(request):
 
 @permission_required('delete_page')
 def delete(request, slug):
-    return render(request, 'waliki/detail.html', {})
+    page = get_object_or_404(Page, slug=slug)
+    data = request.POST if request.method == 'POST' else None
+    form = DeleteForm(data)
+    if form.is_valid():
+        if form.cleaned_data['what'] == 'this':
+            msg = _("The page %(slug)s was deleted") % {'slug': slug}
+            page.delete()
+        else:
+            Page.objects.filter(slug__startswith=slug).delete()
+            msg = _("The page %(slug)s and all its namespace was deleted") % {'slug': slug}
 
+        messages.warning(request, msg)
+        if request.is_ajax():
+            return HttpResponse(json.dumps({'redirect': reverse('waliki_home')}), content_type="application/json")
+        return redirect('waliki_home')
+
+    if request.is_ajax():
+        data = render_to_string('waliki/delete.html', {'page': page, 'form': form},
+                                context_instance=RequestContext(request))
+        return HttpResponse(json.dumps({'data': data}), content_type="application/json")
+    return render(request, 'waliki/delete.html', {'page': page, 'form': form})
 
