@@ -21,7 +21,10 @@
         <div class="btn-group">
 
             {% block main_action %}
-            <a href="{% url 'waliki_edit' slug=page.slug|default:slug %}" class="btn btn-default">{% trans "Edit" %}</a>
+
+            <a href="{% if page %}{% url 'waliki_edit' slug=page.slug|default:slug %}{% else %}#{% endif %}" class="btn btn-default {% if not page %}disabled{% endif %}">{% trans "Edit" %}</a>
+
+
             {% endblock main_action %}
             <button class="btn dropdown-toggle btn-default" data-toggle="dropdown">
                 <span class="caret"></span>
