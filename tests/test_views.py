@@ -1,4 +1,5 @@
 import json
+import os
 import mock
 from django.test import TestCase
 from waliki.models import Page
@@ -7,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from waliki import settings
 from waliki.models import Redirect
-from waliki.forms import MovePageForm
+from waliki.forms import MovePageForm, DeleteForm
 
 from .factories import PageFactory, UserFactory, ACLRuleFactory
 
@@ -164,3 +165,93 @@ class TestMove(TestCase):
         self.assertEqual(Redirect.objects.filter(old_slug='the-new-slug').count(), 0)
 
 
+class TestDelete(TestCase):
+
+    def setUp(self):
+        self.page = PageFactory(raw="hello test!", slug='a-page')
+        self.delete_url = reverse('waliki_delete', args=(self.page.slug,))
+
+    def login(self):
+        self.user = UserFactory()
+        ACLRuleFactory(slug='a-page', permissions=['delete_page'], users=[self.user])
+        self.client.login(username=self.user.username, password='pass')
+
+    def test_normal_get_without_permission(self):
+        response = self.client.get(self.delete_url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_ajax_get_without_permission(self):
+        response = self.client.get(self.delete_url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 302)
+
+    def test_normal_get_with_permission(self):
+        self.login()
+        response = self.client.get(self.delete_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'waliki/delete.html')
+        self.assertIsInstance(response.context[0]['form'], DeleteForm)
+
+    def test_ajax_get_with_permission(self):
+        self.login()
+        with mock.patch('waliki.views.render_to_string') as r2s_mock:
+            r2s_mock.side_effect = render_to_string
+            response = self.client.get(self.delete_url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(json.loads(response.content.decode('utf8')).keys()), ['data'])
+        self.assertEqual(r2s_mock.call_args[0][0], 'waliki/delete.html')
+
+    def test_successful_post_delete_only_page(self):
+        self.login()
+        path = self.page.abspath
+        response = self.client.post(self.delete_url, {'what': 'this'})
+        self.assertRedirects(response, reverse('waliki_home'), status_code=302)
+        self.assertFalse(Page.objects.filter(id=self.page.id).exists())
+        self.assertFalse(os.path.exists(path))
+
+    def test_successful_post_ajax_delete_only_page(self):
+        self.login()
+        path = self.page.abspath
+        response = self.client.post(self.delete_url, {'what': 'this'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertFalse(Page.objects.filter(id=self.page.id).exists())
+        self.assertFalse(os.path.exists(path))
+        data = json.loads(response.content.decode('utf8'))
+        self.assertEqual(data['redirect'], reverse('waliki_home'))
+
+    def test_successful_post_delete_only_page(self):
+        self.login()
+        path = self.page.abspath
+        response = self.client.post(self.delete_url, {'what': 'this'})
+        self.assertRedirects(response, reverse('waliki_home'), status_code=302)
+        self.assertFalse(Page.objects.filter(id=self.page.id).exists())
+        self.assertFalse(os.path.exists(path))
+
+    def test_successful_post_delete_namespace(self):
+
+        # TODO : whould we check permissions on each page?
+        self.login()
+
+        page2 = PageFactory(raw="hello test 2!", slug='a-page/subpage')
+        page2_path = page2.abspath
+        path = self.page.abspath
+        response = self.client.post(self.delete_url, {'what': 'namespace'})
+        self.assertRedirects(response, reverse('waliki_home'), status_code=302)
+
+        self.assertFalse(Page.objects.filter(id=self.page.id).exists())
+        self.assertFalse(os.path.exists(path))
+        self.assertFalse(Page.objects.filter(id=page2.id).exists())
+        self.assertFalse(os.path.exists(page2_path))
+
+    def test_successful_ajax_post_delete_namespace(self):
+        self.login()
+
+        page2 = PageFactory(raw="hello test 2!", slug='a-page/subpage')
+        page2_path = page2.abspath
+        path = self.page.abspath
+        response = self.client.post(self.delete_url, {'what': 'namespace'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        data = json.loads(response.content.decode('utf8'))
+        self.assertEqual(data['redirect'], reverse('waliki_home'))
+
+        self.assertFalse(Page.objects.filter(id=self.page.id).exists())
+        self.assertFalse(os.path.exists(path))
+        self.assertFalse(Page.objects.filter(id=page2.id).exists())
+        self.assertFalse(os.path.exists(page2_path))

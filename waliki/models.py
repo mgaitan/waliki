@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import codecs
 import shutil
 import os.path
@@ -13,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission, Group, AnonymousUser
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from docutils.utils import SystemMessage
 from . import _markups
 from waliki.settings import (get_slug, WALIKI_DEFAULT_MARKUP,
@@ -259,3 +260,8 @@ class Redirect(models.Model):
 @receiver(post_save, sender=Page)
 def on_page_save_clear_cache(instance, **kwargs):
     cache.delete(instance.get_cache_key())
+
+
+@receiver(pre_delete, sender=Page)
+def delete_page(sender, instance, **kwargs):
+    os.remove(instance.abspath)
