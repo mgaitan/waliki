@@ -20,6 +20,7 @@ def home(request):
 
 @permission_required('view_page')
 def detail(request, slug, raw=False):
+
     slug = slug.strip('/')
 
     # handle redirects first
