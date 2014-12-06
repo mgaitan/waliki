@@ -18,7 +18,7 @@ It requires `django-sendfile`_ as an extra requirement. Install it via pip::
 
     $ pip install django-sendfile
 
-then adds ``waliki.attachments`` and ``sendfile`` to your ``INSTALLED_APPS``:
+then adds ``waliki.attachments`` and ``sendfile`` to your ``INSTALLED_APPS``::
 
    INSTALLED_APPS = (
         ...
@@ -32,25 +32,27 @@ then adds ``waliki.attachments`` and ``sendfile`` to your ``INSTALLED_APPS``:
 
 .. _django-sendfile: https://github.com/johnsensible/django-sendfile
 
+Permissions
+-----------
 
-Lastly, configure ``sendfile``. This package allows serve the attached files using your web server, but still checking the permission.
+The permissions over attachment are inherited from the container page.
+
+* To view or download an attachment, the user needs the permission ``view_page`` over the page's slug where the attachment belongs.
+* To upload a new attachment, ``change_page`` is required.
+* and to delete, ``delete_page`` is required.
 
 
-.. tip:: to view/download an attachment, the user needs the 'view_page' permission
-         over the current slug
+In order to serve the attached files using your web server, but still checking permission, Waliki uses `django-sendfile <https://github.com/johnsensible/django-sendfile>`_ , which wraps the different techniques (for different webserver) to do this .
 
-For a basic configuration set::
+You need to define the ``SENDFILE_BACKEND`` to use. For a basic configuration set::
 
 
     SENDFILE_BACKEND = 'sendfile.backends.simple'
 
 
-.. attention:: by default, Waliki uploads attachments to the path /waliki_attachments/<page_slug>/<filename>. Override the function ``WALIKI_UPLOAD_TO`` in your settings if you need another structure.
+.. attention:: by default, Waliki uploads attachments to the path ``<MEDIA_ROOT>/waliki_attachments/<page_slug>/<filename>``. Override the function ``WALIKI_UPLOAD_TO`` in your settings if you need another structure.
 
 
-
-
-
-Read the django-sendfile's documentation for specific instructions if you use Nginx or Apache.
+Read the django-sendfile's `documentation <https://github.com/johnsensible/django-sendfile#simple-backend>`_  for specific instructions if you use Nginx or Apache.
 
 
