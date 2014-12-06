@@ -264,4 +264,5 @@ def on_page_save_clear_cache(instance, **kwargs):
 
 @receiver(pre_delete, sender=Page)
 def delete_page(sender, instance, **kwargs):
-    os.remove(instance.abspath)
+    if os.path.exists(instance.abspath):
+        os.remove(instance.abspath)
