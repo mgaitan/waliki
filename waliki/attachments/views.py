@@ -22,7 +22,7 @@ def attachments(request, slug):
 	return render(request, 'waliki/attachments.html', {'page': page})
 
 
-@permission_required('change_page')
+@permission_required('delete_page')
 def delete_attachment(request, slug, attachment_id):
 	attachment = get_object_or_404(Attachment, id=attachment_id, page__slug=slug)
 	name = text_type(attachment)

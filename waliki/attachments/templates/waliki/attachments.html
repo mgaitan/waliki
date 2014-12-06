@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load waliki_tags %}
 
 {% comment %}
 
@@ -22,6 +23,8 @@ that reload the same view but in a popup window. The popup show the same view, b
     <table class="table table-striped">
         <tbody>
 
+           {% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
+
            {% for attachment in page.attachments.all %}
            <tr>
                 <td><a href="{{ attachment.get_absolute_url }}">{{ attachment }}</a></td>
@@ -30,7 +33,11 @@ that reload the same view but in a popup window. The popup show the same view, b
                     <div class="btn-group btn-group-xs pull-right">
 
                     <a title="{% trans "Insert" %}" class="insert btn btn-default" data-file="{{ attachment }}" href="{{ attachment.get_absolute_url }}"><i class="glyphicon glyphicon-download"></i></a>
+
+                    {% if can_delete %}
                     <a title="{% trans "Delete" %}" class="remove btn btn-default" data-file="{{ attachment }}" href="{% url "waliki_delete_attachment" page.slug attachment.id %}"><i class="glyphicon glyphicon-remove"></i></a>
+                    {% endif %}
+
                     </div>
                 </td>
             </tr>
