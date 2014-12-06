@@ -117,6 +117,7 @@ STATIC_URL = '/static/'
 SENDFILE_BACKEND = 'sendfile.backends.simple'
 SENDFILE_ROOT = 'protected_downloads/protected'
 SENDFILE_URL = '/protected'
+WALIKI_LOGGED_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page', 'delete_page')
 
 try:
     from .local_settings import *    # noqa

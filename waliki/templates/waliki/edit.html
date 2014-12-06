@@ -93,6 +93,7 @@
 
         <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
@@ -102,6 +103,9 @@
 {% endblock content %}
 
 {% block extra_script %}
+
+  {{ block.super }}
+
 <script type="text/javascript">
 $('#previewlink').on('click', function() {
     var $form = $('.form');

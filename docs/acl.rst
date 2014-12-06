@@ -92,6 +92,12 @@ Also, you can use the low-level helper :func:`acl.check_perms`:
 
 To check permissions in a template, you can use the templatetag :func:`waliki_tags.check_perms`
 
+.. attention::
+
+    Ensure you have ``django.core.context_processors.request`` in your ``TEMPLATE_CONTEXT_PROCESSORS`` setting to use contextual variables
+    like ``request.user``
+
+
 The format is::
 
     {% check_perms "perm1[, perm2, ...]" for user in slug as "context_var" %}

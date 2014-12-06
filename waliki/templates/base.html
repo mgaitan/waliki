@@ -67,6 +67,8 @@
 
                {% block content %}
                {% endblock content %}
+
+                {% block extra_content %}{% endblock extra_content %}
                 </div>
             </div>
           {% endblock body%}
@@ -91,6 +93,7 @@
                     }
                 }
             });
+
         </script>
         <script src="{% static 'js/bootstrap.min.js'%}"></script>
         {% block extra_script %}{% endblock %}

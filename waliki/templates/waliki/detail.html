@@ -1,7 +1,6 @@
 {% extends "waliki/base.html" %}
 {% load i18n %}
 {% load waliki_tags %}
-{% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
 
 
 {% block extra_head %}
@@ -37,9 +36,11 @@
 
                 <li><a href="{% url "waliki_detail_raw" page.slug %}">{% trans "Raw" %}</a></li>
 
+
+                {% check_perms "delete_page" for request.user in page.slug as "can_delete" %}
                 {% if can_delete %}
                 <li class="divider"></li>
-                <li><a id="confirmDelete" class="text-error">{% trans "Delete" %}</a></li>
+                <li><a id="btn-waliki_delete" class="text-error" href="{% url 'waliki_delete' page.slug %}">{% trans "Delete" %}</a></li>
                 {% endif %}
 
             {% endif %}
@@ -62,5 +63,66 @@
 
 
     {% entry_point 'detail_post_content' %}
+
+
 {% endblock content %}
 
+{% block extra_content %}
+    {% if page %}
+    <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="delete-form" method="post" class="form" action="{% url 'waliki_delete' slug=page.slug %}">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span></button>
+            <h4 class="modal-title">{% trans "Delete" %}</h4>
+          </div>
+          <div class="modal-body">
+
+          </div>
+          <div class="modal-footer">
+           <input id='btn-delete-submit' class="btn btn-danger" value="{% trans "Delete" %}" type="submit">
+
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+{% endblock extra_content %}
+
+
+{% block extra_script %}
+
+{% if page %}
+
+    <script type="text/javascript">
+            $('#btn-waliki_delete').on('click', function(e) {
+
+                    e.preventDefault();
+                    var url = $(this).attr('href');
+                    console.log(url);
+                    $.get(url, function(data){
+                        console.log(data);
+                        $('#delete-modal .modal-body').empty().append(data.data);
+                        $('#delete-modal').modal('show');
+                    });
+            });
+
+            $("#delete-form").submit(function(e) {
+                e.preventDefault();
+                var url = $(this).attr('action');
+                $.post(url, $(this).serialize(), function(data){
+                      if (data.redirect !== undefined){
+                        window.location = data.redirect;
+                      }else {
+                          $('#delete-modal .modal-body').empty().append(data.data);
+                          $('#delete-modal').modal('show');
+                      }
+                    });
+            });
+    </script>
+{% endif %}
+{% endblock extra_script %}
