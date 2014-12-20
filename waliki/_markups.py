@@ -88,7 +88,7 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
         if refs:
 
             refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
-                             for ref in refs)
+                             for ref in refs if get_url(ref))
             html = super(ReStructuredTextMarkup, self).get_document_body(
                         text + '\n\n' + refs)
         return html
