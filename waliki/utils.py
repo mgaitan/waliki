@@ -29,7 +29,10 @@ def get_slug(text):
 def get_url(text, *args):
     # *args needed to receive prefix and suffix for markdowns wikilinks ext
     from waliki.settings import get_slug
-    return reverse('waliki_detail', args=(get_slug(text),))
+    slug = get_slug(text)
+    if slug:
+        return reverse('waliki_detail', args=(get_slug(text),))
+    return ''
 
 
 def send_file(path, filename=None, content_type=None):

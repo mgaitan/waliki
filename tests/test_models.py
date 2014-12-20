@@ -69,6 +69,10 @@ class TestRestructuredText(TestCase):
             html = Page.preview('reStructuredText', 'a link_')
         self.assertEqual(html, '\n    <p>a <a href="xxx">link</a></p>\n')
 
+    def test_missing_text(self):
+        html = Page.preview('reStructuredText', '`***`_')
+        self.assertIn('problematic', html)
+
 
 class TestMarkdown(TestCase):
 
