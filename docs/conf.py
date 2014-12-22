@@ -16,7 +16,7 @@ import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
+# documentation root, use os.path.abspath to make it absolute, as shown below.
 #sys.path.insert(0, os.path.abspath('.'))
 
 cwd = os.getcwd()
@@ -38,7 +38,7 @@ def _get_version():
 #needs_sphinx = '1.0'
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
-# coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+# coming with Sphinx (named 'sphinx.ext.*') or with your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
@@ -57,7 +57,7 @@ master_doc = 'index'
 project = u'waliki'
 copyright = u'2014, Martín Gaitán'
 
-# The version info for the project you're documenting, acts as replacement for
+# The version info for the project you're documenting, acts as a replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
@@ -71,12 +71,12 @@ release = version
 #language = None
 
 # There are two options for replacing |today|: either, you set today to some
-# non-false value, then it is used:
+# non-false value, then you use:
 #today = ''
-# Else, today_fmt is used as the format for a strftime call.
+# Otherwise, today_fmt is used as the format for a strftime call.
 #today_fmt = '%B %d, %Y'
 
-# List of patterns, relative to source directory, that match files and
+# List of patterns, relative to source directory that match files and
 # directories to ignore when looking for source files.
 exclude_patterns = ['_build']
 
@@ -107,11 +107,11 @@ pygments_style = 'sphinx'
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
+# a list of built-in themes.
 html_theme = 'pyramid'
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
+# Theme options are theme-specific and further customize the look and feel of a theme.
+# For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
 
@@ -135,11 +135,11 @@ html_theme = 'pyramid'
 #html_favicon = None
 
 # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
+# relative to this directory. They are copied after the built-in static files,
+# so a file named "default.css" will overwrite the built-in "default.css".
 html_static_path = ['_static']
 
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# If not '', a 'Last updated on:' timestamp is inserted at the bottom of every page,
 # using the given strftime format.
 #html_last_updated_fmt = '%b %d, %Y'
 
@@ -172,7 +172,7 @@ html_static_path = ['_static']
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 #html_show_copyright = True
 
-# If true, an OpenSearch description file will be output, and all pages will
+# If true, an OpenSearch description file will be the output, and all pages will
 # contain a <link> tag referring to it.  The value of this option must be the
 # base URL from which the finished HTML is served.
 #html_use_opensearch = ''
