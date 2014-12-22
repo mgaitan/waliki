@@ -3,7 +3,7 @@
 The access control system
 =========================
 
-Waliki has a very simple *"per slug"* `ACL <http://en.wikipedia.org/wiki/Access_control_list>`_ system built-in, that allow to control who have access to view, add, change or delete pages (and possible other permissions and objects) in your wiki.
+Waliki has a very simple *"per slug"* `ACL <http://en.wikipedia.org/wiki/Access_control_list>`_ system built-in, that allows to control who has access to view, add, change or delete pages (and possible other permissions and objects) in your wiki.
 
 It's inspired in `django-guardian <https://github.com/lukaszb/django-guardian>`_ and leverages on ``django.contrib.auth``.
 
@@ -22,7 +22,7 @@ So, here is how it works:
 - The decorator checks if there is an ACL rule with the requested
   permission/s that apply to this slug.
 - If there is a rule and the user is in the rule's allowed users (because
-  it was explicitly assigned or because it belongs to a group assigned to the rule), then the user will be able access
+  it was explicitly assigned or because it belongs to a group assigned to the rule), then the user will be able to access
 - If there isn't a matching rule, check Waliki's defaults permissions
 - Lastly, check standard user's *per model* permissions.
 
@@ -35,11 +35,11 @@ Suppose you want this:
   ones under the slug *intranet*. Anonymous users can't edit pages.
 - Identified users are allowed to see and edit any page, even the ones under
   the slug *intranet*, but they aren't allowed to edit the page with slug
-  *home* (the homepage) nor delete any page
+  *home* (the homepage) nor to delete any pages
 - The user *john* and any user from the group *editors* can edit the home
 - Only superusers can delete pages.
 
-So, first, by default anonymous users only have ``view_page`` permission,
+So, first, by default, anonymous users only have ``view_page`` permission,
 and logged in users can also edit but not delete. In your settings::
 
     WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', )
@@ -80,7 +80,7 @@ If you are writing your own plugin, you can use the ACL reusing the view decorat
                rule with **all those permissions** should apply to the user.
 
                For example, if the rule *A* gives to *user1* the permission ``change_page`` and the rule *B* gives to *user1* the permission
-               ``delete_page``, *user1* still don't be allowed to request a view that requires both ``change_page`` and ``delete_page``.
+               ``delete_page``, *user1* is still not allowed to request a view that requires both ``change_page`` and ``delete_page``.
 
 
 Also, you can use the low-level helper :func:`acl.check_perms`:
@@ -94,7 +94,7 @@ To check permissions in a template, you can use the templatetag :func:`waliki_ta
 
 .. attention::
 
-    Ensure you have ``django.core.context_processors.request`` in your ``TEMPLATE_CONTEXT_PROCESSORS`` setting to use contextual variables
+    Make sure you have ``django.core.context_processors.request`` in your ``TEMPLATE_CONTEXT_PROCESSORS`` setting to use contextual variables
     like ``request.user``
 
 
