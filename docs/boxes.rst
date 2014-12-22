@@ -3,14 +3,14 @@ Boxes: Waliki as a (dummy) CMS
 
 The templatetag ``waliki_box`` allows to display the body of a wiki page as a portion (a "box") of a webpage, and a rapid inline edition if the user has the right permission.
 
-The templatetag receives the page's slug as only parameter::
+The templatetag receives the page's slug as unique parameter::
 
     {% waliki_box "page/slug" %}
 
 Usage example
 -------------
 
-Consider a view that render a template:
+Consider a view that renders a template:
 
 .. code-block:: python
 
@@ -55,7 +55,7 @@ Where ``boxes_example.html`` is as following:
     <iframe width="420" height="315" src="//www.youtube.com/embed/-mm0uQGUEsw" frameborder="0" allowfullscreen></iframe>
 
 
-You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>`_ live in the demo site. Note that the demo site apply an :ref:`ACL rule <acl_>`
+You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>`_ live in the demo site. Note that the demo site applies a :ref:`ACL rule <acl_>`
 to limit the edition under the *namespace* ``boxes``  to authenticated users.
 
 `Login <http://waliki.pythonanywhere.com/accounts/login/?next=/boxes-example/>`_ to edit the boxes!
@@ -63,7 +63,7 @@ to limit the edition under the *namespace* ``boxes``  to authenticated users.
 Context dependent boxes
 ------------------------
 
-As you can see in the code of the template, the last box is specificly for  you, because it will render ``boxes/footer/<your_username>``.
+As you can see in the code of the template, the last box is specifically for you, because it will render ``boxes/footer/<your_username>``.
 
 This technique can be used, for example, to display a different content
 for different languages::
