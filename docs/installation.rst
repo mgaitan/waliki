@@ -5,15 +5,15 @@ Installation
 Install via pip
 ---------------
 
-To install the latest stable release, run::
+To install the latest stable release, run the following::
 
     $ pip install waliki
 
-By default Waliki use reStructuredText as its markup, so docutils and other required dependencies are retrieved. If you prefer a Markdown only wiki, install it as following::
+By default, Waliki uses reStructuredText as its markup, so docutils and other required dependencies are retrieved. If you prefer a Markdown only wiki, install it as it follows::
 
     $ pip install waliki[markdown]
 
-Alternatively, if you want install every dependency, use::
+Alternatively, if you want to install every dependency, use::
 
     $ pip install waliki[all]
 
@@ -22,7 +22,7 @@ Configure ``settings.INSTALLED_APPS``
 -------------------------------------
 
 
-Add ``waliki`` and optionals plugins to your INSTALLED_APPS::
+Add ``waliki`` and optional plugins to your INSTALLED_APPS::
 
     INSTALLED_APPS = (
         ...
@@ -50,7 +50,7 @@ Create this model table using::
 Include url patterns
 --------------------
 
-Include the waliki urls in you project's ``urls.py``. For example::
+Include the waliki urls in your project ``urls.py``. For example::
 
     urlpatterns = patterns('',
         ...
