@@ -2,23 +2,23 @@
 The "Git" backend
 =================
 
-The Git backend is a simple plugin but, probably, it adds the most interesting features to Waliki.
+The Git backend is a simple plugin but, probably, it is what adds the most interesting features to Waliki.
 
 Basically, ``waliki.git`` converts your content folder in a git repository, and makes a commit on each edition.
 
 With this simple logic you'll get:
 
 * History of changes (who, when, what)
-* Diff: compare any version an see what was added or removed
+* Diff: compare any version and see what was added or removed
 * Smart concurrent edition handling: don't lock editions, merge them!
-* View and restore old revisions (without lose history)
+* View and restore old revisions (without losing the history)
 * Simple stats: how many lines were added or removed. (go to the history page to see it in action!)
 * Backup (pushing your repo to a remote place)
 * Edit your content outside the web using the editor of your preference!
 * Webhook/s (pull changes from a remote repository)
 
 
-To install it add ``'waliki.git'`` after ``'waliki'`` in your ``settings.INSTALLED_APPS``.
+To install it, add ``'waliki.git'`` after ``'waliki'`` in your ``settings.INSTALLED_APPS``.
 
 .. tip:: This plugin is optional, but strongly recommended.
 
