@@ -5,6 +5,7 @@ from django.http import Http404
 from django.core.management import call_command
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
+from django.utils.encoding import smart_text
 from django.utils.six import StringIO, text_type
 from django.views.decorators.csrf import csrf_exempt
 from waliki.models import Page
@@ -54,8 +55,10 @@ def diff(request, slug, old, new, raw=False):
     if raw:
         content = Git().diff(page, new, old)
         return HttpResponse(content, content_type='text/plain')
-    old_content = Git().version(page, old).replace('\t', '    ').replace(' ', '\xA0')
-    new_content = Git().version(page, new).replace('\t', '    ').replace(' ', '\xA0')
+    space = smart_text(b'\xc2\xa0', encoding='utf-8')  # non-breaking space character
+    tab = space * 4
+    old_content = Git().version(page, old).replace('\t', tab).replace(' ', space)
+    new_content = Git().version(page, new).replace('\t', tab).replace(' ', space)
     return render(request, 'waliki/diff.html', {'page': page,
                                                 'old_content': old_content,
                                                 'new_content': new_content,
