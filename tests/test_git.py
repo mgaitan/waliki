@@ -267,6 +267,22 @@ class TestGit(TestCase):
         self.assertEqual(changes[0]['message'], 'commit all')
         self.assertEqual(changes[1]['message'], 'commit all')
 
+    def test_diff_with_space_and_tab(self):
+        self.page.raw = 'line with space\n'
+        Git().commit(self.page, message=u'one')
+        old = Git().last_version(self.page)
+
+        self.page.raw = '\tline with tab\n'
+        Git().commit(self.page, message=u'two')
+        new = Git().last_version(self.page)
+
+        response = self.client.get(reverse('waliki_diff', args=(self.page.slug, old, new,)))
+        old_content = response.context[0]['old_content']
+        new_content = response.context[0]['new_content']
+
+        self.assertEqual(old_content, u'line\u00a0with\u00a0space\n')
+        self.assertEqual(new_content, u'\u00a0\u00a0\u00a0\u00a0line\u00a0with\u00a0tab\n')
+
 
 class TestGitMove(TestCase):
 
