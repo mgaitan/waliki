@@ -5,8 +5,10 @@ from sh import hovercraft
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from waliki.models import Page
+from waliki.acl import permission_required
 
 
+@permission_required('view_page')
 def slides(request, slug):
     page = get_object_or_404(Page, slug=slug)
     outpath = tempfile.mkdtemp()
