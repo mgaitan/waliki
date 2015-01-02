@@ -11,5 +11,5 @@ def slides(request, slug):
     outpath = tempfile.mkdtemp()
     infile = page.abspath
     template = path.join(path.dirname(path.realpath(__file__)), 'template')
-    hovercraft(infile, '-t', template, outpath)
+    hovercraft('-t', template, infile, outpath)
     return HttpResponse(open(path.join(outpath, 'index.html')).read())
