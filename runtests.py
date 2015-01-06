@@ -24,7 +24,8 @@ try:
             "django.contrib.staticfiles",
             "waliki",
             "waliki.git",
-            "waliki.attachments"
+            "waliki.attachments",
+            "waliki.slides",
         ),
         TEMPLATE_CONTEXT_PROCESSORS = (
             "django.contrib.auth.context_processors.auth",
@@ -64,8 +65,8 @@ try:
 
     from django_nose import NoseTestSuiteRunner
 except ImportError:
-    raise ImportError(
-        "To fix this error, run: pip install -r requirements-test.txt")
+    name = 'requirements-test.txt' if sys.version_info[0] > 2 else 'requirements-test-python2.txt'
+    raise ImportError('To fix this error, run: pip install -r ' + name)
 
 
 def run_tests(*test_args):

@@ -1,0 +1,3 @@
+-r requirements-test.txt
+# backport packages for python 2
+configparser
