@@ -16,8 +16,13 @@ from . import Git
 
 
 @permission_required('view_page')
-def history(request, slug):
+def history(request, slug, pag=1):
     page = get_object_or_404(Page, slug=slug)
+    # The argument passed for pag might be a string, but we want to
+    # do calculations on it. So we must cast just to be sure.
+    pag = int(pag or 1)
+    skip = (pag - 1) * settings.WALIKI_PAGINATE_BY
+    max_count = settings.WALIKI_PAGINATE_BY
     if request.method == 'POST':
         new, old = request.POST.getlist('commit')
         return redirect('waliki_diff', slug, old, new)
@@ -25,8 +30,10 @@ def history(request, slug):
     max_changes = max([(v['insertion'] + v['deletion']) for v in history])
     return render(request, 'waliki/history.html', {'page': page,
                                                    'slug': slug,
-                                                   'history': history,
-                                                   'max_changes': max_changes})
+                                                   'history': history[skip:(skip+max_count)],
+                                                   'max_changes': max_changes,
+                                                   'prev': pag - 1 if pag > 1 else None,
+                                                   'next': pag + 1 if skip + max_count < len(history) else None})
 
 
 @permission_required('view_page')

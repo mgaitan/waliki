@@ -34,18 +34,12 @@
             {% endfor %}
             </tbody>
         </table>
-{% if history|length > 10 %}
-
-<div class="form-group">
-    <button type="submit" class="btn disabled btn-default btn-sm" disabled="disabled">{% trans "Compare revisions" %}</button>
-    <a class="btn btn-default btn-sm" href="#top"><i class="icon-chevron-up"></i>{% trans "Back to top" %}</a>
-</div>
-{% endif %}
-</form>
-</div>
-</div>
-{% endblock content %}
-
+       <nav>
+         <ul class="pager">
+           <li class="previous {% if not prev %}disabled{% endif %}"><a href="{% if prev %}{% url 'waliki_history' page.slug prev %}{% else %}#{% endif %}">{% trans "Previous" %}</a></li>
+           <li class="next {% if not next %}disabled{% endif %}"><a href="{% if next %}{% url 'waliki_history' page.slug next %}{% else %}#{% endif %}">{% trans "Next" %}</a></li>
+         </ul>
+       </nav>
 
 {% block extra_script %}
 <script type="text/javascript">
