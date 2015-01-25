@@ -69,9 +69,14 @@ def diff(request, slug, old, new, raw=False):
 
 def whatchanged(request, pag=1):
     changes = []
+    # The argument passed for pag might be a string, but we want to
+    # do calculations on it. So we must cast just to be sure.
     pag = int(pag or 1)
     skip = (pag - 1) * settings.WALIKI_PAGINATE_BY
     max_count = settings.WALIKI_PAGINATE_BY
+    # Git().total_commits() returns a unicode string
+    # but we want to do calculations on the number it represents,
+    # therefore, we cast
     total = int(Git().total_commits())
     for version in Git().whatchanged(skip, max_count):
         for path in version[-1]:
@@ -85,7 +90,7 @@ def whatchanged(request, pag=1):
 
     return render(request, 'waliki/whatchanged.html', {'changes': changes,
                                                        'prev': pag - 1 if pag > 1 else None,
-                                                       'next': pag + 1 if (total / settings.WALIKI_PAGINATE_BY) > pag else None})
+                                                       'next': pag + 1 if skip + max_count < total else None})
 
 
 @csrf_exempt
