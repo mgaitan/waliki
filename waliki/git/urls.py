@@ -8,7 +8,8 @@ urlpatterns = patterns('waliki.git.views',
     url(r'^_whatchanged$', 'whatchanged', {'pag': '1'}, name='waliki_whatchanged'),       # noqa
 
     url(r'^_hooks/pull/(?P<remote>[a-zA-Z0-9]+)$', 'webhook_pull', name='waliki_webhook_pull'),
-    url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/history$', 'history', name='waliki_history'),
+    url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/history/(?P<pag>\d+)$', 'history', name='waliki_history'),
+    url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/history/$', 'history', {'pag': '1'}, name='waliki_history'),
 
     url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/version/(?P<version>[0-9a-f\^]{4,40})/raw$', 'version', {'raw': True},
         name='waliki_version_raw'),
