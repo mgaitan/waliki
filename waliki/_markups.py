@@ -15,42 +15,9 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 
     def __init__(self, filename=None, extensions=None, extension_configs=None):
-        super(MarkdownMarkupBase, self).__init__(filename)
-        import markdown
-        self.markdown = markdown
-        self.requested_extensions = extensions or []
-        self.extension_configs = extension_configs or {}
-        self.global_extensions = self._get_global_extensions(filename)
-        self.document_extensions = []
-        self._apply_extensions()
-
-    def _apply_extensions(self):
-        extensions = (self.requested_extensions or
-                      self.global_extensions) + self.document_extensions
-        # Remove duplicate entries
-        extensions = list(set(extensions))
-        # We have two "virtual" extensions
-        self.mathjax = ('mathjax' in extensions)
-        self.remove_mathjax = ('remove_extra' in extensions)
-        if 'remove_extra' in extensions:
-            extensions.remove('remove_extra')
-        elif 'extra' not in extensions:
-            extensions.append('extra')
-        if self.mathjax:
-            extensions.remove('mathjax')
-        for extension in extensions:
-            if not extension:
-                extensions.remove(extension)
-                continue
-            if not self._check_extension_exists(extension):
-                sys.stderr.write(
-                    'Extension "%s" does not exist.\n' % extension)
-                extensions.remove(extension)
-        self.md = self.markdown.Markdown(extensions, extension_configs=self.extension_configs,
-                                         output_format='html5')
-        for i, pattern in enumerate(self._get_mathjax_patterns()):
-            self.md.inlinePatterns.add('mathjax%d' % i, pattern, '<escape')
-        self.extensions = extensions
+        super(MarkdownMarkup, self).__init__(filename)
+        self.md.set_output_format('html5')
+        self.md.registerExtensions(extensions, extension_configs)
 
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
