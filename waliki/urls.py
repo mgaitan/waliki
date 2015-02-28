@@ -9,6 +9,8 @@ load_plugins()
 
 def waliki_urls():
     base = [url(r'^$', 'home', name='waliki_home'),
+            url(r'^_new$', 'new', name='waliki_new'),
+            url(r'^_get_slug$', 'get_slug', name='waliki_get_slug'),
             url(r'^_preview$', 'preview', name='waliki_preview')]
 
     for pattern in page_urls():

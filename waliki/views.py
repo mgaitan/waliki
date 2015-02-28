@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from .models import Page, Redirect
-from .forms import PageForm, MovePageForm, DeleteForm
+from .forms import PageForm, MovePageForm, DeleteForm, NewPageForm
 from .signals import page_saved, page_preedit, page_moved
 from ._markups import get_all_markups
 from .acl import permission_required
@@ -76,11 +76,10 @@ def move(request, slug):
         return redirect(page.get_absolute_url())
 
     if request.is_ajax():
-        data = render_to_string('waliki/move.html', {'page': page, 'form': form},
+        data = render_to_string('waliki/generic_form.html', {'page': page, 'form': form},
                                 context_instance=RequestContext(request))
         return HttpResponse(json.dumps({'data': data}), content_type="application/json")
-    return render(request, 'waliki/move.html', {'page': page, 'form': form})
-
+    return render(request, 'waliki/generic_form.html', {'page': page, 'form': form})
 
 
 @permission_required('change_page')
@@ -172,3 +171,29 @@ def delete(request, slug):
         return HttpResponse(json.dumps({'data': data}), content_type="application/json")
     return render(request, 'waliki/delete.html', {'page': page, 'form': form})
 
+
+def new(request):
+    data = request.POST if request.method == 'POST' else None
+    form = NewPageForm(data, user=request.user)
+    if request.method == 'POST' and form.is_valid():
+        page = form.save()
+        page.raw = ""
+        page_saved.send(sender=new,
+                    page=page,
+                    author=request.user,
+                    message=_("Page created"),
+                    form_extra_data={})
+        if request.is_ajax():
+            return HttpResponse(json.dumps({'redirect': page.get_edit_url()}), content_type="application/json")
+        return redirect(page.get_edit_url())
+
+    if request.is_ajax():
+        data = render_to_string('waliki/generic_form.html', {'form': form},
+                                context_instance=RequestContext(request))
+        return HttpResponse(json.dumps({'data': data}), content_type="application/json")
+    return render(request, 'waliki/generic_form.html', {'form': form})
+
+
+def get_slug(request):
+    slug = settings.get_slug(request.GET.get('title', ''))
+    return HttpResponse(json.dumps({'slug': slug}), content_type="application/json")

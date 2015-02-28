@@ -91,6 +91,29 @@
       </div>
     </div>
     {% endif %}
+
+
+<div id="new-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="new-form" method="post" class="form" action="{% url 'waliki_new' %}">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Create a new page" %}</span></button>
+        <h4 class="modal-title" id="myModalLabel">{% trans "New page" %}</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+       <input id='btn-new-submit' data-slug-url="{% url 'waliki_get_slug' %}" class="btn btn-success" value="{% trans "Create page" %}" type="submit">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 {% endblock extra_content %}
 
 
