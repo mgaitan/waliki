@@ -88,7 +88,7 @@ class TestMove(TestCase):
     def test_normal_get(self):
         response = self.client.get(self.move_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'waliki/move.html')
+        self.assertTemplateUsed(response, 'waliki/generic_form.html')
         self.assertIsInstance(response.context[0]['form'], MovePageForm)
 
     def test_ajax_get(self):
@@ -97,7 +97,7 @@ class TestMove(TestCase):
             response = self.client.get(self.move_url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(json.loads(response.content.decode('utf8')).keys()), ['data'])
-        self.assertEqual(r2s_mock.call_args[0][0], 'waliki/move.html')
+        self.assertEqual(r2s_mock.call_args[0][0], 'waliki/generic_form.html')
 
     def test_post_with_error(self):
         response = self.client.post(self.move_url, {'slug': self.page.slug})
