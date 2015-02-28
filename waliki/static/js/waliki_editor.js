@@ -76,4 +76,3 @@ $("#move-form").submit(function(e) {
           }
         });
 });
-
