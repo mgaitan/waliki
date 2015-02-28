@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from .models import Page
 from ._markups import get_all_markups
 from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS
+from .acl import check_perms
 
 
 class DeleteForm(forms.Form):
@@ -27,6 +28,30 @@ class MovePageForm(forms.ModelForm):
         return slug
 
 
+
+class NewPageForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(NewPageForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Page
+        fields = ['title', 'slug']
+
+    def clean_slug(self):
+        slug = self.cleaned_data['slug']
+        if not slug:
+            raise forms.ValidationError(_("The slug can't be empty"))
+        if not check_perms(['add_page'], self.user, slug):
+            raise forms.ValidationError(_("You have no permission to create a page with this slug"))
+        if Page.objects.filter(slug=slug).exists():
+            raise forms.ValidationError(_("There is already a page with this slug"))
+        return slug
+
+
+
+
 class PageForm(forms.ModelForm):
     raw = forms.CharField(label="", widget=forms.Textarea)
     # Translators: log message
@@ -43,7 +68,7 @@ class PageForm(forms.ModelForm):
         theme = ('codemirror/theme/%s.css' % CM_SETTINGS['theme'],) if 'theme' in CM_SETTINGS else ()
 
         js = ('codemirror/lib/codemirror.js',
-              'codemirror/addon/mode/overlay.js') + modes + ('js/waliki.js',)
+              'codemirror/addon/mode/overlay.js') + modes + ('js/waliki_editor.js',)
         css = {
             'all': ('codemirror/lib/codemirror.css', ) + theme
         }
