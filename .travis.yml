@@ -1,18 +1,19 @@
+sudo: false
 language: python
 python:
   - "2.7"
-#  - "3.3"
-#  - "3.4"
-#  - "pypy"
+  - "3.3"
+  - "3.4"
+  - "pypy"
 
 env:
-#  - DJANGO=1.5.9
-#  - DJANGO=1.6.7
-#  - DJANGO=1.7
+  - DJANGO=1.5.9
+  - DJANGO=1.6.7
+  - DJANGO=1.7
   - DJANGO=1.8b1
 
-before_install:
-  - sudo apt-get update && sudo apt-get install git
+# before_install:
+#  - sudo apt-get update && sudo apt-get install git
 
 install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' || $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then easy_install configparser; fi"
