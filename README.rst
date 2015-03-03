@@ -37,8 +37,9 @@ At a glance, Waliki has these features:
 - Markdown or reStructuredText support. Easy to add more.
 - A simple ACL system
 - Per page attachments
-- UI based on Twitter's Bootstrap and CodeMirror.
-- Works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.5 or newer
+- Realtime collaborative edition via togheterJS
+- UI based on Bootstrap 3 and CodeMirror.
+- Works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.5 or newer (including 1.8b1)
 
 How to start
 ------------
@@ -61,6 +62,7 @@ Add ``waliki`` and the optionals plugins to your INSTALLED_APPS::
         'waliki.attachments',   # optional but recommended
         'waliki.pdf',           # optional
         'waliki.slides',        # optional
+        'waliki.togheterjs',    # optional
         ...
     )
 
