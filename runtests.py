@@ -65,8 +65,9 @@ try:
 
     from django_nose import NoseTestSuiteRunner
 except ImportError:
-    name = 'requirements-test.txt' if sys.version_info[0] > 2 else 'requirements-test-python2.txt'
-    raise ImportError('To fix this error, run: pip install -r ' + name)
+    raise
+    #name = 'requirements-test.txt' if sys.version_info[0] > 2 else 'requirements-test-python2.txt'
+    #raise ImportError('To fix this error, run: pip install -r ' + name)
 
 
 def run_tests(*test_args):
