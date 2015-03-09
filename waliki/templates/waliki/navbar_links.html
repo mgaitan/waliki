@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if navbar_links %}
-<ul class="nav navbar-nav">
+<ul class="nav navbar-nav waliki-nav">
     <li><a id="btn-waliki_new" href="{% url 'waliki_new' %}">{% trans "New page" %}</a></li>
     {% for url_name, link_text in navbar_links  %}
     <li><a href="{% url url_name %}">{{ link_text }}</a></li>
