@@ -1,4 +1,14 @@
 
+function hook_slug() {
+         $('input#id_title').on('input', function(){
+                  var title = $(this).val();
+                  var url = $('#btn-new-submit').data('slug-url');
+                  $.get(url, {'title': title}, function(data){
+                        $('input#id_slug').val(data.slug);
+                  });
+            });
+}
+
 $('#btn-waliki_new').on('click', function(e) {
         e.preventDefault();
         var url = $(this).attr('href');
@@ -6,14 +16,7 @@ $('#btn-waliki_new').on('click', function(e) {
             $('#new-modal .modal-body').empty().append(data.data);
             $('#new-modal').modal('show');
 
-            $('input#id_title').on('input', function(){
-                  var title = $(this).val();
-                  console.log(title)
-                  var url = $('#btn-new-submit').data('slug-url');
-                  $.get(url, {'title': title}, function(data){
-                        $('input#id_slug').val(data.slug);
-                  });
-            });
+            hook_slug();
 
         });
 });
@@ -27,7 +30,9 @@ $("#new-form").submit(function(e) {
               window.location = data.redirect;
           }else {
               $('#new-modal .modal-body').empty().append(data.data);
+              hook_slug();
               $('#new-modal').modal('show');
+
           }
         });
 });
