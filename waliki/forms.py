@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from .models import Page
 from ._markups import get_all_markups
-from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS
+from .settings import WALIKI_CODEMIRROR_SETTINGS as CM_SETTINGS, get_slug
 from .acl import check_perms
 
 
@@ -43,10 +43,15 @@ class NewPageForm(forms.ModelForm):
         slug = self.cleaned_data['slug']
         if not slug:
             raise forms.ValidationError(_("The slug can't be empty"))
+        if get_slug(slug) != slug:
+            raise forms.ValidationError(_("The slug isn't valid"))
         if not check_perms(['add_page'], self.user, slug):
             raise forms.ValidationError(_("You have no permission to create a page with this slug"))
         if Page.objects.filter(slug=slug).exists():
             raise forms.ValidationError(_("There is already a page with this slug"))
+
+
+
         return slug
 
 
