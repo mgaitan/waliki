@@ -35,7 +35,7 @@ def attachments(rst_content, slug):
         for filename in matchobj.groups(1):
             try:
                 a = Attachment.objects.filter(file__endswith=filename, page__slug=slug)[0]
-            except KeyError:
+            except IndexError:
                 print('Cant find %s in %s' % (filename, slug))
                 return None
         return '`%s <%s>`_' % (filename, a.get_absolute_url())
