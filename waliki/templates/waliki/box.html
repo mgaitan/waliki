@@ -8,7 +8,7 @@
             <form id="edit_form_{{ label }}" accept-charset="UTF-8" class="modal-form" method="POST" action="{{ form_action }}?next={{ request.path }}">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span></button>
-                <h4 class="modal-title">{% trans "Editing" %} {{ slug }}</h4>
+                <h4 class="modal-title">{% trans "Editing" %} <a href="{% url "waliki_edit" slug %}">{{ slug }}</a></h4>
               </div>
               <div class="modal-body">
                     {% csrf_token %}

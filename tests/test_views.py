@@ -68,9 +68,9 @@ class TestPageEdit(TestCase):
         response = self.client.get(self.edit_url)
         self.assertEqual(response.context[0]['form'].instance, self.page)
 
-    def test_get_edit_not_existent_page_raises_404(self):
+    def test_get_edit_not_existent_page_redirect(self):
         response = self.client.get(reverse('waliki_edit', args=('unknown-page',)))
-        self.assertEqual(response.status_code, 404)
+        self.assertRedirects(response, reverse('waliki_detail', args=('unknown-page',)))
 
     def test_post_edit_not_existent_page_create_page(self):
         assert not Page.objects.filter(slug='unknown-page').exists()

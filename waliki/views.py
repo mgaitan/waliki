@@ -99,7 +99,7 @@ def edit(request, slug):
                         form_extra_data={})
             just_created = True
         else:
-            raise Http404
+            return redirect('waliki_detail', slug)
 
     data = request.POST if request.method == 'POST' and not just_created else None
     form_extra_data = {}
