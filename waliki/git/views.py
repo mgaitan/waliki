@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
 from django.core.management import call_command
 from django.http import HttpResponse
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.encoding import smart_text
 from django.utils.six import StringIO, text_type
 from django.views.decorators.csrf import csrf_exempt
@@ -13,6 +13,7 @@ from waliki.forms import PageForm
 from waliki.acl import permission_required
 from waliki import settings
 from . import Git
+from django.contrib.syndication.views import Feed
 
 
 @permission_required('view_page')
@@ -98,6 +99,43 @@ def whatchanged(request, pag=1):
     return render(request, 'waliki/whatchanged.html', {'changes': changes,
                                                        'prev': pag - 1 if pag > 1 else None,
                                                        'next': pag + 1 if skip + max_count < total else None})
+
+
+class WhatchangedFeed(Feed):
+    title = _("Last changes in the wiki")
+    link = reverse_lazy('waliki_whatchanged')
+
+    def items(self):
+        changes = Git().whatchanged_diff()
+        import ipdb; ipdb.set_trace()
+        return changes
+
+    def item_title(self, item):
+        return item.name
+
+    def item_pubdate(self, item):
+        return item.created
+
+    def author_name(self, item):
+        if item and item.company:
+            return item.company.name
+        return ''
+
+    def author_email(self, item):
+        if item:
+            return item.email
+        return ''
+
+    def author_link(self, item):
+        if item and item.company:
+            return item.company.get_absolute_url()
+        return ''
+
+    def categories(self, item):
+        if item:
+            return item.tags.values_list('name', flat=True)
+        return ()
+
 
 
 @csrf_exempt
