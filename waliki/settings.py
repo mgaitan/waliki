@@ -31,12 +31,15 @@ def deep_update(d, u):
 
 def _get_markup_settings(user_settings):
     defaults = {'reStructuredText': {
+                    # check http://docutils.sourceforge.net/docs/user/config.html
                     'settings_overrides': {              # noqa
                         'initial_header_level': 2,
                         'record_dependencies': True,
                         'stylesheet_path': None,
                         'link_stylesheet': True,
-                        'syntax_highlight': 'short'},
+                        'syntax_highlight': 'short',
+                        'halt_level': 5,
+                    },
                     'writer': HTML5Writer(),
                     'writer_name': 'html5'
                     },
