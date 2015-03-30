@@ -44,16 +44,17 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
     def get_document_body(self, text):
         html = super(ReStructuredTextMarkup, self).get_document_body(text)
+        if not html:
+            return html
+
         # Convert unknown links to internal wiki links.
         # Examples:
         #   Something_ will link to '/something'
         #  `something great`_  to '/something-great'
         #  `another thing <thing>`_  '/thing'
-        if not html:
-            return html
         refs = [a.text[:-1] for a in PyQuery(html)('a.problematic') if not re.match(r'\|(.*)\|', a.text)]
+        # substitions =  [a.text[:-1] for a in PyQuery(html)('a.problematic') if re.match(r'\|(.*)\|', a.text)]
         if refs:
-
             refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
                              for ref in refs if get_url(ref))
             html = super(ReStructuredTextMarkup, self).get_document_body(

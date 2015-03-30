@@ -104,6 +104,8 @@ WALIKI_ATTACHMENTS_DIR = getattr(settings, 'WALIKI_ATTACHMENTS_DIR', None)  or _
 
 WALIKI_UPLOAD_TO_PATTERN = '%(slug)s/%(filename)s'
 
+WALIKI_RST_DIRECTIVES = getattr(settings, 'WALIKI_RST_DIRECTIVES', ['waliki.directives.media'])
+
 
 def WALIKI_UPLOAD_TO(instance, filename):
     return os.path.join(WALIKI_ATTACHMENTS_DIR,
@@ -111,3 +113,7 @@ def WALIKI_UPLOAD_TO(instance, filename):
                                                        'page_id': getattr(instance.page, 'id', ''),
                                                        'filename': filename,
                                                        'filename_extension': os.path.splitext(filename)[1]})
+
+for mod in WALIKI_RST_DIRECTIVES:
+    register_directive = str2object(mod + '.register_directive')
+    register_directive()
