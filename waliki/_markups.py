@@ -29,7 +29,12 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
     def __init__(self, filename=None, **kwargs):
         settings_overrides = kwargs.pop('settings_overrides', None)
+        self.reader = kwargs.pop('reader', None)
         super(ReStructuredTextMarkup, self).__init__(filename, settings_overrides)
+        if not self.reader:
+            from waliki.directives.transforms import WalikiReader
+            self.reader = WalikiReader()
+
         self.kwargs = kwargs
 
     def publish_parts(self, text):
@@ -37,7 +42,7 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
             return self._cache['rest_parts']
         parts = self._publish_parts(text, source_path=self.filename,
                                     settings_overrides=self.overrides,
-                                    **self.kwargs)
+                                    reader=self.reader, **self.kwargs)
         if self._enable_cache:
             self._cache['rest_parts'] = parts
         return parts

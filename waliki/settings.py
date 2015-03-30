@@ -41,7 +41,7 @@ def _get_markup_settings(user_settings):
                         'halt_level': 5,
                     },
                     'writer': HTML5Writer(),
-                    'writer_name': 'html5'
+                    'writer_name': 'html5',
                     },
                 'Markdown': {
                     'extensions': ['wikilinks', 'headerid'],
@@ -105,6 +105,8 @@ WALIKI_ATTACHMENTS_DIR = getattr(settings, 'WALIKI_ATTACHMENTS_DIR', None)  or _
 WALIKI_UPLOAD_TO_PATTERN = '%(slug)s/%(filename)s'
 
 WALIKI_RST_DIRECTIVES = getattr(settings, 'WALIKI_RST_DIRECTIVES', ['waliki.directives.media'])
+
+WALIKI_RST_TRANSFORMS = getattr(settings, 'WALIKI_RST_TRANSFORMS', ['waliki.directives.transforms.Emojis'])
 
 
 def WALIKI_UPLOAD_TO(instance, filename):
