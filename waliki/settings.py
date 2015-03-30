@@ -5,7 +5,7 @@ from django.conf import settings
 from .utils import get_url
 from waliki.rst2html5 import HTML5Writer
 from waliki.plugins import str2object
-
+import waliki.directives
 
 def _get_default_data_dir(directory, abspath=True):
     settings_mod = importlib.import_module(settings.SETTINGS_MODULE)
