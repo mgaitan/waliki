@@ -36,6 +36,6 @@ class WalikiReader(Reader):
 
     def get_transforms(self):
         transforms = [str2object(transform) for transform in WALIKI_RST_TRANSFORMS]
-        return super(Reader, self).get_transforms() + transforms
+        return Reader.get_transforms(self) + transforms
 
 
