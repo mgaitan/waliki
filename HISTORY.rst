@@ -3,6 +3,13 @@
 Changelog
 ---------
 
+
+0.4.1 (2015-03-31)
+++++++++++++++++++
+
+ - Marked the release as beta (instead of alpha)
+ - Improves on setup.py and the README
+
 0.4 (2015-03-31)
 ++++++++++++++++
 

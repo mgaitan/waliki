@@ -2,7 +2,7 @@
 **Waliki** is an extensible wiki app for Django with a Git backend.
 
 
-.. attention:: It's usable but in an early development stage. I'll appreciate your feedback and help.
+.. attention:: It's in an early development stage. I'll appreciate your feedback and help.
 
 
 .. image:: https://badge.fury.io/py/waliki.png
@@ -32,13 +32,14 @@
 At a glance, Waliki has these features:
 
 - File based content storage.
+- UI based on Bootstrap 3 and CodeMirror
 - Version control and concurrent edition for your content using Git
 - Extensible architecture with plugins
-- Markdown or reStructuredText support. Easy to add more.
+- Markdown or reStructuredText support (and it's easy to add extensions)
 - A simple ACL system
 - Per page attachments
 - Realtime collaborative edition via togetherJS
-- UI based on Bootstrap 3 and CodeMirror.
+- Wiki content embeddable in any django template
 - Works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.5 or newer (including 1.8b1)
 
 How to start
