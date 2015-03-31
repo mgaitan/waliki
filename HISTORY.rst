@@ -3,12 +3,46 @@
 Changelog
 ---------
 
-0.4dev
-++++++
+0.4 (2015-03-31)
+++++++++++++++++
 
+**Implemented enhancements:**
+
+- Implemented views to add a new, move and delete pages
 - Implemented real-time collaborative editing via together.js
+  (`#33 <https://github.com/mgaitan/waliki/issues/33>`__)
 - Added pagination in *what changed* page
-- Implemented views to move and delete pages
+- Added a way to extend waliki's docutils with directives and transformation for
+- A deep docs proofreading by `chuna <https://github.com/chuna>`__
+
+**Closed issues:**
+
+- Edit view redirect to detail if the page doesn't exist
+  (`#37 <https://github.com/mgaitan/waliki/issues/37>`__)
+-  waliki\_box fails with missing slug
+   `#40 <https://github.com/mgaitan/waliki/issues/40>`__
+-  can't view diffs on LMDE
+   `#60 <https://github.com/mgaitan/waliki/issues/60>`__
+
+-  fix typos in tutorial
+   `#76 <https://github.com/mgaitan/waliki/pull/76>`__
+   (`martenson <https://github.com/martenson>`__)
+
+-  Fix build with Markups 0.6.
+   `#63 <https://github.com/mgaitan/waliki/pull/63>`__
+   (`loganchien <https://github.com/loganchien>`__)
+
+-  fixed roundoff error for whatchanged pagination
+   `#61 <https://github.com/mgaitan/waliki/pull/61>`__
+   (`aszepieniec <https://github.com/aszepieniec>`__)
+
+-  Enhance slides `#59 <https://github.com/mgaitan/waliki/pull/59>`__
+   (`loganchien <https://github.com/loganchien>`__)
+
+-  Fix UnicodeDecodeError in waliki.git.view.
+   `#58 <https://github.com/mgaitan/waliki/pull/58>`__
+   (`loganchien <https://github.com/loganchien>`__)
+
 
 
 0.3.3 (2014-11-24)
