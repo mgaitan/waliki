@@ -1,1 +1,2 @@
+waliki[all]
 django-allauth
