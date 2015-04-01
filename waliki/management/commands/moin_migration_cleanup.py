@@ -94,7 +94,7 @@ class Command(BaseCommand):
                     dest='slug',
                     default='',
                     help="optional slug namespace"),
-        make_option('--apply-filter',
+        make_option('--filters',
                     dest='filters',
                     default='all',
                     help="comma separated list of filter functions to apply"),
