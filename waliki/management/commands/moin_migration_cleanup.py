@@ -73,14 +73,17 @@ def emojis(rst_content):
     }
 
     def replace_emoji(pattern):
-
         replacement = emojis_map.get(pattern.groups()[0], '')
-        import ipdb; ipdb.set_trace()
         if replacement:
             return '|%s|' % replacement
         return ''
     result = re.sub(r'\|((?:\:|;).{1,3})\|', replace_emoji, rst_content, flags=re.MULTILINE)
     return result
+
+
+def email(rst_content):
+    pattern = r'`\[\[MailTo\((.*)\)\]\]`_(?:\.\.)?'
+    return re.sub(pattern, r'``\1``', rst_content)
 
 
 class Command(BaseCommand):
@@ -102,9 +105,9 @@ class Command(BaseCommand):
     ) + BaseCommand.option_list
 
     def handle(self, *args, **options):
-        valid_filters = ['clean_meta', 'delete_relative_links',
+        valid_filters = ['meta', 'links',
                          'attachments', 'directives',
-                         'emojis', 'set_title']
+                         'emojis', 'title', 'email']
         slug = options['slug']
         filters = options['filters']
 
@@ -115,7 +118,7 @@ class Command(BaseCommand):
             filters = [f.strip() for f in filters.split(',')]
             if not set(filters).issubset(valid_filters):
                 valid = get_text_list(valid_filters, 'and')
-                raise CommandError("At least one filter is unknown\n. Valid filters are %s" % valid)
+                raise CommandError("At least one filter is unknown. Valid filters are:\n    %s" % valid)
 
         if slug:
             pages = Page.objects.filter(slug__startswith=slug)
@@ -126,9 +129,9 @@ class Command(BaseCommand):
             title = None
             print('\nApplying filter/s %s to %s' % (get_text_list(filters, 'and'), page.slug))
             raw = page.raw
-            if 'clean_meta' in filters:
+            if 'meta' in filters:
                 raw = clean_meta(raw)
-            if 'delete_relative_links' in filters:
+            if 'links' in filters:
                 raw = delete_relative_links(raw)
             if 'attachments' in filters:
                 raw = attachments(raw, page.slug)
@@ -139,8 +142,12 @@ class Command(BaseCommand):
             if 'emojis' in filters:
                 raw = emojis(raw)
 
-            if 'set_title' in filters and not page.title:
+            if 'email' in filters:
+                raw = email(raw)
+
+            if 'title' in filters and not page.title:
                 title = page._get_part('get_document_title')
+
 
             if raw != page.raw or title:
                 if title:
