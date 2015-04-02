@@ -14,7 +14,8 @@ class Emojis(Transform):
     default_priority = 210
 
     # list from http://www.tortue.me/
-    emojis = ['bowtie',     # NOQA
+    emojis = set([
+             'bowtie',     # NOQA
              'smile',
              'laughing',
              'blush',
@@ -876,7 +877,7 @@ class Emojis(Transform):
              'small_orange_diamond',
              'small_red_triangle',
              'small_red_triangle_down',
-             'shipit']
+             'shipit'])
 
     def apply(self, **kwargs):
         # only handle those not otherwise defined in the document
