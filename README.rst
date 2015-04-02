@@ -40,7 +40,7 @@ At a glance, Waliki has these features:
 - Per page attachments
 - Realtime collaborative edition via togetherJS
 - Wiki content embeddable in any django template
-- Works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.5 or newer (including 1.8)
+- Works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.6, 1.7 or 1.8
 
 How to start
 ------------
