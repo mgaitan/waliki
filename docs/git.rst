@@ -2,7 +2,7 @@
 The "Git" backend
 =================
 
-The Git backend is a simple plugin but, probably, it is what adds the most interesting features to Waliki.
+The Git backend is a regular plugin but, probably, it is what adds the most interesting features to Waliki.
 
 Basically, ``waliki.git`` converts your content folder in a git repository, and makes a commit on each edition.
 
