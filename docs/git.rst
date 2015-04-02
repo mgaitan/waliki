@@ -30,7 +30,17 @@ The *pull* webhook
 
 ``waliki.git`` has a webhook endpoint that receives an HTTP POST requests (without parameters) to pull and sync content from a remote repository::
 
-    POST http://yoursite.com[/<waliki_prefix>]/hooks/pull/<remote>
-
+    POST http://yoursite.com[/<waliki_prefix>]/_hooks/pull/<remote name>
 
 This is useful to sync your wiki whenever a repository is pushed to. For example when you push `to github <https://developer.github.com/webhooks/>`_.
+
+When a ``POST`` event arrives to the webhook url, Waliki programatically run the command ``sync_waliki`` that pulls the code from the remote name ``<remote name>``,
+and then syncs the database adding or deleting ``Page`` instances as needed.
+
+Of course, the ``remote`` name should be registered in your waliki data repo.
+See the man page for ``git remote`` to do this.
+
+To keep your remote synced with the changes done via the web editor,
+you should push back frequently, setting a cron job or a similar tool.
+
+
