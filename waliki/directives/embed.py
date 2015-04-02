@@ -7,7 +7,7 @@ except ImportError:
     micawber = None  # NOQA
 
 
-class Media(Directive):
+class Embed(Directive):
     """ Restructured text extension for inserting any
         sort of media using micawber."""
     has_content = False
@@ -15,7 +15,7 @@ class Media(Directive):
     optional_arguments = 999
 
     def get_providers(self):
-        return micawber.bootstrap_basic()
+        return micawber.bootstrap_noembed()
 
     def run(self):
         if micawber is None:
@@ -27,4 +27,4 @@ class Media(Directive):
 
 
 def register_directive():
-    directives.register_directive('media', Media)
+    directives.register_directive('embed', Embed)
