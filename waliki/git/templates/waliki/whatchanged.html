@@ -11,7 +11,7 @@
         <tbody>
             {% for change in changes %}
                 <tr>
-                  <td class="col-sm-1"><a href="{{ change.page.get_absolute_url }}">{{ change.page.get_absolute_url }}</td>
+                  <td class="col-sm-1"><a href="{{ change.page.get_absolute_url }}">{{ change.page.slug }}</td>
                   <td class="col-sm-1"><a href="{% url 'waliki_version' change.page.slug change.version %}" rel="nofollow">{{ change.version }}</a></td>
                   {% with change.version|add:"^" as parent %}
                   <td class="col-sm-1"><a href="{% url 'waliki_diff' change.page.slug parent change.version %}" rel="nofollow">{% trans "diff" %}</a></td>
