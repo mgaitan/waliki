@@ -10,6 +10,11 @@ try:
 except ImportError:
     Attachment = None
 
+try:
+    from sh import pandoc, echo
+except ImportError:
+    pandoc = None
+
 
 def clean_meta(rst_content):
     """remove moinmoin metada from the top of the file"""
@@ -72,8 +77,8 @@ def emojis(rst_content):
         ":'-(": 'cry',
     }
 
-    def replace_emoji(pattern):
-        replacement = emojis_map.get(pattern.groups()[0], '')
+    def replace_emoji(match):
+        replacement = emojis_map.get(match.groups()[0], '')
         if replacement:
             return '|%s|' % replacement
         return ''
@@ -84,6 +89,23 @@ def emojis(rst_content):
 def email(rst_content):
     pattern = r'`\[\[MailTo\((.*)\)\]\]`_(?:\.\.)?'
     return re.sub(pattern, r'``\1``', rst_content)
+
+
+def code(rst_content):
+    if not pandoc:
+        return rst_content
+    pattern = r'^\:\:\n\s+\.\. raw:: html\n\s+(<span class\=\"line\"\>.*?|\s+?<\/span\>)\n\s*$'
+
+    def convert(match):
+        source = match.groups()[0]
+        source = '\n'.join(l.strip() for l in source.split('\n'))
+        source = "<pre>%s</pre>" % source
+        rst_source = pandoc(echo(source), f='html', t='rst').stdout.decode('utf8')
+        # rst_source = rst_source.strip().replace('\n', '\n   ') + '\n'
+        return rst_source
+    result = re.sub(pattern, convert, rst_content, flags=re.DOTALL | re.MULTILINE)
+    return result
+
 
 
 class Command(BaseCommand):
@@ -107,7 +129,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         valid_filters = ['meta', 'links',
                          'attachments', 'directives',
-                         'emojis', 'title', 'email']
+                         'emojis', 'title', 'email', 'code']
         slug = options['slug']
         filters = options['filters']
 
@@ -128,6 +150,7 @@ class Command(BaseCommand):
         for page in pages:
             title = None
             print('\nApplying filter/s %s to %s' % (get_text_list(filters, 'and'), page.slug))
+
             raw = page.raw
             if 'meta' in filters:
                 raw = clean_meta(raw)
@@ -144,7 +167,11 @@ class Command(BaseCommand):
 
             if 'email' in filters:
                 raw = email(raw)
-
+            if 'code' in filters:
+                if not pandoc:
+                    print('The filter "code" need Pandoc installed in your system. Ignoring')
+                else:
+                    raw = code(raw)
             if 'title' in filters and not page.title:
                 title = page._get_part('get_document_title')
 
