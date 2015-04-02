@@ -19,7 +19,7 @@ class Embed(Directive):
 
     def run(self):
         if micawber is None:
-            msg = "To use the media directive, install micawber first."
+            msg = "To use the embed directive, install micawber first."
             return [nodes.raw('', '<div class="text-error">{0}</div>'.format(msg), format='html')]
         url = " ".join(self.arguments)
         html = micawber.parse_text(url, self.get_providers())
