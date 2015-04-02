@@ -107,15 +107,14 @@ def code(rst_content):
     return result
 
 
-
 class Command(BaseCommand):
-    help = 'Cleanups for a moin2git import'
+    help = 'Cleanup filters for a moin2git import'
 
     option_list = (
         make_option('--limit-to',
                     dest='slug',
                     default='',
-                    help="optional slug namespace"),
+                    help="optional namespace"),
         make_option('--filters',
                     dest='filters',
                     default='all',
