@@ -46,7 +46,7 @@ def version(request, slug, version, raw=False):
                     is_hidden=True)
 
     if raw:
-        return HttpResponse(content, content_type='text/plain')
+        return HttpResponse(content, content_type='text/plain; charset=utf-8')
 
     content = Page.preview(page.markup, content)
     return render(request, 'waliki/version.html', {'page': page,
@@ -61,7 +61,7 @@ def diff(request, slug, old, new, raw=False):
     page = get_object_or_404(Page, slug=slug)
     if raw:
         content = Git().diff(page, new, old)
-        return HttpResponse(content, content_type='text/plain')
+        return HttpResponse(content, content_type='text/plain; charset=utf-8')
     space = smart_text(b'\xc2\xa0', encoding='utf-8')  # non-breaking space character
     tab = space * 4
     old_content = Git().version(page, old).replace('\t', tab).replace(' ', space)

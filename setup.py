@@ -60,10 +60,13 @@ setup(
     keywords='django wiki git waliki restructuredtext markdown',
     classifiers=[
         'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
         'Framework :: Django',
+        'Operating System :: OS Independent',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
+        'Natural Language :: Spanish',
         'Framework :: Django',
         'Framework :: Django :: 1.6',
         'Framework :: Django :: 1.7',
