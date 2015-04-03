@@ -65,7 +65,6 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Framework :: Django',
-        'Framework :: Django :: 1.5',
         'Framework :: Django :: 1.6',
         'Framework :: Django :: 1.7',
         'Framework :: Django :: 1.8',
