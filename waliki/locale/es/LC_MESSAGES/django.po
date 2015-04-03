@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-11 11:55-0300\n"
+"POT-Creation-Date: 2015-04-03 18:59-0300\n"
 "Last-Translator: Martín Gaitán <gaitan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,53 +27,103 @@ msgstr "Adjunto"
 msgid "Attachments"
 msgstr "Archivos adjuntos"
 
-#: attachments/templates/waliki/attachments.html:32
+#: attachments/templates/waliki/attachments.html:35
 msgid "Insert"
 msgstr "Insertar"
 
-#: attachments/templates/waliki/attachments.html:33
-#: templates/waliki/detail.html:26
+#: attachments/templates/waliki/attachments.html:38
+#: templates/waliki/detail.html:43 templates/waliki/detail.html.py:79
+#: templates/waliki/detail.html:85
 msgid "Delete"
 msgstr "Eliminar"
 
-#: attachments/templates/waliki/attachments.html:41
+#: attachments/templates/waliki/attachments.html:48
 msgid "There is no attached files yet"
 msgstr "Todavía no hay archivos adjuntos"
 
-#: attachments/templates/waliki/attachments.html:60
+#: attachments/templates/waliki/attachments.html:67
 msgid "Upload a new file"
 msgstr "Subir un archivo nuevo"
 
-#: attachments/templates/waliki/attachments.html:63
-#: attachments/templates/waliki/attachments.html:116
+#: attachments/templates/waliki/attachments.html:70
+#: attachments/templates/waliki/attachments.html:123
 msgid "Upload"
 msgstr "Subir"
 
-#: attachments/templates/waliki/attachments.html:76
+#: attachments/templates/waliki/attachments.html:83
 msgid "upload"
 msgstr "subir"
 
-#: attachments/templates/waliki/attachments.html:210
+#: attachments/templates/waliki/attachments.html:217
 msgid "Are you sure you want to delete "
 msgstr "¿Estás seguro de que quieres eliminar "
 
 #: attachments/templates/waliki/attachments_edit_content.html:7
 #: attachments/templates/waliki/attachments_edit_content.html:16
-#: templates/waliki/box.html:9
+#: templates/waliki/box.html:10 templates/waliki/detail.html:78
+#: templates/waliki/edit.html:85
 msgid "Close"
 msgstr "Cerrar"
 
-#. Translators: log message
+#: forms.py:10
+#, fuzzy
+#| msgid "Are you sure you want to delete "
+msgid "What do you want to delete?"
+msgstr "¿Estás seguro de que quieres eliminar "
+
 #: forms.py:11
+msgid "Just this page"
+msgstr "Sólo esta página"
+
+#: forms.py:12
+msgid "This page and all the namespace"
+msgstr "Esta página y todo su espacio de nombre"
+
+#: forms.py:25
+#, fuzzy
+#| msgid "What changed"
+msgid "The slug wasn't changed"
+msgstr "La dirección no fue modificada"
+
+#: forms.py:27 forms.py:51
+msgid "There is already a page with this slug"
+msgstr "Ya existe una página en esta dirección"
+
+#: forms.py:45
+msgid "The slug can't be empty"
+msgstr "La dirección no puede estar vacía"
+
+#: forms.py:47
+msgid "The slug isn't valid"
+msgstr "La dirección no es válida"
+
+#: forms.py:49
+msgid "You have no permission to create a page with this slug"
+msgstr "No tienes permisos para crear una página con esta dirección"
+
+#. Translators: log message
+#: forms.py:63
 msgid "Log message"
 msgstr "Mensaje de log"
 
-#: forms.py:32
+#: forms.py:87
 #, python-format
 msgid "Update %s"
 msgstr "Actualiza %s"
 
-#: git/__init__.py:62
+#: forms.py:95
+#, fuzzy
+#| msgid ""
+#| "There were changes in the page during your edition. Auto-merge has been "
+#| "applied."
+msgid "There were no changes in the page to commit."
+msgstr "Hubo cambios en la página durante tu edición. Se aplicó auto-mezclado."
+
+#: git/__init__.py:64
+msgid "Merged with conflict"
+msgstr "Mezclado con conflictos"
+
+#: git/__init__.py:65
 msgid "Automatic merge failed. Please, fix the conflict and save the page."
 msgstr ""
 "La mezcla automática falló. Por favor, corrige el conflicto y guarda la "
@@ -87,31 +137,36 @@ msgstr "Hubo cambios en la página durante tu edición. Se aplicó auto-mezclado
 
 #: git/templates/waliki/diff.html:6 git/templates/waliki/version.html:21
 msgid "Diff"
-msgstr ""
+msgstr "Diferencia"
 
 #: git/templates/waliki/diff.html:12
 msgid "Comparing"
 msgstr "Comparando"
 
 #: git/templates/waliki/diff.html:14 git/templates/waliki/version.html:20
-#: templates/waliki/detail.html:22
+#: templates/waliki/detail.html:37
 msgid "Raw"
-msgstr ""
+msgstr "Sólo texto"
 
 #: git/templates/waliki/history.html:5 git/waliki_plugin.py:9
 msgid "History"
 msgstr "Historial"
 
-#: git/templates/waliki/history.html:14 git/templates/waliki/history.html:40
+#: git/templates/waliki/history.html:14
 msgid "Compare revisions"
 msgstr "Comparar versiones"
 
-#: git/templates/waliki/history.html:41
-#: git/templates/waliki/whatchanged.html:30
+#: git/templates/waliki/history.html:39
+#: git/templates/waliki/whatchanged.html:32
 #, fuzzy
-#| msgid "Back to page"
-msgid "Back to top"
-msgstr "Ir arriba"
+#| msgid "Preview"
+msgid "Previous"
+msgstr "Previsualizar"
+
+#: git/templates/waliki/history.html:40
+#: git/templates/waliki/whatchanged.html:33
+msgid "Next"
+msgstr "Siguiente"
 
 #: git/templates/waliki/version.html:19
 msgid "Restore this version"
@@ -123,68 +178,72 @@ msgstr "Qué cambió"
 
 #: git/templates/waliki/whatchanged.html:17
 msgid "diff"
-msgstr ""
+msgstr "diferencia"
 
-#: git/views.py:36
+#: git/views.py:45
 #, fuzzy, python-format
 #| msgid "Restore this version"
 msgid "Restored version @%s"
 msgstr "Versión @%s restaurada"
 
-#: models.py:21
+#: management/commands/moin_migration_cleanup.py:124
+msgid "RestructuredText clean up"
+msgstr "Limpieza de reStructuredText"
+
+#: models.py:27
 msgid "Title"
 msgstr "Título"
 
-#: models.py:24
+#: models.py:30
 msgid "Markup"
 msgstr "Markup"
 
-#: models.py:28
+#: models.py:34
 msgid "Page"
 msgstr "Página"
 
-#: models.py:29
+#: models.py:35
 msgid "Pages"
 msgstr "Páginas"
 
-#: models.py:141
+#: models.py:164
 msgid "Any user"
 msgstr "Cualquier usuario"
 
-#: models.py:142
+#: models.py:165
 msgid "Any authenticated user"
 msgstr "Cualquier usuario identificado"
 
-#: models.py:143
+#: models.py:166
 msgid "Any staff member"
 msgstr "Cualquier miembro del staff"
 
-#: models.py:144
+#: models.py:167
 msgid "Any superuser"
 msgstr "Cualquier superusuario"
 
-#: models.py:145
+#: models.py:168
 msgid "Any user/group explicitly defined"
 msgstr "Cualquier usuario o grupo explícitamente definido"
 
-#: models.py:148
+#: models.py:171
 msgid "Name"
 msgstr "Nombre"
 
-#: models.py:150
+#: models.py:173
 msgid "As namespace"
 msgstr "Como espacio de nombre"
 
-#: models.py:158
+#: models.py:181
 #, python-format
 msgid "Rule: %(name)s for /%(slug)s"
 msgstr "Regla: %(name)s para /%(slug)s"
 
-#: models.py:164
+#: models.py:187
 msgid "ACL rule"
 msgstr "Regla ACL"
 
-#: models.py:165
+#: models.py:188
 msgid "ACL rules"
 msgstr "Reglas ACL"
 
@@ -200,57 +259,105 @@ msgstr "Ver como diapositivas"
 msgid "You aren't authorized to see this page."
 msgstr "No estás autorizado a ver esta página."
 
-#: templates/waliki/box.html:10 templates/waliki/edit.html:5
+#: templates/waliki/box.html:11 templates/waliki/edit.html:5
 msgid "Editing"
 msgstr "Editando"
 
-#: templates/waliki/box.html:18 templates/waliki/edit.html:62
+#: templates/waliki/box.html:19 templates/waliki/detail.html:87
+#: templates/waliki/edit.html:65 templates/waliki/edit.html.py:94
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/waliki/box.html:19
+#: templates/waliki/box.html:20
 msgid "Save changes"
 msgstr "Guadar cambios"
 
-#: templates/waliki/box.html:29
+#: templates/waliki/box.html:30
 msgid "Edit this content"
 msgstr "Editar este contenido"
 
-#: templates/waliki/detail.html:12
+#: templates/waliki/detail.html:24
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/waliki/detail.html:43
+#: templates/waliki/detail.html:60
 msgid "This page doesn't exist yet."
 msgstr "Ésta página todavía no existe."
 
-#: templates/waliki/detail.html:44
+#: templates/waliki/detail.html:61
 msgid "Create it"
 msgstr "Creala"
 
-#: templates/waliki/edit.html:21
+#: templates/waliki/detail.html:102
+msgid "Create a new page"
+msgstr "Crear una nueva página"
+
+#: templates/waliki/detail.html:103 templates/waliki/navbar_links.html:4
+msgid "New page"
+msgstr "Nueva página"
+
+#: templates/waliki/detail.html:109
+#, fuzzy
+#| msgid "Create it"
+msgid "Create page"
+msgstr "Creala"
+
+#: templates/waliki/edit.html:14
+msgid "Move"
+msgstr "Mover"
+
+#: templates/waliki/edit.html:24
 msgid "Editor"
 msgstr "Editor"
 
-#: templates/waliki/edit.html:22 templates/waliki/edit.html.py:59
+#: templates/waliki/edit.html:25 templates/waliki/edit.html.py:62
 msgid "Preview"
 msgstr "Previsualizar"
 
-#: templates/waliki/edit.html:63
+#: templates/waliki/edit.html:66
 msgid "Save"
 msgstr "Guardar"
 
-#: templates/waliki/edit.html:86
+#: templates/waliki/edit.html:86 templates/waliki/edit.html.py:92
+msgid "Move page"
+msgstr "Mover página"
+
+#: templates/waliki/edit.html:116
 msgid "Loading..."
 msgstr "Cargando..."
 
-#: templates/waliki/edit.html:96
+#: templates/waliki/edit.html:126
 msgid "There was a problem with the preview."
 msgstr "Hubo un problema con la previsualización."
 
-#: views.py:42
+#: togetherjs/templates/waliki/togetherjs_edit_extra_script.html:5
+#: togetherjs/templates/waliki/togetherjs_extra_edit_actions.html:4
+msgid "Collaborate"
+msgstr "Colaborar"
+
+#: views.py:66
+#, python-format
+msgid "Page moved from %(old_slug)s"
+msgstr "Página movida desde %(old_slug)s"
+
+#: views.py:98 views.py:184
 msgid "Page created"
 msgstr "Página creada"
+
+#: views.py:157
+#, python-format
+msgid "The page %(slug)s was deleted"
+msgstr "La página %(slug)s se eliminó"
+
+#: views.py:161
+#, python-format
+msgid "The page %(slug)s and all its namespace was deleted"
+msgstr "La página %(slug)s y todo su espacio de nombres se eliminó"
+
+#, fuzzy
+#~| msgid "Back to page"
+#~ msgid "Back to top"
+#~ msgstr "Ir arriba"
 
 #~ msgid "Back to page"
 #~ msgstr "Volver a la página"
