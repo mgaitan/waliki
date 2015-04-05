@@ -118,34 +118,38 @@
 
 
 {% block extra_script %}
+    {% if WALIKI_USE_MATHJAX %}
+      <script type="text/javascript"
+        src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      </script>
+    {% endif %}
 
-{% if page %}
+    {% if page %}
+      <script type="text/javascript">
+        $('#btn-waliki_delete').on('click', function(e) {
 
-    <script type="text/javascript">
-            $('#btn-waliki_delete').on('click', function(e) {
-
-                    e.preventDefault();
-                    var url = $(this).attr('href');
-                    console.log(url);
-                    $.get(url, function(data){
-                        console.log(data);
-                        $('#delete-modal .modal-body').empty().append(data.data);
-                        $('#delete-modal').modal('show');
-                    });
-            });
-
-            $("#delete-form").submit(function(e) {
                 e.preventDefault();
-                var url = $(this).attr('action');
-                $.post(url, $(this).serialize(), function(data){
-                      if (data.redirect !== undefined){
-                        window.location = data.redirect;
-                      }else {
-                          $('#delete-modal .modal-body').empty().append(data.data);
-                          $('#delete-modal').modal('show');
-                      }
-                    });
-            });
-    </script>
-{% endif %}
+                var url = $(this).attr('href');
+                console.log(url);
+                $.get(url, function(data){
+                    console.log(data);
+                    $('#delete-modal .modal-body').empty().append(data.data);
+                    $('#delete-modal').modal('show');
+                });
+        });
+
+        $("#delete-form").submit(function(e) {
+            e.preventDefault();
+            var url = $(this).attr('action');
+            $.post(url, $(this).serialize(), function(data){
+                  if (data.redirect !== undefined){
+                    window.location = data.redirect;
+                  }else {
+                      $('#delete-modal .modal-body').empty().append(data.data);
+                      $('#delete-modal').modal('show');
+                  }
+                });
+        });
+      </script>
+    {% endif %}
 {% endblock extra_script %}

@@ -120,9 +120,12 @@ $('#previewlink').on('click', function() {
     data: { text: bodycontent, markup: '{{ page.markup }}' },
     success: function(msg) {
       $pre.html(msg.html);
+      {% if WALIKI_USE_MATHJAX %}
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+      {% endif %}
     },
     error: function() {
-            $pre.addClass('alert').addClass('alert-error');
+      $pre.addClass('alert').addClass('alert-error');
       $pre.html('{% trans "There was a problem with the preview." %}');
     },
     complete: function() {
