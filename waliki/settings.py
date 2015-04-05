@@ -108,6 +108,8 @@ WALIKI_RST_DIRECTIVES = getattr(settings, 'WALIKI_RST_DIRECTIVES', ['waliki.dire
 
 WALIKI_RST_TRANSFORMS = getattr(settings, 'WALIKI_RST_TRANSFORMS', ['waliki.directives.transforms.Emojis'])
 
+WALIKI_USE_MATHJAX = getattr(settings, 'WALIKI_USE_MATHJAX', False)
+
 
 def WALIKI_UPLOAD_TO(instance, filename):
     return os.path.join(WALIKI_ATTACHMENTS_DIR,
