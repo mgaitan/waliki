@@ -21,6 +21,7 @@ Contents:
    write_a_plugin
    boxes
    acl
+   faqs
    history
    contributing
    authors

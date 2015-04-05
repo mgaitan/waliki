@@ -10,11 +10,7 @@ There is autolinking support for restructuredtext with a very simple trick: if y
 
 So, just define ``somewhere_`` and link the page with the slug *somewhere*
 
-How is this implemented?
-++++++++++++++++++++++++
-
-It's dirty but very simple: just render the page as usual using docutils and every unreferenced target is parsed and appended to internals urls.
-
+Waliki find every link with an undefined target, and interpret it as an internal link
 
 Autolinks in Markdown
 ---------------------
