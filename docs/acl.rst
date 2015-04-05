@@ -10,10 +10,9 @@ It's inspired in `django-guardian <https://github.com/lukaszb/django-guardian>`_
 You can define your ACL policies defining default permissions
 for anonymous and logged users in your settings (``WALIKI_ANONYMOUS_USER_PERMISSIONS`` and ``WALIKI_LOGGED_USER_PERMISSIONS``) and instances of the model :class:`ACLRule`` that stores:
 
-    - which permissions the rule gives
-    - to which groups and/or users
-    - limited to which slug
-
+- which permissions the rule gives
+- to which groups and/or users
+- limited to which slug
 
 So, here is how it works:
 
@@ -26,10 +25,10 @@ So, here is how it works:
 - If there isn't a matching rule, check Waliki's defaults permissions
 - Lastly, check standard user's *per model* permissions.
 
-An example
+Example
 ----------
 
-Suppose you want this:
+Suppose you want this policy:
 
 - Anonymous users can view any page except the
   ones under the slug *intranet*. Anonymous users can't edit pages.
@@ -40,13 +39,16 @@ Suppose you want this:
 - Only superusers can delete pages.
 
 So, first, by default, anonymous users only have ``view_page`` permission,
-and logged in users can also edit but not delete. In your settings::
+and logged in users can also edit but not delete. In your settings:
+
+.. code-block:: python
 
     WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', )
     WALIKI_LOGGED_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page')
 
 .. note:: Note that, in this case, those are the Waliki's
           defaults permissions, so, you wouldn't need to set them.
+          Check :confval:`WALIKI_ANONYMOUS_USER_PERMISSIONS` and :confval:`WALIKI_LOGGED_USER_PERMISSIONS` for further details.
 
 Then go to the admin an create the following rules:
 

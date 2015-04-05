@@ -1,4 +1,4 @@
-.. _pdf_:
+.. _pdf:
 
 Plugin "Get as PDF"
 =======================
@@ -12,3 +12,4 @@ It registers a new :ref:`extra_page_action view <write_plugin>` in the dropdown 
          or Pandoc_ to convert from markdown.
 
 .. _rst2pdf: https://pypi.python.org/pypi/rst2pdf
+.. _pandoc: http://johnmacfarlane.net/pandoc/

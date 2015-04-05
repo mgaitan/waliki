@@ -5,10 +5,7 @@ Settings
 Waliki follows a `convention over configuration <http://en.wikipedia.org/wiki/Convention_over_configuration>`_
 paradigm, defining sensible defaults for every constant.
 
-For now, look in `waliki/settings.py <https://github.com/mgaitan/waliki/blob/master/waliki/settings.py>`_
-to see a list of available settings.
-
-You can override any settings in your project's ``settings.py``
+You can override any settings in your project's :file:`settings.py` file
 
 
 .. confval:: WALIKI_AVAILABLE_MARKUPS
@@ -77,7 +74,7 @@ You can override any settings in your project's ``settings.py``
 
 .. confval:: WALIKI_PDF_INCLUDE_TITLE
 
-    Apply if :ref:`PDF plugin  <pdf>`_ is installed.
+    Apply if :ref:`PDF plugin <pdf>` is installed.
 
     As the title is not part of the file content but stored in the database, it should be given
     to rst2pdf. Default is ``False``
@@ -117,7 +114,7 @@ You can override any settings in your project's ``settings.py``
     If :ref:`git` is enabled and anonymous editios allowed, this is the git's committer email used. Default is ``waliki@waliki.pythonanywhere.com``.
 
 
-.. confval:: WALIKI_COMMITTER_EMAIL
+.. confval:: WALIKI_COMMITTER_NAME
 
     Analog to :confval:`WALIKI_COMMITTER_EMAIL`. Default is ``Waliki``
 
