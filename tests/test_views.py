@@ -4,9 +4,7 @@ import mock
 from django.test import TestCase
 from waliki.models import Page
 from django.core.urlresolvers import reverse
-from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
-from waliki import settings
 from waliki.models import Redirect
 from waliki.forms import MovePageForm, DeleteForm
 
@@ -15,8 +13,7 @@ from .factories import PageFactory, UserFactory, ACLRuleFactory
 
 class TestPageView(TestCase):
 
-
-    def setUp(self):
+    def setUp(self):        # NOQA
         self.page = PageFactory(raw="hello test!")
         self.edit_url = reverse('waliki_edit', args=(self.page.slug,))
 
@@ -57,7 +54,6 @@ class TestPageView(TestCase):
         self.assertEqual(response.status_code, 403)
 
 
-
 class TestPageEdit(TestCase):
 
     def setUp(self):
@@ -77,6 +73,39 @@ class TestPageEdit(TestCase):
         response = self.client.post(reverse('waliki_edit', args=('unknown-page',)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Page.objects.filter(slug='unknown-page').count(), 1)
+
+    def test_change_page_markup(self):
+        assert self.page.markup == 'reStructuredText'
+        old_path = self.page.abspath
+        response = self.client.get(self.page.get_edit_url())
+        data = response.context[0]['form'].initial
+        data['raw'] = 'few changes'
+        data['markup'] = 'Markdown'
+        response = self.client.post(self.page.get_edit_url(), data)
+        page = Page.objects.get(id=self.page.id)
+        self.assertFalse(os.path.exists(old_path))
+        self.assertTrue(os.path.exists(page.abspath))
+        self.assertTrue(page.path.endswith('.md'))
+        self.assertEqual(page.raw, 'few changes')
+        self.assertEqual(page.markup, 'Markdown')
+
+        # again
+        old_path = page.abspath
+        response = self.client.get(self.page.get_edit_url())
+        data = response.context[0]['form'].initial
+        data['raw'] = 'other changes'
+        data['markup'] = 'reStructuredText'
+
+        response = self.client.post(self.page.get_edit_url(), data)
+        import ipdb; ipdb.set_trace()
+        self.assertEqual(response.status_code, 200)
+        page = Page.objects.get(id=self.page.id)
+        self.assertFalse(os.path.exists(old_path))
+        self.assertTrue(os.path.exists(page.abspath))
+        self.assertTrue(page.path.endswith('.rst'))
+        self.assertEqual(page.raw, 'other changes')
+        self.assertEqual(page.markup, 'reStructuredText')
+
 
 
 class TestMove(TestCase):

@@ -106,6 +106,11 @@ class Page(models.Model):
         shutil.move(os.path.join(WALIKI_DATA_DIR, self.path), os.path.join(WALIKI_DATA_DIR, new_path))
         self.path = new_path
 
+    def update_extension(self):
+        filename, _ = os.path.splitext(self.path)
+        markup_class = _markups.find_markup_class_by_name(self.markup)
+        self.move(filename + markup_class.file_extensions[0])
+
     @staticmethod
     def get_markup_instance(markup):
         markup_settings = WALIKI_MARKUPS_SETTINGS.get(markup, None)

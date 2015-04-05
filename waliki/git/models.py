@@ -22,4 +22,4 @@ def get_last_version(sender, page, **kwargs):
 
 @receiver(page_moved)
 def move(sender, page, old_path, author, message, **kwargs):
-    Git().mv(page, old_path, author, message)
+    Git().mv(sender, page, old_path, author, message)
