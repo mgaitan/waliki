@@ -1,4 +1,4 @@
-.. _acl_:
+.. _acl:
 
 The access control system
 =========================
