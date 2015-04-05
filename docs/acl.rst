@@ -3,7 +3,7 @@
 The access control system
 =========================
 
-Waliki has a very simple *"per slug"* `ACL <http://en.wikipedia.org/wiki/Access_control_list>`_ system built-in, that allows to control who has access to view, add, change or delete pages (and possible other permissions and objects) in your wiki.
+Waliki has a very simple *"per slug"* `Access Control List <http://en.wikipedia.org/wiki/Access_control_list>`_ system built-in, that allows to control who has access to view, add, change or delete pages (and possible other permissions and objects) in your wiki.
 
 It's inspired in `django-guardian <https://github.com/lukaszb/django-guardian>`_ and leverages on ``django.contrib.auth``.
 

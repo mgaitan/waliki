@@ -55,7 +55,7 @@ Where ``boxes_example.html`` is as following:
     <iframe width="420" height="315" src="//www.youtube.com/embed/-mm0uQGUEsw" frameborder="0" allowfullscreen></iframe>
 
 
-You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>`_ live in the demo site. Note that the demo site applies a :ref:`ACL rule <acl_>`
+You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>`_ live in the demo site. Note that the demo site applies a :ref:`ACL rule <acl>`
 to limit the edition under the *namespace* ``boxes``  to authenticated users.
 
 `Login <http://waliki.pythonanywhere.com/accounts/login/?next=/boxes-example/>`_ to edit the boxes!

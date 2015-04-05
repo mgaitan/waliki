@@ -260,3 +260,8 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+def setup(app):
+    app.add_object_type('confval', 'confval', objname='configuration value',
+                        indextemplate='pair: %s; configuration value')
