@@ -29,19 +29,20 @@
 :group: https://groups.google.com/forum/#!forum/waliki-devs
 :license: `BSD <https://github.com/mgaitan/waliki/blob/master/LICENSE>`_
 
+At a glance, Waliki has this features:
 
- * File based content storage.
- * UI based on Bootstrap and CodeMirror
- * Version control and concurrent edition for your content using git
- * An extensible architecture with plugins
- * reStructuredText or Markdown support, configurable per page
-   (and it's easy to add extensions)
- * A very simple *per slug* ACL system
- * A nice page attachments manager (that respects the page permissions)
- * Realtime collaborative edition via togetherJS
- * Wiki content embeddable in any django template (as a "dummy CMS")
- * Few helpers to migrate content (particularly from MoinMoin, using moin2git_)
- * It works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.6 or newer
+* File based content storage.
+* UI based on Bootstrap and CodeMirror
+* Version control and concurrent edition for your content using git
+* An extensible architecture with plugins
+* reStructuredText or Markdown support, configurable per page
+  (and it's easy to add extensions)
+* A very simple *per slug* ACL system
+* A nice page attachments manager (that respects the page permissions)
+* Realtime collaborative edition via togetherJS
+* Wiki content embeddable in any django template (as a "dummy CMS")
+* Few helpers to migrate content (particularly from MoinMoin, using moin2git_)
+* It works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.6 or newer
 
 How to start
 ------------
