@@ -8,6 +8,30 @@ paradigm, defining sensible defaults for every constant.
 You can override any settings in your project's :file:`settings.py` file
 
 
+.. confval:: WALIKI_DATA_DIR
+
+    Waliki's content path. By default it's ``<project_root>/waliki_data``
+
+    You can set it to an absolute path. Ensure the path exists and it's writable from
+    your web server
+
+.. confval:: WALIKI_INDEX_SLUG
+
+   The slug of the index page. Default is ``home``
+
+
+.. confval:: WALIKI_ANONYMOUS_USER_PERMISSIONS
+
+    The tuple of permissions given to not authenticated users. Default is ``('view_page',)``
+    Check :ref:`acl` for further details. If there is no ``change_page`` permission,
+    the anonymous user is redirected to the login page when try to edit the page.
+
+.. confval:: WALIKI_LOGGED_USER_PERMISSIONS
+
+    The tuple of permissions given to any authenticated user. Default is ``('view_page', 'add_page', 'change_page')``. Check :ref:`acl` for further details.
+
+
+
 .. confval:: WALIKI_AVAILABLE_MARKUPS
 
     A list tha define the enabled markups. Default is ``['reStructuredText', 'Markdown']``.
@@ -29,17 +53,6 @@ You can override any settings in your project's :file:`settings.py` file
     Default ``'waliki.utils.get_slug'``
 
     If you override it, ensure that ``your_get_slug(any_valid_slug) == any_valid_slug``
-
-.. confval:: WALIKI_DATA_DIR
-
-    Waliki's content path. By default it's ``<project_root>/waliki_data``
-
-    You can set it to an absolute path. Ensure the path exists and it's writable from
-    your web server
-
-.. confval:: WALIKI_INDEX_SLUG
-
-   The slug of the index page. Default is ``home``
 
 
 .. confval:: WALIKI_MARKUPS_SETTINGS
@@ -82,24 +95,11 @@ You can override any settings in your project's :file:`settings.py` file
 
 .. confval:: WALIKI_CODEMIRROR_SETTINGS
 
-    A dictionary (converted to json) used to `configure Codemirror <http://codemirror.net/doc/manual.html#config>`_. Default is
+    A dictionary (converted to json) used to `configure Codemirror <http://codemirror.net/doc/manual.html#config>`_. It's default is:
 
-    .. .. code-block:: python
+    .. code-block:: python
 
-        {'lineNumbers': False,
-         'theme': 'monokai',
-         'autofocus': True}
-
-.. confval:: WALIKI_ANONYMOUS_USER_PERMISSIONS
-
-    The tuple of permissions given to not authenticated users. Default is ``('view_page',)``
-    Check :ref:`acl` for further details. If there is no ``change_page`` permission,
-    the anonymous user is redirected to the login page when try to edit the page.
-
-.. confval:: WALIKI_LOGGED_USER_PERMISSIONS
-
-    The tuple of permissions given to any authenticated user. Default is ``('view_page', 'add_page', 'change_page')``. Check :ref:`acl` for further details.
-
+        {'lineNumbers': False, 'theme': 'monokai', 'autofocus': True}
 
 .. confval:: WALIKI_RENDER_403
 
@@ -159,4 +159,5 @@ You can override any settings in your project's :file:`settings.py` file
 .. confval:: WALIKI_USE_MATHJAX
 
     If ``True``, load Mathjax's assets from the official CDN service
-    Default is ``False``
+    Default is ``False``. Check the :ref:`faq <math>` for details.
+

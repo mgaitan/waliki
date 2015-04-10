@@ -18,6 +18,8 @@ Does Waliki scale?
 
     I guess it could be improved in the future, using libgit2 instead of plain system calls to the git cli.
 
+.. _math:
+
 Can Waliki render math?
     Sure! Both reStructuredText and Markdown play well with Mathjax. As the Mathjax's assets (javascript file) are huge, it's disable by default.
     To enable it you need add ``waliki.context_processors.settings`` to ``TEMPLATE_CONTEXT_PROCESSORS`` and set ``WALIKI_USE_MATHJAX`` to ``True`` in your settings::

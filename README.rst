@@ -82,11 +82,18 @@ Sync your database::
     $ python manage.py migrate   # syncdb in django < 1.7
 
 
+
 .. tip::
 
-   Already have content? Put it in your ``WALIKI_DATA_DIR`` and run::
+   Do you already have some content? Put it in your ``WALIKI_DATA_DIR`` (or set it to the actual path) and run::
 
         $ python manage.py sync_waliki
+
+   Do you want everybody be able to edit your wiki? Set::
+
+        WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page')
+
+   in your project's settings.
 
 
 Why *Waliki* ?
@@ -96,6 +103,7 @@ Why *Waliki* ?
 
 It sounds a bit like *wiki*, has a meaningful sense and also plays with the idea of using a non-mainstream language [1]_ .
 
-And last but most important, it's a humble tribute to the bolivian president `Evo Morales <http://en.wikipedia.org/wiki/Evo_Morales>`_.
+And last but most important, it's a humble tribute to the president `Evo Morales <http://en.wikipedia.org/wiki/Evo_Morales>`_ and the Bolivian people.
 
 .. [1] *wiki* itself is a hawaiian word
+.. _moin2git: https://github.com/mgaitan/moin2git
