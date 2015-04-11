@@ -123,7 +123,10 @@ def edit(request, slug):
                             old_path=old_path,
                             author=request.user,
                             message=msg,
+                            commit=False
                             )
+
+            messages.warning(request, msg)
         page.raw = form.cleaned_data['raw']
         page.save()
         try:

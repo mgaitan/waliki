@@ -133,8 +133,9 @@ class Git(object):
             args += ['--', page.path]
         return git(*args).stdout.decode('utf8')[:-1]
 
-    def mv(self, sender, page, old_path, author, message):
+    def mv(self, sender, page, old_path, author, message, commit=True):
         status = git.status('--porcelain', old_path).stdout.decode('utf8')[1:2]
         if status in ('D', 'M'):
             git.rm(old_path)
-        self.commit(page, author=author, message=message)
+        if commit:
+            self.commit(page, author=author, message=message)

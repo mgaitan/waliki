@@ -97,8 +97,7 @@ class TestPageEdit(TestCase):
         data['markup'] = 'reStructuredText'
 
         response = self.client.post(self.page.get_edit_url(), data)
-        import ipdb; ipdb.set_trace()
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         page = Page.objects.get(id=self.page.id)
         self.assertFalse(os.path.exists(old_path))
         self.assertTrue(os.path.exists(page.abspath))
