@@ -29,7 +29,7 @@
 :group: https://groups.google.com/forum/#!forum/waliki-devs
 :license: `BSD <https://github.com/mgaitan/waliki/blob/master/LICENSE>`_
 
-At a glance, Waliki has this features:
+At a glance, Waliki has these features:
 
 * File based content storage.
 * UI based on Bootstrap and CodeMirror
