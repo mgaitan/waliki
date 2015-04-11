@@ -116,8 +116,8 @@ def edit(request, slug):
         if page.markup != original_markup:
             old_path = page.path
             page.update_extension()
-            msg = _("Page converted from {original} to {new}").format(original=original_markup,
-                                                                      new=page.markup)
+            msg = _("The markup was changed from {original} to {new}").format(original=original_markup,
+                                                                              new=page.markup)
             page_moved.send(sender=edit,
                             page=page,
                             old_path=old_path,
@@ -125,8 +125,10 @@ def edit(request, slug):
                             message=msg,
                             commit=False
                             )
-
+            was_moved = True
             messages.warning(request, msg)
+        else:
+            was_moved = False
         page.raw = form.cleaned_data['raw']
         page.save()
         try:
@@ -135,7 +137,8 @@ def edit(request, slug):
                                                   author=request.user,
                                                   message=form.cleaned_data[
                                                       "message"],
-                                                  form_extra_data=json.loads(form.cleaned_data["extra_data"] or "{}"))
+                                                  form_extra_data=json.loads(form.cleaned_data["extra_data"] or "{}"),
+                                                  was_moved=was_moved)
         except Page.EditionConflict as e:
             messages.warning(request, e)
             return redirect('waliki_edit', slug=page.slug)

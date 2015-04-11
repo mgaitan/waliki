@@ -7,9 +7,10 @@ from . import Git
 @receiver(page_saved)
 def commit(sender, page, author, message, form_extra_data, **kwargs):
     parent = form_extra_data.get('parent', None)
+    was_moved = kwargs.get('was_moved', False)
     there_were_changes = Git().commit(page, author=author, message=message,
                                            parent=parent)
-    if there_were_changes:
+    if there_were_changes and not was_moved:
         msg = _('There were changes in the page during your edition. Auto-merge has been applied.')
         return {'messages': {'warning': msg}}
 
