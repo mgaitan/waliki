@@ -93,14 +93,15 @@ def edit(request, slug):
             page = Page.objects.create(slug=slug)
             page.raw = ""
             page_saved.send(sender=edit,
-                        page=page,
-                        author=request.user,
-                        message=_("Page created"),
-                        form_extra_data={})
+                            page=page,
+                            author=request.user,
+                            message=_("Page created"),
+                            form_extra_data={})
             just_created = True
         else:
             return redirect('waliki_detail', slug)
 
+    original_markup = page.markup
     data = request.POST if request.method == 'POST' and not just_created else None
     form_extra_data = {}
     receivers_responses = page_preedit.send(sender=edit, page=page)
@@ -108,15 +109,36 @@ def edit(request, slug):
         if isinstance(r[1], dict) and 'form_extra_data' in r[1]:
             form_extra_data.update(r[1]['form_extra_data'])
 
-    form = PageForm(data, instance=page, initial={'extra_data': json.dumps(form_extra_data)})
+    form = PageForm(
+        data, instance=page, initial={'extra_data': json.dumps(form_extra_data)})
     if form.is_valid():
-        page = form.save()
+        page = form.save(commit=False)
+        if page.markup != original_markup:
+            old_path = page.path
+            page.update_extension()
+            msg = _("The markup was changed from {original} to {new}").format(original=original_markup,
+                                                                              new=page.markup)
+            page_moved.send(sender=edit,
+                            page=page,
+                            old_path=old_path,
+                            author=request.user,
+                            message=msg,
+                            commit=False
+                            )
+            was_moved = True
+            messages.warning(request, msg)
+        else:
+            was_moved = False
+        page.raw = form.cleaned_data['raw']
+        page.save()
         try:
             receivers_responses = page_saved.send(sender=edit,
                                                   page=page,
                                                   author=request.user,
-                                                  message=form.cleaned_data["message"],
-                                                  form_extra_data=json.loads(form.cleaned_data["extra_data"] or "{}"))
+                                                  message=form.cleaned_data[
+                                                      "message"],
+                                                  form_extra_data=json.loads(form.cleaned_data["extra_data"] or "{}"),
+                                                  was_moved=was_moved)
         except Page.EditionConflict as e:
             messages.warning(request, e)
             return redirect('waliki_edit', slug=page.slug)
@@ -143,7 +165,8 @@ def edit(request, slug):
 def preview(request):
     data = {}
     if request.is_ajax() and request.method == "POST":
-        data['html'] = Page.preview(request.POST['markup'], request.POST['text'])
+        data['html'] = Page.preview(
+            request.POST['markup'], request.POST['text'])
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
@@ -158,7 +181,8 @@ def delete(request, slug):
             page.delete()
         else:
             Page.objects.filter(slug__startswith=slug).delete()
-            msg = _("The page %(slug)s and all its namespace was deleted") % {'slug': slug}
+            msg = _("The page %(slug)s and all its namespace was deleted") % {
+                'slug': slug}
 
         messages.warning(request, msg)
         if request.is_ajax():
@@ -179,10 +203,10 @@ def new(request):
         page = form.save()
         page.raw = ""
         page_saved.send(sender=new,
-                    page=page,
-                    author=request.user,
-                    message=_("Page created"),
-                    form_extra_data={})
+                        page=page,
+                        author=request.user,
+                        message=_("Page created"),
+                        form_extra_data={})
         if request.is_ajax():
             return HttpResponse(json.dumps({'redirect': page.get_edit_url()}), content_type="application/json")
         return redirect(page.get_edit_url())

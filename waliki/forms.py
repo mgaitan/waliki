@@ -82,8 +82,7 @@ class PageForm(forms.ModelForm):
         is_hidden = kwargs.pop('is_hidden', None)
         super(PageForm, self).__init__(*args, **kwargs)
         self.fields['raw'].initial = self.instance.raw
-        self.fields['markup'].widget = forms.HiddenInput()
-        # Translator: placeholder for log message
+        # self.fields['markup'].widget = forms.HiddenInput()
         self.fields['message'].widget = forms.TextInput(attrs={'placeholder': _('Update %s') % self.instance.path})
         if is_hidden:
             for field in self.fields.values():

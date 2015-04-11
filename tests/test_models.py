@@ -53,6 +53,18 @@ class TestPage(TestCase):
         page.save()
         self.assertEqual(page.slug, 'some/slug')
 
+    def test_update_extension(self):
+        page = PageFactory(raw='lala')
+        assert page.markup == 'reStructuredText'
+        old_path = page.abspath
+        assert os.path.exists(old_path)
+        page.markup = 'Markdown'
+        page.update_extension()
+        self.assertTrue(os.path.exists(page.abspath))
+        self.assertFalse(os.path.exists(old_path))
+        self.assertTrue(page.path.endswith('.md'))
+        self.assertEqual(page.raw, 'lala')
+
 
 class TestRestructuredText(TestCase):
 
