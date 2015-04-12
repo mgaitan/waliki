@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import six
 from waliki.models import Page
 from waliki import settings
-from sh import git, ErrorReturnCode
+from sh import git, ErrorReturnCode, Command
 
 
 git = git.bake("--no-pager")
@@ -27,8 +27,11 @@ class Git(object):
 
         self.git = git
 
-    def commit(self, page, message='', author=None, parent=None):
+    def commit(self, page, message='', author=None, parent=None, extra_path=None):
         path = page.path
+        paths_to_commit = [path]
+        if extra_path:
+            paths_to_commit.append(extra_path)
         kwargs = {}
         if isinstance(author, User) and author.is_authenticated():
             kwargs['author'] = u"%s <%s>" % (author.get_full_name() or author.username, author.email)
@@ -51,7 +54,8 @@ class Git(object):
                 kwargs['i'] = True
 
             git.add(path)
-            git.commit(path, allow_empty_message=True, m=message, **kwargs)
+            git_commit_cmd = git.commit.bake(allow_empty_message=True, m=message, **kwargs)
+            git_commit_cmd('--', *paths_to_commit)
             last = self.last_version(page)
             if parent and status != "UU":
                 git.checkout('master')
@@ -61,7 +65,8 @@ class Git(object):
             error = e.stdout.decode('utf8')
             if 'CONFLICT' in error:
                 # For '-i' attribute see http://stackoverflow.com/q/5827944/811740
-                git.commit(path, allow_empty_message=True, m=_('Merged with conflict'), i=True, **kwargs)
+                git_commit_cmd = git.commit.bake(allow_empty_message=True, m=_('Merged with conflict'), i=True, **kwargs)
+                git_commit_cmd('--', *paths_to_commit)
                 raise Page.EditionConflict(_('Automatic merge failed. Please, fix the conflict and save the page.'))
             else:
                 raise
@@ -135,7 +140,9 @@ class Git(object):
 
     def mv(self, sender, page, old_path, author, message, commit=True):
         status = git.status('--porcelain', old_path).stdout.decode('utf8')[1:2]
+        extra_path = ''
         if status in ('D', 'M'):
             git.rm(old_path)
+            extra_path = old_path
         if commit:
-            self.commit(page, author=author, message=message)
+            self.commit(page, author=author, message=message, extra_path=extra_path)
