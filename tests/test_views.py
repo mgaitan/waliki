@@ -127,13 +127,13 @@ class TestMove(TestCase):
         self.assertEqual(list(json.loads(response.content.decode('utf8')).keys()), ['data'])
         self.assertEqual(r2s_mock.call_args[0][0], 'waliki/generic_form.html')
 
-    def test_post_with_error(self):
+    def test_post_error_if_slug_not_changed(self):
         response = self.client.post(self.move_url, {'slug': self.page.slug})
         self.assertEqual(response.status_code, 200)
         form = response.context[0]['form']
-        self.assertEqual(form.errors, {'slug': ["The slug wasn't changed"]})
+        self.assertEqual(form.errors, {'__all__': ["The slug wasn't changed"]})
 
-    def test_post_ajax_with_error(self):
+    def test_post_ajax_error_if_slug_not_changed(self):
         response = self.client.post(self.move_url, {'slug': self.page.slug}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content.decode('utf8'))
@@ -191,6 +191,8 @@ class TestMove(TestCase):
         self.client.post(self.move_url, {'slug': 'the-new-slug'})
         self.assertEqual(Redirect.objects.all().count(), 1)
         self.assertEqual(Redirect.objects.filter(old_slug='the-new-slug').count(), 0)
+
+
 
 
 class TestDelete(TestCase):

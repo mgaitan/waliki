@@ -26,6 +26,8 @@ class MovePageForm(forms.ModelForm):
         cleaned_data = super(MovePageForm, self).clean()
         slug = cleaned_data['slug']
         just_redirect = cleaned_data.get('just_redirect', False)
+        if self.instance.slug == slug:
+            raise forms.ValidationError(_("The slug wasn't changed"))
 
         if Page.objects.filter(slug=slug).exists() and not just_redirect:
             self.fields['just_redirect'].widget = forms.CheckboxInput()
@@ -33,11 +35,6 @@ class MovePageForm(forms.ModelForm):
 
         return cleaned_data
 
-    def clean_slug(self):
-        slug = self.cleaned_data['slug']
-        if self.instance.slug == slug:
-            raise forms.ValidationError(_("The slug wasn't changed"))
-        return slug
 
 
 
