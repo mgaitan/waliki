@@ -158,6 +158,34 @@ class TestMove(TestCase):
         self.assertIn("Just create a redirection", data['data'])  # field is present
         self.assertNotIn('redirect', data)
 
+    def test_post_just_redirect(self):
+        new_page = PageFactory(raw="hello test!", slug='target-page')
+        with mock.patch('waliki.views.page_moved') as page_moved_mock:
+            response = self.client.post(self.move_url, {'slug': 'target-page', 'just_redirect': True})
+        self.assertRedirects(response, new_page.get_absolute_url(), status_code=302)
+        r = Redirect.objects.all()[0]
+        self.assertEqual(r.old_slug, self.page.slug)
+        self.assertEqual(r.new_slug, new_page.slug)
+        # page still exists
+        self.assertTrue(Page.objects.filter(id=self.page.id).exists())
+        # because it wan't moved: just redirected
+        self.assertFalse(page_moved_mock.called)
+
+    def test_post_ajax_just_redirect(self):
+        new_page = PageFactory(raw="hello test!", slug='target-page')
+        with mock.patch('waliki.views.page_moved') as page_moved_mock:
+            response = self.client.post(self.move_url, {'slug': 'target-page', 'just_redirect': True}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content.decode('utf8'))
+        self.assertEqual(data['redirect'], new_page.get_absolute_url())
+        r = Redirect.objects.all()[0]
+        self.assertEqual(r.old_slug, self.page.slug)
+        self.assertEqual(r.new_slug, new_page.slug)
+        # page still exists
+        self.assertTrue(Page.objects.filter(id=self.page.id).exists())
+        # because it wan't moved: just redirected
+        self.assertFalse(page_moved_mock.called)
+
     def test_success_post_move_page(self):
         with mock.patch('waliki.views.page_moved') as page_moved_mock:
             response = self.client.post(self.move_url, {'slug': 'another-page'})
