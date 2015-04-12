@@ -5,7 +5,7 @@ https://github.com/ojii/django-load. Taken from django-wiki.
 """
 from __future__ import print_function
 from django.conf import settings
-from django.utils.importlib import import_module
+from importlib import import_module
 
 
 

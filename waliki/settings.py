@@ -1,5 +1,5 @@
 import os.path
-import importlib
+from importlib import import_module
 import collections
 from django.conf import settings
 from .utils import get_url
@@ -8,7 +8,7 @@ from waliki.plugins import str2object
 
 
 def _get_default_data_dir(directory, abspath=True):
-    settings_mod = importlib.import_module(settings.SETTINGS_MODULE)
+    settings_mod = import_module(settings.SETTINGS_MODULE)
 
     project_dir = os.path.dirname(settings_mod.__name__)
     if abspath:
