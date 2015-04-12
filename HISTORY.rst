@@ -7,17 +7,13 @@ Changelog
 0.5 (2015-04-12)
 ++++++++++++++++++
 
--  Per page markup is now fully functional. It allows to
-   have a mixed rst & markdown wiki. Fixed `#2 <https://github.com/mgaitan/waliki/issues/2>`__
-
--  Allow save page without body change.
-   Fixed `#85 <https://github.com/mgaitan/waliki/issues/85>`__
-
--  Fixed `#84 <https://github.com/mgaitan/waliki/issues/84>`__, that marked deleted but no commited after a move
-
--  Allow to choice markup from new page dialog. `#82 <https://github.com/mgaitan/waliki/issues/82>`__
-
--  Fix wrong encoding for raw of an old revision. `#75 <https://github.com/mgaitan/waliki/issues/75>`__
+- Per page markup is now fully functional. It allows to
+  have a mixed rst & markdown wiki. Fixed `#2 <https://github.com/mgaitan/waliki/issues/2>`__
+- Allow save a page without changes in a body.
+  Fixed `#85 <https://github.com/mgaitan/waliki/issues/85>`__
+- Fixed `#84 <https://github.com/mgaitan/waliki/issues/84>`__, that marked deleted but no commited after a move
+- Allow to choice markup from new page dialog. `#82 <https://github.com/mgaitan/waliki/issues/82>`__
+- Fix wrong encoding for raw of an old revision. `#75 <https://github.com/mgaitan/waliki/issues/75>`__
 
 
 0.4.2 (2015-03-31)
@@ -35,8 +31,6 @@ Changelog
 0.4 (2015-03-31)
 ++++++++++++++++
 
-**Implemented enhancements:**
-
 - Implemented views to add a new, move and delete pages
 - Implemented real-time collaborative editing via together.js
   (`#33 <https://github.com/mgaitan/waliki/issues/33>`__)
@@ -45,30 +39,26 @@ Changelog
 - A deep docs proofreading by `chuna <https://github.com/chuna>`__
 - Edit view redirect to detail if the page doesn't exist
   (`#37 <https://github.com/mgaitan/waliki/issues/37>`__)
--  waliki\_box fails with missing slug
-   `#40 <https://github.com/mgaitan/waliki/issues/40>`__
--  can't view diffs on LMDE
-   `#60 <https://github.com/mgaitan/waliki/issues/60>`__
+- waliki\_box fails with missing slug
+  `#40 <https://github.com/mgaitan/waliki/issues/40>`__
+- can't view diffs on LMDE
+  `#60 <https://github.com/mgaitan/waliki/issues/60>`__
+- fix typos in tutorial
+  `#76 <https://github.com/mgaitan/waliki/pull/76>`__
+  (`martenson <https://github.com/martenson>`__)
+- Fix build with Markups 0.6.
+  `#63 <https://github.com/mgaitan/waliki/pull/63>`__
+  (`loganchien <https://github.com/loganchien>`__)
+- fixed roundoff error for whatchanged pagination
+  `#61 <https://github.com/mgaitan/waliki/pull/61>`__
+  (`aszepieniec <https://github.com/aszepieniec>`__)
 
--  fix typos in tutorial
-   `#76 <https://github.com/mgaitan/waliki/pull/76>`__
-   (`martenson <https://github.com/martenson>`__)
+- Enhance slides `#59 <https://github.com/mgaitan/waliki/pull/59>`__
+  (`loganchien <https://github.com/loganchien>`__)
 
--  Fix build with Markups 0.6.
-   `#63 <https://github.com/mgaitan/waliki/pull/63>`__
-   (`loganchien <https://github.com/loganchien>`__)
-
--  fixed roundoff error for whatchanged pagination
-   `#61 <https://github.com/mgaitan/waliki/pull/61>`__
-   (`aszepieniec <https://github.com/aszepieniec>`__)
-
--  Enhance slides `#59 <https://github.com/mgaitan/waliki/pull/59>`__
-   (`loganchien <https://github.com/loganchien>`__)
-
--  Fix UnicodeDecodeError in waliki.git.view.
-   `#58 <https://github.com/mgaitan/waliki/pull/58>`__
-   (`loganchien <https://github.com/loganchien>`__)
-
+- Fix UnicodeDecodeError in waliki.git.view.
+  `#58 <https://github.com/mgaitan/waliki/pull/58>`__
+  (`loganchien <https://github.com/loganchien>`__)
 
 0.3.3 (2014-11-24)
 ++++++++++++++++++
@@ -77,7 +67,6 @@ Changelog
 - fix bugs related to attachments in `sync_waliki`
 - The edition form uses crispy forms if it's installed
 - many small improvements to help the integration/customization
-
 
 0.3.2 (2014-11-17)
 ++++++++++++++++++
