@@ -44,7 +44,7 @@ class NewPageForm(forms.ModelForm):
 
     class Meta:
         model = Page
-        fields = ['title', 'slug']
+        fields = ['title', 'slug', 'markup']
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
