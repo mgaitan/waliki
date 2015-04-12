@@ -5,6 +5,7 @@ from django.test import TestCase
 from waliki.models import Page
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
+from django import forms
 from waliki.models import Redirect
 from waliki.forms import MovePageForm, DeleteForm
 
@@ -138,6 +139,23 @@ class TestMove(TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content.decode('utf8'))
         self.assertIn("The slug wasn", data['data'])
+        self.assertNotIn('redirect', data)
+
+    def test_post_error_if_target_already_exist(self):
+        new_page = PageFactory(raw="hello test!", slug='target-page')
+        response = self.client.post(self.move_url, {'slug': 'target-page'})
+        self.assertEqual(response.status_code, 200)
+        form = response.context[0]['form']
+        self.assertEqual(form.errors, {'__all__': ["There is already a page with this slug"]})
+        self.assertIsInstance(form.fields['just_redirect'].widget, forms.CheckboxInput)
+
+    def test_post_ajax_error_if_target_already_exist(self):
+        new_page = PageFactory(raw="hello test!", slug='target-page')
+        response = self.client.post(self.move_url, {'slug': 'target-page'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content.decode('utf8'))
+        self.assertIn("There is already a page", data['data'])
+        self.assertIn("Just create a redirection", data['data'])  # field is present
         self.assertNotIn('redirect', data)
 
     def test_success_post_move_page(self):
