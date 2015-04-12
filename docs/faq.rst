@@ -37,3 +37,11 @@ Does it use some cache?
     (in seconds). For example::
 
         WALIKI_CACHE_TIMEOUT = 3600    # 1 hour cache
+
+Can I have *user pages*?
+    Of course, but this feature isn't built-in. As a *user page* is a regular page
+    editable exclusively by an user, you can hook a simple code to create an :class:`ACLRule`
+    instance to the signal raised when a new :class:`User` is signed up.
+
+    Check the code of `this implementation <https://github.com/PyAr/pyarweb/pull/266>`_ in
+    the Python Argentina's site.
