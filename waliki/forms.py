@@ -36,9 +36,6 @@ class MovePageForm(forms.ModelForm):
         return cleaned_data
 
 
-
-
-
 class NewPageForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -60,10 +57,7 @@ class NewPageForm(forms.ModelForm):
         if Page.objects.filter(slug=slug).exists():
             raise forms.ValidationError(_("There is already a page with this slug"))
 
-
-
         return slug
-
 
 
 
@@ -97,13 +91,6 @@ class PageForm(forms.ModelForm):
         if is_hidden:
             for field in self.fields.values():
                 field.widget = forms.HiddenInput()
-
-    def clean_raw(self):
-        if self.instance.raw == self.cleaned_data['raw']:
-            raise forms.ValidationError(
-                _('There were no changes in the page to commit.')
-            )
-        return self.cleaned_data['raw']
 
     def save(self, commit=True):
         instance = super(PageForm, self).save(commit)

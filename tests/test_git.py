@@ -179,16 +179,18 @@ class TestGit(TestCase):
 
         response = self.client.get(self.edit_url)
         data = response.context[0]['form'].initial
+        data['title'] = 'new title'
         data['raw'] = self.page.raw
         data['message'] = 'testing :)'
         response = self.client.post(self.edit_url, data)
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.context['form'].is_valid())
-        self.assertIn('raw', response.context['form'].errors)
-        self.assertContains(response, _('There were no changes in the page to commit.'))
-
-        self.assertEqual(self.page.raw, 'lala')
-        self.assertEqual(Git().version(self.page, 'HEAD'), 'lala')
+        self.assertRedirects(response, self.page.get_absolute_url())
+        page = Page.objects.get(id=self.page.id)       # refresh
+        self.assertEqual(page.raw, 'lala')      # same body
+        self.assertEqual(page.title, 'new title')      # different title
+        response = self.client.get(reverse('waliki_history', args=(self.page.slug,)))
+        history = response.context[0].get('history')
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0]['message'], u'previous commit')
 
     def test_history_log(self):
         self.page.raw = 'line\n' * 10

@@ -54,7 +54,7 @@ class Git(object):
                 kwargs['i'] = True
 
             git.add(path)
-            git_commit_cmd = git.commit.bake(allow_empty_message=True, m=message, **kwargs)
+            git_commit_cmd = git.commit.bake(allow_empty=True, allow_empty_message=True, m=message, **kwargs)
             git_commit_cmd('--', *paths_to_commit)
             last = self.last_version(page)
             if parent and status != "UU":
@@ -65,7 +65,7 @@ class Git(object):
             error = e.stdout.decode('utf8')
             if 'CONFLICT' in error:
                 # For '-i' attribute see http://stackoverflow.com/q/5827944/811740
-                git_commit_cmd = git.commit.bake(allow_empty_message=True, m=_('Merged with conflict'), i=True, **kwargs)
+                git_commit_cmd = git.commit.bake(allow_empty=True, allow_empty_message=True, m=_('Merged with conflict'), i=True, **kwargs)
                 git_commit_cmd('--', *paths_to_commit)
                 raise Page.EditionConflict(_('Automatic merge failed. Please, fix the conflict and save the page.'))
             else:
