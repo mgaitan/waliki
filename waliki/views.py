@@ -59,21 +59,28 @@ def move(request, slug):
         # create the new redirection
         Redirect.objects.create(old_slug=slug, new_slug=new_slug)
 
-        old_path = page.path
-        page.move(new_slug + page.markup_.file_extensions[0])
-        page.slug = new_slug
-        page.save()
-        msg = _("Page moved from %(old_slug)s") % {'old_slug': slug}
-        page_moved.send(sender=move,
-                        page=page,
-                        old_path=old_path,
-                        author=request.user,
-                        message=msg,
-                        )
+        if not form.cleaned_data['just_redirect']:
+            old_path = page.path
+            page.move(new_slug + page.markup_.file_extensions[0])
+            page.slug = new_slug
+            page.save()
+            msg = _("Page moved from %(old_slug)s") % {'old_slug': slug}
+            page_moved.send(sender=move,
+                            page=page,
+                            old_path=old_path,
+                            author=request.user,
+                            message=msg,
+                            )
+            url = page.get_absolute_url()
+        else:
+            msg = _("A redirection from %(old_slug)s to this page was added") % {'old_slug': slug}
+
+        url = reverse('waliki_detail', args=[new_slug])
         messages.success(request, msg)
+
         if request.is_ajax():
-            return HttpResponse(json.dumps({'redirect': page.get_absolute_url()}), content_type="application/json")
-        return redirect(page.get_absolute_url())
+            return HttpResponse(json.dumps({'redirect': url}), content_type="application/json")
+        return redirect(url)
 
     if request.is_ajax():
         data = render_to_string('waliki/generic_form.html', {'page': page, 'form': form},

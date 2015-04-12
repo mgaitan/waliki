@@ -14,18 +14,31 @@ class DeleteForm(forms.Form):
 
 
 class MovePageForm(forms.ModelForm):
+    slug = forms.CharField()
+    just_redirect = forms.BooleanField(label=_('Just create a redirection'), widget=forms.HiddenInput, initial=False, required=False)
 
     class Meta:
         model = Page
-        fields = ['slug']
+        fields = ('slug', 'just_redirect',)
+        exclude = ('slug',)
+
+    def clean(self):
+        cleaned_data = super(MovePageForm, self).clean()
+        slug = cleaned_data['slug']
+        just_redirect = cleaned_data.get('just_redirect', False)
+
+        if Page.objects.filter(slug=slug).exists() and not just_redirect:
+            self.fields['just_redirect'].widget = forms.CheckboxInput()
+            raise forms.ValidationError(_("There is already a page with this slug"))
+
+        return cleaned_data
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
         if self.instance.slug == slug:
             raise forms.ValidationError(_("The slug wasn't changed"))
-        if Page.objects.filter(slug=slug).exists():
-            raise forms.ValidationError(_("There is already a page with this slug"))
         return slug
+
 
 
 
