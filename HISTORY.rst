@@ -3,6 +3,23 @@
 Changelog
 ---------
 
+
+0.5 (2015-04-12)
+++++++++++++++++++
+
+-  Per page markup is now fully functional. It allows to
+   have a mixed rst & markdown wiki. Fixed `#2 <https://github.com/mgaitan/waliki/issues/2>`__
+
+-  Allow save page without body change.
+   Fixed `#85 <https://github.com/mgaitan/waliki/issues/85>`__
+
+-  Fixed `#84 <https://github.com/mgaitan/waliki/issues/84>`__, that marked deleted but no commited after a move
+
+-  Allow to choice markup from new page dialog. `#82 <https://github.com/mgaitan/waliki/issues/82>`__
+
+-  Fix wrong encoding for raw of an old revision. `#75 <https://github.com/mgaitan/waliki/issues/75>`__
+
+
 0.4.2 (2015-03-31)
 ++++++++++++++++++
 
@@ -26,9 +43,6 @@ Changelog
 - Added pagination in *what changed* page
 - Added a way to extend waliki's docutils with directives and transformation for
 - A deep docs proofreading by `chuna <https://github.com/chuna>`__
-
-**Closed issues:**
-
 - Edit view redirect to detail if the page doesn't exist
   (`#37 <https://github.com/mgaitan/waliki/issues/37>`__)
 -  waliki\_box fails with missing slug
@@ -54,7 +68,6 @@ Changelog
 -  Fix UnicodeDecodeError in waliki.git.view.
    `#58 <https://github.com/mgaitan/waliki/pull/58>`__
    (`loganchien <https://github.com/loganchien>`__)
-
 
 
 0.3.3 (2014-11-24)
