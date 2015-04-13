@@ -242,15 +242,17 @@ class TestWhatChanged(TestCase):
         another_page = PageFactory(path='another-page.rst')
         another_page.raw = "hello!"
         self.page.raw = "hello 2!"
-        git.add('.')
-        git.commit('-am', 'commit all')
+        git.add(another_page.path)
+        git.add(self.page.path)
+        git.commit('-m', 'commit all')
         wc = Git().whatchanged()
-        import ipdb; ipdb.set_trace()
+        self.assertEqual(wc[0][3], 'commit all')
+        self.assertEqual(wc[0][5], [another_page.path, self.page.path])
 
     def test_whatchanged(self):
         self.page.raw = 'line\n'
         Git().commit(self.page, message=u'"//"')
-        another_page = PageFactory(path='another-page.rst')
+        another_page = PageFactory(path='random_page.rst')
         another_page.raw = "hello!"
         Git().commit(another_page, message=u'hello history')
         response = self.client.get(reverse('waliki_whatchanged'))
