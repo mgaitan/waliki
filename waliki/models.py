@@ -145,8 +145,8 @@ class Page(models.Model):
     def javascript(self):
         return self._get_part('get_javascript')
 
-    def get_cache_key(self):
-        return "waliki:content:%s" % self.slug
+    def get_cache_key(self, prefix='content'):
+        return "waliki:%s:%s" % (prefix, self.slug)
 
     def get_cached_content(self):
         """Returns cached """
