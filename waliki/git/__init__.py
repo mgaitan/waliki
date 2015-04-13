@@ -127,7 +127,6 @@ class Git(object):
                 pages[-1][-1].append(log[-1])
 
         if include_diff:
-            import ipdb; ipdb.set_trace()
             args = ['--no-color', '-p', '--format="%x1f"', '--skip=%d' % skip]
             if max_count:
                 args.append('--max-count=%d' % max_count)

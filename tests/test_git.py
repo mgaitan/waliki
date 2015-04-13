@@ -5,7 +5,6 @@ from sh import git
 from mock import patch, PropertyMock
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
 from waliki.models import Page
 from waliki.git import Git
 from waliki.settings import WALIKI_DATA_DIR, WALIKI_COMMITTER_EMAIL, WALIKI_COMMITTER_NAME
@@ -263,6 +262,18 @@ class TestWhatChanged(TestCase):
         self.assertEqual(changes[1]['page'], self.page)
         self.assertEqual(changes[0]['message'], 'hello history')
         self.assertEqual(changes[1]['message'], '"//"')
+
+    def test_whatchanged_rss(self):
+        another_page = PageFactory(path='lala.rst')
+        another_page.raw = "hello!"
+        Git().commit(another_page, message=u'hello history item')
+        response = self.client.get(reverse('waliki_whatchanged_rss'))
+
+        self.page.raw = "bye!"
+        Git().commit(self.page, message=u'bye history item')
+        response = self.client.get(reverse('waliki_whatchanged_rss'))
+        content = response.content.decode('utf8')
+        self.assertTrue(-1 < content.find('bye history item') < content.find('hello history item'))
 
     def test_whatchanged_pagination(self):
         self.page.raw = 'line\n'
