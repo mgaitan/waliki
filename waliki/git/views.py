@@ -1,4 +1,8 @@
 import json
+from django.utils import timezone
+
+from datetime import datetime
+from django.templatetags.tz import localtime
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
@@ -76,6 +80,7 @@ def diff(request, slug, old, new, raw=False):
 
 
 def whatchanged(request, pag=1):
+    now = timezone.now()
     changes = []
     # The argument passed for pag might be a string, but we want to
     # do calculations on it. So we must cast just to be sure.
@@ -94,9 +99,9 @@ def whatchanged(request, pag=1):
                 continue
             changes.append({'page': page, 'author': version[0],
                             'version': version[2], 'message': version[3],
-                            'date': version[4]})
+                            'date': datetime.fromtimestamp(int(version[4]))})
 
-    return render(request, 'waliki/whatchanged.html', {'changes': changes,
+    return render(request, 'waliki/whatchanged.html', {'changes': changes, 'now': now,
                                                        'prev': pag - 1 if pag > 1 else None,
                                                        'next': pag + 1 if skip + max_count < total else None})
 
@@ -104,38 +109,35 @@ def whatchanged(request, pag=1):
 class WhatchangedFeed(Feed):
     title = _("Last changes in the wiki")
     link = reverse_lazy('waliki_whatchanged')
+    description_template = "waliki/whatchanged_rss.html"
 
     def items(self):
-        changes = Git().whatchanged_diff()
-        import ipdb; ipdb.set_trace()
+        changes = []
+        for version, diff in Git().whatchanged_diff():
+            for path in version[-1]:
+                try:
+                    page = Page.objects.get(path=path)
+                except Page.DoesNotExist:
+                    continue
+                changes.append({'page': page, 'author': version[0],
+                                'version': version[2], 'message': version[3],
+                                'date': datetime.fromtimestamp(int(version[4])),
+                                'diff': diff[1:-1].strip()})
         return changes
 
     def item_title(self, item):
-        return item.name
+        return item['page'].title
 
-    def item_pubdate(self, item):
-        return item.created
+    def item_date(self, item):
+        return localtime(item['date'])
 
-    def author_name(self, item):
-        if item and item.company:
-            return item.company.name
-        return ''
+    def item_link(self, item):
+        return reverse_lazy("waliki_version", args=[item['page'].slug, item['version']])
 
     def author_email(self, item):
         if item:
-            return item.email
+            return item['author']
         return ''
-
-    def author_link(self, item):
-        if item and item.company:
-            return item.company.get_absolute_url()
-        return ''
-
-    def categories(self, item):
-        if item:
-            return item.tags.values_list('name', flat=True)
-        return ()
-
 
 
 @csrf_exempt
