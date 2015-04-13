@@ -7,7 +7,7 @@ Changelog
 +++++++++++++++++++++++++++
 
 - Slides view use the cache. Fix `#81 <https://github.com/mgaitan/waliki/issues/81>`__
-
+- Implemented an RSS feed listing lastest changes. It's part of `#32 <https://github.com/mgaitan/waliki/issues/32>`__
 
 
 0.5 (2015-04-12)
