@@ -33,19 +33,27 @@ At a glance, Waliki has these features:
 
 * File based content storage.
 * UI based on Bootstrap and CodeMirror
-* Version control and concurrent edition for your content using git
-* An extensible architecture with plugins
+* Version control and concurrent edition for your content using `git <http://waliki.readthedocs.org/en/latest/git.html>`_
+* An `extensible architecture <http://waliki.readthedocs.org/en/latest/write_a_plugin.html>`_ through plugins
 * reStructuredText or Markdown support, configurable per page
   (and it's easy to add extensions)
-* A very simple *per slug* ACL system
-* A nice page attachments manager (that respects the page permissions)
-* Realtime collaborative edition via togetherJS
-* Wiki content embeddable in any django template (as a "dummy CMS")
+* A very simple *per slug* `ACL system <http://waliki.readthedocs.org/en/latest/acl.html>`_
+* A nice `attachments manager <http://waliki.readthedocs.org/en/latest/attachments.html>`_ (that respects the permissions over the page)
+* Realtime `collaborative edition <http://waliki.readthedocs.org/en/latest/togetherjs.html>`_ via togetherJS
+* Wiki content embeddable in any django template (as a "`dummy CMS <http://waliki.readthedocs.org/en/latest/boxes.html>`_")
 * Few helpers to migrate content (particularly from MoinMoin, using moin2git_)
-* It works with Python 2.7, 3.3, 3.4 or PyPy in Django 1.6 or newer
+* It `works <https://travis-ci.org/mgaitan/waliki>`_ with Python 2.7, 3.3, 3.4 or PyPy in Django 1.6 or newer
 
-How to start
-------------
+It's easy to create a site powered by Waliki using the preconfigured project_ which is the same code that motorize the demo_.
+
+Waliki was inspired in Github's wikis, but it tries to be a bit smarter than many others `git backed wiki engines`_ at handling changes: instead of a hard *"newer wins"* or *"page blocking"* approaches, Waliki uses git's merge facilities on each save. So, if there was another change during an edition and git can merge them automatically, it's done and the user is notified. If the merge fails, the last edition is still saved but the editor is reloaded asking the user to fix the conflict.
+
+.. _project: https://github.com/mgaitan/waliki/tree/master/waliki_project
+.. _demo: http://waliki.pythonanywhere.com
+.. _git backed wiki engines: https://waliki.pythonanywhere.com/Git-powered-wiki-engines
+
+Getting started
+----------------
 
 Install it with pip::
 
