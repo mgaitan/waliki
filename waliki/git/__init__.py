@@ -7,9 +7,11 @@ from django.utils import six
 from waliki.models import Page
 from waliki import settings
 from sh import git, ErrorReturnCode, Command
+from collections import namedtuple
 
 
 git = git.bake("--no-pager")
+Commit = namedtuple('Commit', ['hash', 'author_name', 'author_email', 'subject', 'date', 'date_relative', 'paths', 'diff'])
 
 
 class Git(object):
@@ -72,7 +74,6 @@ class Git(object):
                 raise
         return there_were_changes
 
-
     def history(self, page):
         GIT_COMMIT_FIELDS = ['commit', 'author', 'date', 'date_relative', 'message']
         GIT_LOG_FORMAT = '%x1f'.join(['%h', '%an', '%ad', '%ar', '%s']) + '%x1e'
@@ -107,8 +108,8 @@ class Git(object):
         except ErrorReturnCode:
             return None
 
-    def whatchanged(self, skip=0, max_count=None):
-        GIT_LOG_FORMAT = '%x1f'.join(['%an', '%ae', '%h', '%s', '%ar'])
+    def whatchanged(self, skip=0, max_count=None, include_diff=False):
+        GIT_LOG_FORMAT = '%x1f'.join(['%an', '%ae', '%h', '%s', '%at'])
         pages = []
 
         args = ["--pretty=format:%s" % GIT_LOG_FORMAT, '--skip=%d' % skip]
@@ -116,14 +117,25 @@ class Git(object):
             args.append('--max-count=%d' % max_count)
         raw_log = git.whatchanged(*args).stdout.decode('utf8')
         logs = re.findall(r'((.*)\x1f(.*)\x1f(.*)\x1f(.*)\x1f(.*))?\n:.*\t(.*)', raw_log, flags=re.MULTILINE | re.UNICODE)
+
         for log in logs:
             if log[0]:
                 log = list(log[1:])
-                log[-1] = [log[-1]]
+                log[-1] = [log[-1]]     # pages
                 pages.append(list(log))
             else:
                 pages[-1][-1].append(log[-1])
+
+        if include_diff:
+            args = ['--no-color', '-p', '--format="%x1f"', '--skip=%d' % skip]
+            if max_count:
+                args.append('--max-count=%d' % max_count)
+            diffs = git.log(*args).stdout.decode('utf8').split('\x1f')[1:]
+            return zip(pages, diffs)
         return pages
+
+    def whatchanged_diff(self):
+        return self.whatchanged(max_count=20, include_diff=True)
 
     def pull(self, remote):
         log = git.pull('-s', 'recursive', '-X', 'ours', remote, 'HEAD').stdout.decode('utf8')

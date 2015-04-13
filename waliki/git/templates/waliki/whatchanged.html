@@ -1,7 +1,26 @@
 {% extends "waliki/detail.html" %}
 {% load i18n %}
+{% load tz %}
+
+{% block extra_head %}
+  {{ block.super }}
+
+  <link rel="alternate" type="application/rss+xml" title="{% trans "Last changes in the wiki" %}"href="{% url "waliki_whatchanged_rss" %}">
+
+{% endblock %}
+
+
+
 {% block header %}
     {% block title %}<h1>{% trans "What changed" %}</h1>{% endblock title %}
+
+    <div class="pull-right">
+
+            <a class="btn btn-default btn-xs" href="{% url "waliki_whatchanged_rss" %}">
+                RSS
+            </a>
+
+      </div>
 {% endblock %}
 
 {% block content %}
@@ -17,7 +36,11 @@
                   <td class="col-sm-1"><a href="{% url 'waliki_diff' change.page.slug parent change.version %}" rel="nofollow">{% trans "diff" %}</a></td>
                   {% endwith %}
                   <td class="col-sm-1">{{ change.author }}</td>
-                  <td class="col-sm-2" title="{{ change.date }}">{{ change.date }}</td>
+                  <td class="col-sm-2" title="{{ change.date|date }}">
+                    {% blocktrans with since=change.date|localtime|timesince:now context "timesince humanized" %}
+                      {{ since }} ago
+                    {% endblocktrans %}
+                  </td>
                   <td class="col-sm-3">{{ change.message }}</td>
 
                 </tr>

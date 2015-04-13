@@ -1,11 +1,13 @@
 from django.conf.urls import patterns, url
 from waliki.settings import WALIKI_SLUG_PATTERN
+from waliki.git.views import WhatchangedFeed
 
 
 urlpatterns = patterns('waliki.git.views',
 
     url(r'^_whatchanged/(?P<pag>\d+)$', 'whatchanged', name='waliki_whatchanged'),       # noqa
     url(r'^_whatchanged$', 'whatchanged', {'pag': '1'}, name='waliki_whatchanged'),       # noqa
+    url(r'^_whatchanged/rss$', WhatchangedFeed(), name='waliki_whatchanged_rss'),
 
     url(r'^_hooks/pull/(?P<remote>[a-zA-Z0-9]+)$', 'webhook_pull', name='waliki_webhook_pull'),
     url(r'^(?P<slug>' + WALIKI_SLUG_PATTERN + ')/history/(?P<pag>\d+)$', 'history', name='waliki_history'),
