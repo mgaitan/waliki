@@ -1,6 +1,11 @@
 Boxes: Waliki as a (dummy) CMS
 ==============================
 
+.. raw:: html
+
+    <iframe width="420" height="315" src="//www.youtube.com/embed/-mm0uQGUEsw" frameborder="0" allowfullscreen></iframe>
+
+
 The templatetag ``waliki_box`` allows to display the body of a wiki page as a portion (a "box") of a webpage, and a rapid inline edition if the user has the right permission.
 
 The templatetag receives the page's slug as unique parameter::
@@ -48,11 +53,6 @@ Where ``boxes_example.html`` is as following:
 
     {% endblock %}
 
-
-
-.. raw:: html
-
-    <iframe width="420" height="315" src="//www.youtube.com/embed/-mm0uQGUEsw" frameborder="0" allowfullscreen></iframe>
 
 
 You can `see this example <http://waliki.pythonanywhere.com/boxes-example/>`_ live in the demo site. Note that the demo site applies a :ref:`ACL rule <acl>`
