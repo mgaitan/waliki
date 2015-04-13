@@ -3,6 +3,12 @@
 Changelog
 ---------
 
+0.6dev (under developement)
++++++++++++++++++++++++++++
+
+- Slides view use the cache. Fix `#81 <https://github.com/mgaitan/waliki/issues/81>`__
+
+
 
 0.5 (2015-04-12)
 ++++++++++++++++++
