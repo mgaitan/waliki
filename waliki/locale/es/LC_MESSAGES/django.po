@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-03 18:59-0300\n"
+"POT-Creation-Date: 2015-04-14 11:35-0300\n"
 "Last-Translator: Martín Gaitán <gaitan@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -79,63 +79,59 @@ msgstr "Sólo esta página"
 msgid "This page and all the namespace"
 msgstr "Esta página y todo su espacio de nombre"
 
-#: forms.py:25
+#: forms.py:18
+msgid "Just create a redirection"
+msgstr ""
+
+#: forms.py:30
 #, fuzzy
 #| msgid "What changed"
 msgid "The slug wasn't changed"
 msgstr "La dirección no fue modificada"
 
-#: forms.py:27 forms.py:51
+#: forms.py:34 forms.py:58
 msgid "There is already a page with this slug"
 msgstr "Ya existe una página en esta dirección"
 
-#: forms.py:45
+#: forms.py:52
 msgid "The slug can't be empty"
 msgstr "La dirección no puede estar vacía"
 
-#: forms.py:47
+#: forms.py:54
 msgid "The slug isn't valid"
 msgstr "La dirección no es válida"
 
-#: forms.py:49
+#: forms.py:56
 msgid "You have no permission to create a page with this slug"
 msgstr "No tienes permisos para crear una página con esta dirección"
 
 #. Translators: log message
-#: forms.py:63
+#: forms.py:67
 msgid "Log message"
 msgstr "Mensaje de log"
 
-#: forms.py:87
+#: forms.py:90
 #, python-format
 msgid "Update %s"
 msgstr "Actualiza %s"
 
-#: forms.py:95
-#, fuzzy
-#| msgid ""
-#| "There were changes in the page during your edition. Auto-merge has been "
-#| "applied."
-msgid "There were no changes in the page to commit."
-msgstr "Hubo cambios en la página durante tu edición. Se aplicó auto-mezclado."
-
-#: git/__init__.py:64
+#: git/__init__.py:70
 msgid "Merged with conflict"
 msgstr "Mezclado con conflictos"
 
-#: git/__init__.py:65
+#: git/__init__.py:72
 msgid "Automatic merge failed. Please, fix the conflict and save the page."
 msgstr ""
 "La mezcla automática falló. Por favor, corrige el conflicto y guarda la "
 "página"
 
-#: git/models.py:13
+#: git/models.py:14
 msgid ""
 "There were changes in the page during your edition. Auto-merge has been "
 "applied."
 msgstr "Hubo cambios en la página durante tu edición. Se aplicó auto-mezclado."
 
-#: git/templates/waliki/diff.html:6 git/templates/waliki/version.html:21
+#: git/templates/waliki/diff.html:6 git/templates/waliki/version.html:24
 msgid "Diff"
 msgstr "Diferencia"
 
@@ -143,7 +139,7 @@ msgstr "Diferencia"
 msgid "Comparing"
 msgstr "Comparando"
 
-#: git/templates/waliki/diff.html:14 git/templates/waliki/version.html:20
+#: git/templates/waliki/diff.html:14 git/templates/waliki/version.html:23
 #: templates/waliki/detail.html:37
 msgid "Raw"
 msgstr "Sólo texto"
@@ -157,30 +153,49 @@ msgid "Compare revisions"
 msgstr "Comparar versiones"
 
 #: git/templates/waliki/history.html:39
-#: git/templates/waliki/whatchanged.html:32
+#: git/templates/waliki/whatchanged.html:55
 #, fuzzy
 #| msgid "Preview"
 msgid "Previous"
-msgstr "Previsualizar"
+msgstr "Anterior"
 
 #: git/templates/waliki/history.html:40
-#: git/templates/waliki/whatchanged.html:33
+#: git/templates/waliki/whatchanged.html:56
 msgid "Next"
 msgstr "Siguiente"
 
-#: git/templates/waliki/version.html:19
+#: git/templates/waliki/version.html:9
+#, fuzzy
+#| msgid "Restore this version"
+msgid "Current version"
+msgstr "Restaurar esta versión"
+
+#: git/templates/waliki/version.html:22
 msgid "Restore this version"
 msgstr "Restaurar esta versión"
 
-#: git/templates/waliki/whatchanged.html:4 git/waliki_plugin.py:10
-msgid "What changed"
-msgstr "Qué cambió"
+#: git/templates/waliki/whatchanged.html:8 git/views.py:110
+msgid "Last changes in the wiki"
+msgstr "Últimos cambios en la wiki"
 
-#: git/templates/waliki/whatchanged.html:17
+#: git/templates/waliki/whatchanged.html:15 git/waliki_plugin.py:10
+msgid "What changed"
+msgstr "Últimos cambios"
+
+#: git/templates/waliki/whatchanged.html:36
 msgid "diff"
 msgstr "diferencia"
 
-#: git/views.py:45
+#: git/templates/waliki/whatchanged.html:40
+#, python-format
+msgctxt "timesince humanized"
+msgid "Hace %(since)s"
+"\n"
+"                      %(since)s ago\n"
+"                    "
+msgstr ""
+
+#: git/views.py:50
 #, fuzzy, python-format
 #| msgid "Restore this version"
 msgid "Restored version @%s"
@@ -206,44 +221,44 @@ msgstr "Página"
 msgid "Pages"
 msgstr "Páginas"
 
-#: models.py:164
+#: models.py:169
 msgid "Any user"
 msgstr "Cualquier usuario"
 
-#: models.py:165
+#: models.py:170
 msgid "Any authenticated user"
 msgstr "Cualquier usuario identificado"
 
-#: models.py:166
+#: models.py:171
 msgid "Any staff member"
 msgstr "Cualquier miembro del staff"
 
-#: models.py:167
+#: models.py:172
 msgid "Any superuser"
 msgstr "Cualquier superusuario"
 
-#: models.py:168
+#: models.py:173
 msgid "Any user/group explicitly defined"
 msgstr "Cualquier usuario o grupo explícitamente definido"
 
-#: models.py:171
+#: models.py:176
 msgid "Name"
 msgstr "Nombre"
 
-#: models.py:173
+#: models.py:178
 msgid "As namespace"
 msgstr "Como espacio de nombre"
 
-#: models.py:181
+#: models.py:186
 #, python-format
 msgid "Rule: %(name)s for /%(slug)s"
 msgstr "Regla: %(name)s para /%(slug)s"
 
-#: models.py:187
+#: models.py:192
 msgid "ACL rule"
 msgstr "Regla ACL"
 
-#: models.py:188
+#: models.py:193
 msgid "ACL rules"
 msgstr "Reglas ACL"
 
@@ -326,7 +341,7 @@ msgstr "Mover página"
 msgid "Loading..."
 msgstr "Cargando..."
 
-#: templates/waliki/edit.html:126
+#: templates/waliki/edit.html:129
 msgid "There was a problem with the preview."
 msgstr "Hubo un problema con la previsualización."
 
@@ -335,24 +350,42 @@ msgstr "Hubo un problema con la previsualización."
 msgid "Collaborate"
 msgstr "Colaborar"
 
-#: views.py:66
+#: views.py:67
 #, python-format
 msgid "Page moved from %(old_slug)s"
 msgstr "Página movida desde %(old_slug)s"
 
-#: views.py:98 views.py:184
+#: views.py:76
+#, python-format
+msgid "A redirection from %(old_slug)s to this page was added"
+msgstr "Se agregó una redirección desde %(old_slug)s a esta página"
+
+#: views.py:105 views.py:215
 msgid "Page created"
 msgstr "Página creada"
 
-#: views.py:157
+#: views.py:126
+#, python-brace-format
+msgid "The markup was changed from {original} to {new}"
+msgstr "El markup cambió de {original} a {new}"
+
+#: views.py:187
 #, python-format
 msgid "The page %(slug)s was deleted"
 msgstr "La página %(slug)s se eliminó"
 
-#: views.py:161
+#: views.py:191
 #, python-format
 msgid "The page %(slug)s and all its namespace was deleted"
 msgstr "La página %(slug)s y todo su espacio de nombres se eliminó"
+
+#, fuzzy
+#~| msgid ""
+#~| "There were changes in the page during your edition. Auto-merge has been "
+#~| "applied."
+#~ msgid "There were no changes in the page to commit."
+#~ msgstr ""
+#~ "Hubo cambios en la página durante tu edición. Se aplicó auto-mezclado."
 
 #, fuzzy
 #~| msgid "Back to page"
