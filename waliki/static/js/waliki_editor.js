@@ -64,6 +64,14 @@ $('#btn-waliki_move').on('click', function(e) {
         });
 });
 
+$('#move-modal').on('show.bs.modal', function (e) {
+        $('input#id_slug').on('input', function(){
+          $('input#id_just_redirect').attr('checked', false);
+          $('#div_id_just_redirect, .modal-body .alert').fadeOut();
+        });
+});
+
+
 $("#move-form").submit(function(e) {
     e.preventDefault();
     var url = $(this).attr('action');
@@ -73,6 +81,9 @@ $("#move-form").submit(function(e) {
           }else {
               $('#move-modal .modal-body').empty().append(data.data);
               $('#move-modal').modal('show');
+
+
+
           }
         });
 });
