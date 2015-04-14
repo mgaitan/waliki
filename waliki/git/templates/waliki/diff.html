@@ -11,7 +11,7 @@
     <div class="alert alert-info">
         {% trans "Comparing" %} <a href="{% url "waliki_version" page.slug new_commit %}">{{ new_commit }}</a> vs. <a href="{% url "waliki_version" page.slug old_commit %}">{{ old_commit }}</a>
 
-        <a href="{% url 'waliki_diff_raw' page.slug old_commit new_commit %}" class="btn btn-default btn-sm">{% trans "Raw" %}</a>
+        <a href="{% url 'waliki_diff_raw' page.slug new_commit old_commit %}" class="btn btn-default btn-sm">{% trans "Raw" %}</a>
     </div>
 
 
