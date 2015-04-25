@@ -35,9 +35,9 @@
 
     <body>
         {% block navbar %}
-        <div class="navbar navbar-fixed-top navbar-default">
+        <div class="navbar navbar-default">
             <div class="container">
-                <div class="container">
+                <div class="navbar-header">
                     <div class="row">
                         <div class="col-sm-12 col-md-12"><div class="navbar-header"><a href="{% url 'waliki_home' %}" class="navbar-brand">{{ site_name|default:"Waliki" }}</a></div>
                             {% navbar_links %}
