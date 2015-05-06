@@ -92,6 +92,11 @@ You can override any settings in your project's :file:`settings.py` file
     As the title is not part of the file content but stored in the database, it should be given
     to rst2pdf. Default is ``False``
 
+.. confval:: WALIKI_PDF_RST2PDF_BIN
+
+    Apply if :ref:`PDF plugin <pdf>` is installed.
+
+    A custom binary path to rst2pdf. E.g. '/usr/bin/rst2pdf'
 
 .. confval:: WALIKI_CODEMIRROR_SETTINGS
 

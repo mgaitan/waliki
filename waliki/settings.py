@@ -80,6 +80,9 @@ WALIKI_MARKUPS_SETTINGS = _get_markup_settings(getattr(settings, 'WALIKI_MARKUPS
 # get as txt
 WALIKI_PDF_INCLUDE_TITLE = getattr(settings, 'WALIKI_PDF_INCLUDE_TITLE', False)
 
+# custom rst2pdf binary path. You should set it on python3.
+WALIKI_PDF_RST2PDF_BIN = getattr(settings, 'WALIKI_PDF_RST2PDF_BIN', False)
+
 WALIKI_CODEMIRROR_SETTINGS = getattr(settings, 'WALIKI_CODEMIRROR_SETTINGS',
                                      {'lineNumbers': False, 'theme': 'monokai', 'autofocus': True})
 
