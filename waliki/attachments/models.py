@@ -15,6 +15,7 @@ from waliki.settings import WALIKI_UPLOAD_TO
 class Attachment(models.Model):
     page = models.ForeignKey(Page, related_name='attachments')
     file = models.FileField(upload_to=WALIKI_UPLOAD_TO, max_length=300)
+    filename = models.CharField(max_length=300)
 
     class Meta:
         verbose_name = _("Attachment")
@@ -24,7 +25,7 @@ class Attachment(models.Model):
     	return os.path.basename(self.file.name)
 
     def get_absolute_url(self):
-        return reverse('waliki_attachment_file', args=(self.page.slug, self.id, text_type(self)))
+        return reverse('waliki_attachment_file', args=(self.page.slug, text_type(self.file)))
 
 
 # @receiver(pre_delete, sender=Attachment)
