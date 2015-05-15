@@ -4,9 +4,13 @@ WALIKI_ANONYMOUS_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page')
 DEBUG = False
 ALLOWED_HOSTS = ['waliki.pythonanywhere.com']
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" 
-EMAIL_USE_TLS = True 
-EMAIL_HOST = 'smtp.gmail.com' 
-EMAIL_HOST_USER = 'youruser@gmail.com' 
-EMAIL_HOST_PASSWORD = 'yourpassword' 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'youruser@gmail.com'
+EMAIL_HOST_PASSWORD = 'yourpassword'
 EMAIL_PORT = 587
+
+GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-XXXXXX-X'
+GOOGLE_ANALYTICS_DISPLAY_ADVERTISING = True
+GOOGLE_ANALYTICS_SITE_SPEED = True

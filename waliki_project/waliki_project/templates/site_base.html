@@ -3,10 +3,16 @@
 {% load waliki_tags %}
 {% load i18n %}
 {% load account %}
+{% load google_analytics %}
 
 
 {% block extra_style %}
  <link rel="stylesheet" type="text/css" href="{% static 'css/waliki_project.css' %}">
+{% endblock %}
+
+{% block extra_head_base %}
+    {% block extra_head %}{% endblock %}
+    {% google_analytics %}
 {% endblock %}
 
 {% block navbar %}
