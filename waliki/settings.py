@@ -4,7 +4,7 @@ import collections
 from django.conf import settings
 from .utils import get_url
 from waliki.rst2html5 import HTML5Writer
-from waliki.plugins import str2object
+from django.utils.module_loading import import_string
 
 
 def _get_default_data_dir(directory, abspath=True):
@@ -65,7 +65,7 @@ WALIKI_SLUG_PATTERN = getattr(settings, 'WALIKI_SLUG_PATTERN', '[a-zA-Z0-9-_\/]+
 
 WALIKI_SLUGIFY_FUNCTION = getattr(settings, 'WALIKI_SLUGIFY_FUNCTION', 'waliki.utils.get_slug')
 
-get_slug = str2object(WALIKI_SLUGIFY_FUNCTION)
+get_slug = import_string(WALIKI_SLUGIFY_FUNCTION)
 
 
 # your content folder. by default it's <project_root>/waliki_data
@@ -122,5 +122,5 @@ def WALIKI_UPLOAD_TO(instance, filename):
                                                        'filename_extension': os.path.splitext(filename)[1]})
 
 for mod in WALIKI_RST_DIRECTIVES:
-    register_directive = str2object(mod + '.register_directive')
+    register_directive = import_string(mod + '.register_directive')
     register_directive()

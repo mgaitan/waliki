@@ -2,7 +2,7 @@ from docutils import nodes
 from docutils.transforms import Transform
 from docutils.readers.standalone import Reader
 
-from waliki.plugins import str2object
+from django.utils.module_loading import import_string
 from waliki.settings import WALIKI_RST_TRANSFORMS
 
 
@@ -900,5 +900,5 @@ class Emojis(Transform):
 class WalikiReader(Reader):
 
     def get_transforms(self):
-        transforms = [str2object(transform) for transform in WALIKI_RST_TRANSFORMS]
+        transforms = [import_string(transform) for transform in WALIKI_RST_TRANSFORMS]
         return Reader.get_transforms(self) + transforms

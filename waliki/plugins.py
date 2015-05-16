@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Credits to ojii, functions get_module and load are from:
-https://github.com/ojii/django-load. Taken from django-wiki.
-"""
 from __future__ import print_function
 from django.conf import settings
 from importlib import import_module
@@ -32,6 +28,8 @@ class BasePlugin(object):
 def get_module(app, modname, verbose=False, failfast=False):
     """
     Internal function to load a module from a single app.
+
+    taken from https://github.com/ojii/django-load.
     """
     module_name = '%s.%s' % (app, modname)
     try:
@@ -47,13 +45,6 @@ def get_module(app, modname, verbose=False, failfast=False):
     return module
 
 
-def str2object(str_):
-    """receive 'mypackage.module.function' and return function (the object)"""
-    steps = str_.split('.')
-    module = get_module(steps[0], '.'.join(steps[1:-1]), failfast=True)
-    return getattr(module, steps[-1])
-
-
 def load(modname, verbose=False, failfast=False):
     """
     Loads all modules with name 'modname' from all installed apps.
@@ -66,7 +57,6 @@ def load(modname, verbose=False, failfast=False):
 
 def load_plugins():
     load('waliki_plugin', verbose=False, failfast=False)
-
 
 def register(PluginClass):
     """
