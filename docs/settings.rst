@@ -100,11 +100,11 @@ You can override any settings in your project's :file:`settings.py` file
 
 .. confval:: WALIKI_CODEMIRROR_SETTINGS
 
-    A dictionary (converted to json) used to `configure Codemirror <http://codemirror.net/doc/manual.html#config>`_. It's default is:
+    A dictionary (converted to json) used to `configure Codemirror <http://codemirror.net/doc/manual.html#config>`_. The default is:
 
     .. code-block:: python
 
-        {'lineNumbers': False, 'theme': 'monokai', 'autofocus': True}
+        {'theme': 'mbo', 'autofocus': True, 'lineNumbers': True})
 
 .. confval:: WALIKI_RENDER_403
 

@@ -88,7 +88,7 @@ WALIKI_PDF_INCLUDE_TITLE = getattr(settings, 'WALIKI_PDF_INCLUDE_TITLE', False)
 WALIKI_PDF_RST2PDF_BIN = getattr(settings, 'WALIKI_PDF_RST2PDF_BIN', False)
 
 WALIKI_CODEMIRROR_SETTINGS = getattr(settings, 'WALIKI_CODEMIRROR_SETTINGS',
-                                     {'lineNumbers': False, 'theme': 'monokai', 'autofocus': True})
+                                     {'lineNumbers': False, 'theme': 'mbo', 'autofocus': True, 'lineNumbers': True})
 
 # ('view_page', 'add_page', 'change_page', 'delete_page')
 WALIKI_ANONYMOUS_USER_PERMISSIONS = getattr(settings, 'WALIKI_ANONYMOUS_USER_PERMISSIONS',
