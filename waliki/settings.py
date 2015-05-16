@@ -4,7 +4,11 @@ import collections
 from django.conf import settings
 from .utils import get_url
 from waliki.rst2html5 import HTML5Writer
-from django.utils.module_loading import import_string
+try:
+    from django.utils.module_loading import import_string
+except ImportError:
+    # django 1.6
+    from django.utils.module_loading import import_by_path as import_string
 
 
 def _get_default_data_dir(directory, abspath=True):

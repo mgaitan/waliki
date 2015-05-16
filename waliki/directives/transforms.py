@@ -2,7 +2,12 @@ from docutils import nodes
 from docutils.transforms import Transform
 from docutils.readers.standalone import Reader
 
-from django.utils.module_loading import import_string
+try:
+    from django.utils.module_loading import import_string
+except ImportError:
+    # django 1.6
+    from django.utils.module_loading import import_by_path as import_string
+
 from waliki.settings import WALIKI_RST_TRANSFORMS
 
 

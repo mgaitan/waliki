@@ -58,6 +58,7 @@ def load(modname, verbose=False, failfast=False):
 def load_plugins():
     load('waliki_plugin', verbose=False, failfast=False)
 
+
 def register(PluginClass):
     """
     Register a plugin class. This function will call back your plugin's
