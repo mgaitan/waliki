@@ -91,6 +91,13 @@ def email(rst_content):
     return re.sub(pattern, r'``\1``', rst_content)
 
 
+def title_level(rst_content):
+    def dashrepl(matchobj):
+        return '-' * len(matchobj.group(0))
+    pattern = r'^~+$'
+    return re.sub(pattern, dashrepl, rst_content, flags=re.MULTILINE)
+
+
 def code(rst_content):
     if not pandoc:
         return rst_content
@@ -128,7 +135,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         valid_filters = ['meta', 'links',
                          'attachments', 'directives',
-                         'emojis', 'title', 'email', 'code']
+                         'emojis', 'title', 'email', 'code', 'title_level']
         slug = options['slug']
         filters = options['filters']
 
@@ -166,6 +173,10 @@ class Command(BaseCommand):
 
             if 'email' in filters:
                 raw = email(raw)
+
+            if 'title_level' in filters:
+                raw = title_level(raw)
+
             if 'code' in filters:
                 if not pandoc:
                     print('The filter "code" need Pandoc installed in your system. Ignoring')
