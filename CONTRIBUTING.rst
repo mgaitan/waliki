@@ -66,7 +66,8 @@ Ready to contribute? Here's how to set up `django-waliki` for local development.
 
     $ mkvirtualenv waliki
     $ cd waliki/
-    $ python setup.py develop[all]
+    $ pip install -r requirements-test.txt
+    $ pip install -e .[all]
 
 4. Create a branch for local development::
 
@@ -100,4 +101,4 @@ Now you can make your changes locally.
 
     To run a subset of tests::
 
-        $ python -m unittest tests.test_waliki
+        $ python runtests.py
