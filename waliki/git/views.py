@@ -12,9 +12,10 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.encoding import smart_text
 from django.utils.six import StringIO, text_type
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import AnonymousUser
 from waliki.models import Page
 from waliki.forms import PageForm
-from waliki.acl import permission_required
+from waliki.acl import permission_required, check_perms
 from waliki import settings
 from . import Git
 from django.contrib.syndication.views import Feed
@@ -97,6 +98,9 @@ def whatchanged(request, pag=1):
                 page = Page.objects.get(path=path)
             except Page.DoesNotExist:
                 continue
+            if not check_perms('view_page', request.user, page.slug):
+                # Don't show changes on pages that user can't see
+                continue
             changes.append({'page': page, 'author': version[0],
                             'version': version[2], 'message': version[3],
                             'date': datetime.fromtimestamp(int(version[4]))})
@@ -118,6 +122,9 @@ class WhatchangedFeed(Feed):
                 try:
                     page = Page.objects.get(path=path)
                 except Page.DoesNotExist:
+                    continue
+                if not check_perms('view_page', AnonymousUser(), page.slug):
+                    # Don't show changes on pages that anonymous user can't see
                     continue
                 changes.append({'page': page, 'author': version[0],
                                 'version': version[2], 'message': version[3],
