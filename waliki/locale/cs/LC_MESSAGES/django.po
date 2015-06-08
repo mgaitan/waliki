@@ -1,0 +1,370 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-08 19:37+0200\n"
+"Last-Translator: Filip Pytloun <filip@pytloun.cz>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: attachments/models.py:20
+msgid "Attachment"
+msgstr "Příloha"
+
+#: attachments/models.py:21
+#: attachments/templates/waliki/attachments_edit_content.html:8
+#: attachments/waliki_plugin.py:8
+msgid "Attachments"
+msgstr "Přílohy"
+
+#: attachments/templates/waliki/attachments.html:35
+msgid "Insert"
+msgstr "Vložit"
+
+#: attachments/templates/waliki/attachments.html:38
+#: templates/waliki/detail.html:46 templates/waliki/detail.html.py:85
+#: templates/waliki/detail.html:91
+msgid "Delete"
+msgstr "Odstranit"
+
+#: attachments/templates/waliki/attachments.html:48
+msgid "There is no attached files yet"
+msgstr "Žádné připojené soubory"
+
+#: attachments/templates/waliki/attachments.html:67
+msgid "Upload a new file"
+msgstr "Nahrát nový soubor"
+
+#: attachments/templates/waliki/attachments.html:70
+#: attachments/templates/waliki/attachments.html:123
+msgid "Upload"
+msgstr "Nahrát"
+
+#: attachments/templates/waliki/attachments.html:83
+msgid "upload"
+msgstr "nahrát"
+
+#: attachments/templates/waliki/attachments.html:217
+msgid "Are you sure you want to delete "
+msgstr "Jste si jistý, že chcete smazat "
+
+#: attachments/templates/waliki/attachments_edit_content.html:7
+#: attachments/templates/waliki/attachments_edit_content.html:16
+#: templates/waliki/box.html:10 templates/waliki/detail.html:84
+#: templates/waliki/edit.html:85
+msgid "Close"
+msgstr "Zavřít"
+
+#: forms.py:10
+msgid "What do you want to delete?"
+msgstr "Co chcete smazat?"
+
+#: forms.py:11
+msgid "Just this page"
+msgstr "Pouze tuto stránku"
+
+#: forms.py:12
+msgid "This page and all the namespace"
+msgstr "Tuto stránku a celý jmenný prostor"
+
+#: forms.py:18
+msgid "Just create a redirection"
+msgstr "Pouze vytvořit přesměrování"
+
+#: forms.py:30
+msgid "The slug wasn't changed"
+msgstr "Slug se nezměnil"
+
+#: forms.py:34 forms.py:58
+msgid "There is already a page with this slug"
+msgstr "Již existuje stránka s tímto slugem"
+
+#: forms.py:52
+msgid "The slug can't be empty"
+msgstr "Slug nemůže být prázdný"
+
+#: forms.py:54
+msgid "The slug isn't valid"
+msgstr "Slug není validní"
+
+#: forms.py:56
+msgid "You have no permission to create a page with this slug"
+msgstr "Nemáte oprávnění pro vytvoření stránky s tímto slugem"
+
+#. Translators: log message
+#: forms.py:67
+msgid "Log message"
+msgstr "Zalogovat zprávu"
+
+#: forms.py:90
+#, python-format
+msgid "Update %s"
+msgstr "Aktualizovat %s"
+
+#: git/__init__.py:70
+msgid "Merged with conflict"
+msgstr "Zamergováno s konflikty"
+
+#: git/__init__.py:72
+msgid "Automatic merge failed. Please, fix the conflict and save the page."
+msgstr "Automatické zamergování selhalo. Prosím, opravte konflikt a uložte stránku."
+
+#: git/models.py:14
+msgid ""
+"There were changes in the page during your edition. Auto-merge has been "
+"applied."
+msgstr "Stránka byla změněna v průběhu vaší editace. Bylo aplikováno automatické zamergování."
+
+#: git/templates/waliki/diff.html:6 git/templates/waliki/version.html:24
+msgid "Diff"
+msgstr "Rozdíl"
+
+#: git/templates/waliki/diff.html:12
+msgid "Comparing"
+msgstr "Porovnání"
+
+#: git/templates/waliki/diff.html:14 git/templates/waliki/version.html:23
+#: templates/waliki/detail.html:40
+msgid "Raw"
+msgstr "Surový"
+
+#: git/templates/waliki/history.html:5 git/waliki_plugin.py:9
+msgid "History"
+msgstr "Historie"
+
+#: git/templates/waliki/history.html:14
+msgid "Compare revisions"
+msgstr "Porovnat revize"
+
+#: git/templates/waliki/history.html:39
+#: git/templates/waliki/whatchanged.html:55
+msgid "Previous"
+msgstr "Předchozí"
+
+#: git/templates/waliki/history.html:40
+#: git/templates/waliki/whatchanged.html:56
+msgid "Next"
+msgstr "Další"
+
+#: git/templates/waliki/version.html:9
+msgid "Current version"
+msgstr "Aktuální verze"
+
+#: git/templates/waliki/version.html:22
+msgid "Restore this version"
+msgstr "Obnovit tuto verzi"
+
+#: git/templates/waliki/whatchanged.html:8 git/views.py:114
+msgid "Last changes in the wiki"
+msgstr "Poslední změny na wiki"
+
+#: git/templates/waliki/whatchanged.html:15 git/waliki_plugin.py:10
+msgid "What changed"
+msgstr "Co se změnilo"
+
+#: git/templates/waliki/whatchanged.html:36
+msgid "diff"
+msgstr "rozdíl"
+
+#: git/templates/waliki/whatchanged.html:40
+#, python-format
+msgctxt "timesince humanized"
+msgid ""
+"\n"
+"                      %(since)s ago\n"
+"                    "
+msgstr ""
+"\n"
+"                      %(since)s zpět\n"
+"                    "
+
+#: git/views.py:51
+#, python-format
+msgid "Restored version @%s"
+msgstr "Obnovena verze @%s"
+
+#: management/commands/moin_migration_cleanup.py:131
+msgid "RestructuredText clean up"
+msgstr ""
+
+#: models.py:27
+msgid "Title"
+msgstr "Nadpis"
+
+#: models.py:30
+msgid "Markup"
+msgstr ""
+
+#: models.py:34
+msgid "Page"
+msgstr "Stránka"
+
+#: models.py:35
+msgid "Pages"
+msgstr "Stránky"
+
+#: models.py:169
+msgid "Any user"
+msgstr "Jakýkoliv uživatel"
+
+#: models.py:170
+msgid "Any authenticated user"
+msgstr "Jakýkoliv autentikovaný uživatel"
+
+#: models.py:171
+msgid "Any staff member"
+msgstr "Jakýkoliv člen týmu"
+
+#: models.py:172
+msgid "Any superuser"
+msgstr "Jakýkoliv superuživatel"
+
+#: models.py:173
+msgid "Any user/group explicitly defined"
+msgstr "Jakýkoliv explicitně definovaný uživatel/skupina"
+
+#: models.py:176
+msgid "Name"
+msgstr "Jméno"
+
+#: models.py:178
+msgid "As namespace"
+msgstr "Jako jmenný prostor"
+
+#: models.py:186
+#, python-format
+msgid "Rule: %(name)s for /%(slug)s"
+msgstr "Pravidlo: %(name)s pro /%(slug)s"
+
+#: models.py:192
+msgid "ACL rule"
+msgstr "Přístupové pravidlo"
+
+#: models.py:193
+msgid "ACL rules"
+msgstr "Přístupová pravidla"
+
+#: pdf/waliki_plugin.py:8
+msgid "Get as PDF"
+msgstr "Stáhnout jako PDF"
+
+#: slides/waliki_plugin.py:8
+msgid "View as slides"
+msgstr "Zobrazit jako prezentaci"
+
+#: templates/waliki/403.html:5
+msgid "You aren't authorized to see this page."
+msgstr "Nejste oprávněn zobrazit tuto stránku."
+
+#: templates/waliki/box.html:11 templates/waliki/edit.html:5
+msgid "Editing"
+msgstr "Editace"
+
+#: templates/waliki/box.html:19 templates/waliki/detail.html:93
+#: templates/waliki/edit.html:65 templates/waliki/edit.html.py:94
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: templates/waliki/box.html:20
+msgid "Save changes"
+msgstr "Uložit změny"
+
+#: templates/waliki/box.html:30
+msgid "Edit this content"
+msgstr "Editovat tento obsah"
+
+#: templates/waliki/detail.html:26
+msgid "Edit"
+msgstr "Editovat"
+
+#: templates/waliki/detail.html:63
+msgid "This page doesn't exist yet."
+msgstr "Tato stránka neexistuje."
+
+#: templates/waliki/detail.html:66
+msgid "Create it"
+msgstr "Vytvořit"
+
+#: templates/waliki/detail.html:108
+msgid "Create a new page"
+msgstr "Vytvořit novou stránku"
+
+#: templates/waliki/detail.html:109 templates/waliki/navbar_links.html:4
+msgid "New page"
+msgstr "Nová stránka"
+
+#: templates/waliki/detail.html:115
+msgid "Create page"
+msgstr "Vytvořit stránku"
+
+#: templates/waliki/edit.html:14
+msgid "Move"
+msgstr "Přesunout"
+
+#: templates/waliki/edit.html:24
+msgid "Editor"
+msgstr ""
+
+#: templates/waliki/edit.html:25 templates/waliki/edit.html.py:62
+msgid "Preview"
+msgstr "Náhled"
+
+#: templates/waliki/edit.html:66
+msgid "Save"
+msgstr "Uložit"
+
+#: templates/waliki/edit.html:86 templates/waliki/edit.html.py:92
+msgid "Move page"
+msgstr "Přesunout stránku"
+
+#: templates/waliki/edit.html:116
+msgid "Loading..."
+msgstr "Načítá se..."
+
+#: templates/waliki/edit.html:129
+msgid "There was a problem with the preview."
+msgstr "Objevil se problém při zobrazení náhledu"
+
+#: togetherjs/templates/waliki/togetherjs_edit_extra_script.html:5
+#: togetherjs/templates/waliki/togetherjs_extra_edit_actions.html:4
+msgid "Collaborate"
+msgstr "Kolaborovat"
+
+#: views.py:69
+#, python-format
+msgid "Page moved from %(old_slug)s"
+msgstr "Stránka přesunuta z %(old_slug)s"
+
+#: views.py:78
+#, python-format
+msgid "A redirection from %(old_slug)s to this page was added"
+msgstr "Přesměrování z %(old_slug)s na tuto stránku bylo vytvořeno"
+
+#: views.py:107 views.py:217
+msgid "Page created"
+msgstr "Stránka vytvořena"
+
+#: views.py:128
+#, python-brace-format
+msgid "The markup was changed from {original} to {new}"
+msgstr "Značkovací jazyk se změnil z {original} na {new}"
+
+#: views.py:189
+#, python-format
+msgid "The page %(slug)s was deleted"
+msgstr "Stránka %(slug)s byla smazána"
+
+#: views.py:193
+#, python-format
+msgid "The page %(slug)s and all its namespace was deleted"
+msgstr "Stránka %(slug)s a celý jmenný prostor byl smazán"
