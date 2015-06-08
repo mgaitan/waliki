@@ -10,7 +10,7 @@
         {% block viewport %}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% endblock %}
-        <title>{% block head_title_base %}{% if page %} {{ page.title }} | {% endif %}{{ SITE_NAME|default:'Waliki' }}{% endblock %}</title>
+        <title>{% block head_title_base %}{% if page and page.title %} {{ page.title }} | {% endif %}{{ SITE_NAME|default:'Waliki' }}{% endblock %}</title>
 
          {% block style_base %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
@@ -60,11 +60,13 @@
             <div class="row">
 
                 <div class="col-lg-offset-1 col-sm-10 col-md-10">
+                    {% if page and page.title %}
                     <div class="page-header">
                     {% block header %}
                        <h1>{% block title %}{{ page.title }}{% endblock title %}</h1>
                     {% endblock header %}
                     </div>
+                    {% endif %}
 
                {% block content %}
                {% endblock content %}
