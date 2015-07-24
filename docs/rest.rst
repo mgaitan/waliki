@@ -10,22 +10,31 @@ With this plugin you'll get:
 URLs
 ----
 
-| * Add Page
+| List all Pages
+| ``GET http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/all``
+|
+| Add Page
 | ``POST http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/new``
 |
-| * Retrieve Page
+| Retrieve Page
 | ``GET http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/<slug>``
 |
-| * Edit Page
+| Edit Page
 | ``POST http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/<slug>/edit``
 |
-| * Delete Page
+| Move Page
+| ``POST http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/<slug>/move``
+|
+| Delete Page
 | ``POST http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/<slug>/delete``
 |
-| * History of changes
+| History of changes
 | ``GET http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/<slug>/history``
 |
-| * Diff
+| Retrieve a version
+| ``GET http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/<slug>/version/<version>/``
+|
+| Diff
 | ``GET http://yoursite.com[/<waliki_prefix>]/<WALIKI_API_ROOT>/<slug>/diff/<new_version>..<old_version>``
 
 Setup
