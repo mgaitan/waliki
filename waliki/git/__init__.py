@@ -1,6 +1,7 @@
 import os
 import re
 import json
+from io import StringIO
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.utils import six
@@ -98,7 +99,26 @@ class Git(object):
 
     def version(self, page, version):
         try:
-            return git.show('%s:%s' % (version, page.path)).stdout.decode('utf8')
+            out = str(git.show('-s', "--pretty=format:%aN%n%aD%n%B%n%h%e", version))
+            
+            buf = StringIO()
+            buf.write(out)
+            buf.seek(0)
+            author = str(buf.readline())
+            date = str(buf.readline())
+            message = str(buf.readline())
+            buf.close()
+
+            raw = str(git.show('%s:%s' % (version, page.path)))            
+            
+            data = {
+                "author": author,
+                "date": date,
+                "message": message,
+                "raw": raw,
+            }
+
+            return data
         except:
             return ''
 

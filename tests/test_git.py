@@ -32,7 +32,7 @@ class TestGit(TestCase):
         data["message"] = "testing :)"
         response = self.client.post(self.edit_url, data)
         self.assertEqual(self.page.raw, "test content")
-        self.assertEqual(Git().version(self.page, 'HEAD'), "test content")
+        self.assertEqual(Git().version(self.page, 'HEAD')["raw"], "test content")
         self.assertIn("testing :)", git.log('-s', '--format=%s', self.page.path))
 
     def test_commit_existent_page_with_previous_commits(self):
@@ -44,7 +44,7 @@ class TestGit(TestCase):
         data["raw"] = "test content"
         response = self.client.post(self.edit_url, data)
         self.assertEqual(self.page.raw, "test content")
-        self.assertEqual(Git().version(self.page, 'HEAD'), "test content")
+        self.assertEqual(Git().version(self.page, 'HEAD')["raw"], "test content")
 
     def test_commit_new_page(self):
         assert not Page.objects.filter(slug='test').exists()
@@ -60,7 +60,7 @@ class TestGit(TestCase):
         page = Page.objects.get(slug='test')
         self.assertEqual(page.title, "Test Page")
         self.assertEqual(page.raw, "hey there\n")
-        self.assertEqual(Git().version(page, 'HEAD'), "hey there\n")
+        self.assertEqual(Git().version(page, 'HEAD')["raw"], "hey there\n")
 
     def test_concurrent_edition_with_no_conflict(self):
         self.page.raw = "\n- item1\n"
@@ -170,7 +170,7 @@ class TestGit(TestCase):
         data['message'] = 'testing :)'
         response = self.client.post(self.edit_url, data)
         self.assertRedirects(response, reverse('waliki_detail', args=(self.page.slug,)))
-        self.assertEqual(Git().version(self.page, 'HEAD'), u'Ω')
+        self.assertEqual(Git().version(self.page, 'HEAD')["raw"], u'Ω')
 
     def test_commit_page_with_no_changes(self):
         self.page.raw = 'lala'

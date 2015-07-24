@@ -45,15 +45,16 @@ def history(request, slug, pag=1):
 def version(request, slug, version, raw=False):
     page = get_object_or_404(Page, slug=slug)
     content = Git().version(page, version)
-    if not content:
-        raise Http404
+    if not content["raw"]:
+        return HttpResponse(json.dumps(content), content_type='application/json')
+
     form = PageForm(instance=page, initial={'message': _('Restored version @%s') % version, 'raw': content},
                     is_hidden=True)
 
     if raw:
-        return HttpResponse(content, content_type='text/plain; charset=utf-8')
+        return HttpResponse(json.dumps(content), content_type='application/json')
 
-    content = Page.preview(page.markup, content)
+    content = Page.preview(page.markup, content["raw"])
     return render(request, 'waliki/version.html', {'page': page,
                                                    'content': content,
                                                    'slug': slug,
@@ -69,8 +70,8 @@ def diff(request, slug, old, new, raw=False):
         return HttpResponse(content, content_type='text/plain; charset=utf-8')
     space = smart_text(b'\xc2\xa0', encoding='utf-8')  # non-breaking space character
     tab = space * 4
-    old_content = Git().version(page, old).replace('\t', tab).replace(' ', space)
-    new_content = Git().version(page, new).replace('\t', tab).replace(' ', space)
+    old_content = Git().version(page, old)["raw"].replace('\t', tab).replace(' ', space)
+    new_content = Git().version(page, new)["raw"].replace('\t', tab).replace(' ', space)
     return render(request, 'waliki/diff.html', {'page': page,
                                                 'old_content': old_content,
                                                 'new_content': new_content,
