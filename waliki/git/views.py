@@ -45,8 +45,6 @@ def history(request, slug, pag=1):
 def version(request, slug, version, raw=False):
     page = get_object_or_404(Page, slug=slug)
     content = Git().version(page, version)
-    if not content["raw"]:
-        return HttpResponse(json.dumps(content), content_type='application/json')
 
     form = PageForm(instance=page, initial={'message': _('Restored version @%s') % version, 'raw': content},
                     is_hidden=True)
@@ -54,7 +52,10 @@ def version(request, slug, version, raw=False):
     if raw:
         return HttpResponse(json.dumps(content), content_type='application/json')
 
-    content = Page.preview(page.markup, content["raw"])
+    if content["raw"]:
+        content = Page.preview(page.markup, content["raw"])
+    else:
+        content = ''
     return render(request, 'waliki/version.html', {'page': page,
                                                    'content': content,
                                                    'slug': slug,
