@@ -30,7 +30,8 @@ extras_require = {                                      # noqa
         'markdown': ['markdown'],
         'attachments': ['django-sendfile'],
         'pdf': ['rst2pdf'],
-        'slides': ['hovercraft']
+        'slides': ['hovercraft'],
+        'rest': ['djangorestframework']
     }
 
 everything = set()
