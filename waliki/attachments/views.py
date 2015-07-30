@@ -17,7 +17,7 @@ def attachments(request, slug):
     page = get_object_or_404(Page, slug=slug)
     if request.method == 'POST' and 'attach' in request.FILES:
         last_attached = request.FILES['attach']
-        Attachment.objects.create(file=last_attached, page=page)
+        Attachment.objects.create(file=last_attached, page=page, filename=last_attached.name)
         messages.success(request, '"%s" was attached succesfully to /%s' % (last_attached.name, page.slug))
     return render(request, 'waliki/attachments.html', {'page': page})
 
