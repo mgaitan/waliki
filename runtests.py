@@ -26,6 +26,7 @@ try:
             "waliki.git",
             "waliki.attachments",
             "waliki.slides",
+            "waliki.rest",
         ),
         TEMPLATE_CONTEXT_PROCESSORS = (
             "django.contrib.auth.context_processors.auth",

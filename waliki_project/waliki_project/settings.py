@@ -63,12 +63,14 @@ INSTALLED_APPS = (
     'waliki.slides',
     'waliki.attachments',
     'waliki.togetherjs',
+    'waliki.rest',
     'analytical',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.twitter',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (

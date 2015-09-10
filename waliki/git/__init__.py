@@ -98,7 +98,23 @@ class Git(object):
 
     def version(self, page, version):
         try:
-            return git.show('%s:%s' % (version, page.path)).stdout.decode('utf8')
+            out = str(git.show('-s', "--pretty=format:%aN%n%aD%n%B%n%h%e", version))
+            
+            lines = out.splitlines()
+
+            author = lines[0]
+            date = lines[1]
+            message = lines[2]
+            
+            raw = str(git.show('%s:%s' % (version, page.path)))            
+            
+            data = {
+                "author": author,
+                "date": date,
+                "message": message,
+                "raw": raw,
+            }
+            return data
         except:
             return ''
 
