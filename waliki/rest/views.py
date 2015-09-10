@@ -10,6 +10,8 @@ from waliki.git.views import version, diff, history as git_history
 from rest_framework import generics, permissions, mixins, status
 from rest_framework.response import Response
 
+import json
+
 from .serializers import PageListRetrieveSerializer, PageCreateSerializer, PageEditSerializer, PageDeleteSerializer, PageRetrieveSerializer, PageMoveSerializer
 from .permissions import WalikiPermission_AddPage, WalikiPermission_ViewPage, WalikiPermission_ChangePage
 
@@ -152,7 +154,7 @@ class PageVersionView(
         response = version(request, raw=True,  *args, **kwargs)
 
         data = self.get_serializer(page, many=False).data
-        data['raw'] = response.content.decode("utf8")
+        data['raw'] = json.loads(response.content)
         data['version'] = kwargs['version']
 
         return Response(data)

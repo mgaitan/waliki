@@ -46,7 +46,7 @@ def version(request, slug, version, raw=False):
     page = get_object_or_404(Page, slug=slug)
     content = Git().version(page, version)
 
-    form = PageForm(instance=page, initial={'message': _('Restored version @%s') % version, 'raw': content},
+    form = PageForm(instance=page, initial={'message': _('Restored version @%s') % version, 'raw': content['raw']},
                     is_hidden=True)
 
     if raw:
