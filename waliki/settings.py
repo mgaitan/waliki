@@ -117,7 +117,7 @@ WALIKI_RST_TRANSFORMS = getattr(settings, 'WALIKI_RST_TRANSFORMS', ['waliki.dire
 
 WALIKI_USE_MATHJAX = getattr(settings, 'WALIKI_USE_MATHJAX', False)
 
-WALIKI_BREADCRUMBS = False
+WALIKI_BREADCRUMBS = getattr(settings, 'WALIKI_BREADCRUMBS', False)
 
 
 def WALIKI_UPLOAD_TO(instance, filename):
