@@ -1,3 +1,3 @@
 waliki[all]
-django-allauth
-django-analytical
+django-allauth==0.23.0
+django-analytical==1.0.0
