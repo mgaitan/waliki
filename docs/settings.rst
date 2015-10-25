@@ -122,7 +122,7 @@ You can override any settings in your project's :file:`settings.py` file
 
     .. code-block:: python
 
-        {'theme': 'mbo', 'autofocus': True, 'lineNumbers': True})
+        {'theme': 'mbo', 'autofocus': True, 'lineNumbers': True}
 
 .. confval:: WALIKI_RENDER_403
 
