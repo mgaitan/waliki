@@ -15,7 +15,6 @@ from waliki.settings import WALIKI_UPLOAD_TO
 class Attachment(models.Model):
     page = models.ForeignKey(Page, related_name='attachments')
     file = models.FileField(upload_to=WALIKI_UPLOAD_TO, max_length=300)
-    filename = models.CharField(max_length=300)
 
     class Meta:
         verbose_name = _("Attachment")

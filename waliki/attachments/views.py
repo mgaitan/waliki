@@ -17,7 +17,7 @@ def attachments(request, slug):
     page = get_object_or_404(Page, slug=slug)
     if request.method == 'POST' and 'attach' in request.FILES:
         last_attached = request.FILES['attach']
-        Attachment.objects.create(file=last_attached, page=page, filename=last_attached.name)
+        Attachment.objects.create(file=last_attached, page=page)
         messages.success(request, '"%s" was attached succesfully to /%s' % (last_attached.name, page.slug))
     return render(request, 'waliki/attachments.html', {'page': page})
 
@@ -27,7 +27,7 @@ def delete_attachment(request, slug, attachment_id_or_filename):
     if attachment_id_or_filename.isnumeric():
         attachment = get_object_or_404(Attachment, id=attachment_id_or_filename, page__slug=slug)
     else:
-        attachment = get_object_or_404(Attachment, filename=attachment_id_or_filename, page__slug=slug)
+        attachment = get_object_or_404(Attachment, file__endswith=attachment_id_or_filename, page__slug=slug)
     name = text_type(attachment)
     if request.is_ajax() and request.method in ('POST', 'DELETE'):
         attachment.delete()
@@ -37,7 +37,7 @@ def delete_attachment(request, slug, attachment_id_or_filename):
 
 @permission_required('view_page', raise_exception=True)
 def get_file(request, slug, attachment_id=None, filename=None):
-    attachment = get_object_or_404(Attachment, filename=filename, page__slug=slug)
+    attachment = get_object_or_404(Attachment, file__endswith=filename, page__slug=slug)
     as_attachment = ((not imghdr.what(attachment.file.path) and 'embed' not in request.GET)
                       or 'as_attachment' in request.GET)
     # ref https://github.com/johnsensible/django-sendfile
