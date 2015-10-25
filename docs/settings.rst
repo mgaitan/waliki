@@ -98,6 +98,8 @@ You can override any settings in your project's :file:`settings.py` file
 
 .. confval:: WALIKI_BREADCRUMBS
 
+    .. versionadded:: 0.6
+
     If ``True``, show a breadcrumbs with links to "parent" pages. Default is ``False``
 
 
