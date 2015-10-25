@@ -117,6 +117,9 @@ WALIKI_RST_TRANSFORMS = getattr(settings, 'WALIKI_RST_TRANSFORMS', ['waliki.dire
 
 WALIKI_USE_MATHJAX = getattr(settings, 'WALIKI_USE_MATHJAX', False)
 
+WALIKI_ALLOWED_TAGS = getattr(settings, 'WALIKI_ALLOWED_TAGS', ['a','abbr','acronym','b','blockquote','code','em','i','li','ol','strong','ul','h1','h2','h3','h4','h5','h6','hr', 'img',
+        'pre', 'table','thead','tbody','tfoot','tr','th','td','video','iframe','p'])
+
 
 def WALIKI_UPLOAD_TO(instance, filename):
     return os.path.join(WALIKI_ATTACHMENTS_DIR,

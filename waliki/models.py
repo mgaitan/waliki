@@ -19,7 +19,11 @@ from docutils.utils import SystemMessage
 from . import _markups
 from waliki.settings import (get_slug, WALIKI_DEFAULT_MARKUP,
                              WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR,
-                             WALIKI_CACHE_TIMEOUT)
+                             WALIKI_CACHE_TIMEOUT, WALIKI_ALLOWED_TAGS)
+try:
+    import bleach
+except ImportError:
+    bleach = None
 
 
 class Page(models.Model):
@@ -119,7 +123,10 @@ class Page(models.Model):
 
     @staticmethod
     def preview(markup, text):
-        return Page.get_markup_instance(markup).get_document_body(text)
+        content = Page.get_markup_instance(markup).get_document_body(text)
+        if bleach:
+            content = bleach.clean(content, tags=WALIKI_ALLOWED_TAGS, strip=True)
+        return content
 
     @property
     def markup_(self):
@@ -155,6 +162,8 @@ class Page(models.Model):
 
         if cached_content is None:
             cached_content = self._get_part('get_document_body')
+            if bleach:
+                cached_content = bleach.clean(cached_content, tags=WALIKI_ALLOWED_TAGS, strip=True)
             cache.set(cache_key, cached_content, WALIKI_CACHE_TIMEOUT)
         return cached_content
 

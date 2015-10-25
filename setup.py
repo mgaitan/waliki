@@ -26,8 +26,8 @@ install_requires = ['django', 'Markups', 'sh', 'docutils', 'rst2html5', 'pyquery
 
 
 extras_require = {                                      # noqa
-        'restructuredtext': ['micawber'],
-        'markdown': ['markdown'],
+        'restructuredtext': ['micawber', 'bleach'],
+        'markdown': ['markdown', 'bleach'],
         'attachments': ['django-sendfile'],
         'pdf': ['rst2pdf'],
         'slides': ['hovercraft']

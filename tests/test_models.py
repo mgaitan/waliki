@@ -14,17 +14,23 @@ Title
 =====
 
 some rst markup
+
+.. raw:: html
+
+   <script>alert()</script>
 """
 
-rst_html = """\n    <h2>Title</h2>\n    <p>some rst markup</p>\n"""
+rst_html = """\n    <h2>Title</h2>\n    <p>some rst markup</p>\n    alert()\n"""
 
 md = """
 # Hi
 
 I'm Markdown
+
+<script>alert()</script>
 """
 
-md_html = """<h2 id="hi">Hi</h2>\n<p>I'm Markdown</p>\n"""
+md_html = """<h2>Hi</h2>\n<p>I'm Markdown</p>\nalert()\n"""
 
 
 class TestPage(TestCase):

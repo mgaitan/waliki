@@ -13,7 +13,6 @@ class MarkdownMarkup(MarkdownMarkupBase):
     IMAGE_LINE = '![](%(url)s)'
     LINK_LINE = '[%(filename)s](<%(url)s>)'
 
-
     def __init__(self, filename=None, extensions=None, extension_configs=None):
         super(MarkdownMarkup, self).__init__(filename)
         self.md.set_output_format('html5')
@@ -68,7 +67,10 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
 
 class TextileMarkup(TextileMarkupBase):
-    codemirror_mode_name = codemirror_mode = 'textile'
+    codemirror_mode_name = 'textile'
+    codemirror_mode = 'textile'
+
+
 
 
 def get_all_markups():

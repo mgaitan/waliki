@@ -7,5 +7,5 @@ https://github.com/django-nose/django-nose/archive/master.zip
 flake8>=2.1.0
 tox>=1.7.0
 hovercraft>=1.1
-
+bleach>=1.4
 # Additional test requirements go here
