@@ -55,6 +55,15 @@ You can override any settings in your project's :file:`settings.py` file
     If you override it, ensure that ``your_get_slug(any_valid_slug) == any_valid_slug``
 
 
+.. confval:: WALIKI_SANITIZE_FUNCTION
+
+    String pointing to a callable that receive html and return and return a sanitized version of it.
+    Default ``'waliki.utils.sanitize'``, which just removes ``<script>`` tags.
+
+    You can define a more sofisticated version using `bleach <http://bleach.readthedocs.org>`_ or
+    lxml's `Cleaner <http://lxml.de/api/lxml.html.clean.Cleaner-class.html>`_
+
+
 .. confval:: WALIKI_MARKUPS_SETTINGS
 
     Dictionary of keywords arguments to extend or override the ones passed for each markup class.

@@ -26,6 +26,10 @@ def get_slug(text):
     return text.strip('/')
 
 
+def sanitize(html):
+    return re.sub(r'<script.*?</script>', '', html, flags=re.MULTILINE)
+
+
 def get_url(text, *args):
     # *args needed to receive prefix and suffix for markdowns wikilinks ext
     from waliki.settings import get_slug

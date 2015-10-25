@@ -17,7 +17,7 @@ from django.core.cache import cache
 from django.db.models.signals import post_save, pre_delete
 from docutils.utils import SystemMessage
 from . import _markups
-from waliki.settings import (get_slug, WALIKI_DEFAULT_MARKUP,
+from waliki.settings import (get_slug, sanitize, WALIKI_DEFAULT_MARKUP,
                              WALIKI_MARKUPS_SETTINGS, WALIKI_DATA_DIR,
                              WALIKI_CACHE_TIMEOUT)
 
@@ -119,7 +119,9 @@ class Page(models.Model):
 
     @staticmethod
     def preview(markup, text):
-        return Page.get_markup_instance(markup).get_document_body(text)
+        content = Page.get_markup_instance(markup).get_document_body(text)
+        content= sanitize(content)
+        return content
 
     @property
     def markup_(self):
@@ -155,6 +157,7 @@ class Page(models.Model):
 
         if cached_content is None:
             cached_content = self._get_part('get_document_body')
+            cached_content = sanitize(cached_content)
             cache.set(cache_key, cached_content, WALIKI_CACHE_TIMEOUT)
         return cached_content
 
