@@ -1,6 +1,7 @@
 import json
 import os
 import mock
+import unittest
 from django.test import TestCase
 from waliki.models import Page
 from django.core.urlresolvers import reverse
@@ -11,10 +12,15 @@ from waliki.models import Redirect
 from waliki.forms import MovePageForm, DeleteForm
 
 from .factories import PageFactory, UserFactory, ACLRuleFactory
+try:
+    from sh import hovercraft
+except ImportError:
+    hovercraft = False
+
 
 class TestSlide(TestCase):
     def setUp(self):
-        content= """
+        content = """
 Slide 1
 =======
 
@@ -32,6 +38,7 @@ Slide 2
         self.page = PageFactory(raw=content, slug='slide-example')
         self.slide_url = reverse('waliki_slides', args=(self.page.slug,))
 
+    @unittest.skipIf(not hovercraft, 'no hovercraft')
     def test_slide(self):
         response = self.client.get(self.slide_url)
         self.assertContains(response, 'Slide 1')
@@ -41,6 +48,7 @@ Slide 2
         self.assertContains(response, 'Item 2.1')
         self.assertContains(response, 'Item 2.2')
 
+    @unittest.skipIf(not hovercraft, 'no hovercraft')
     def test_slide_no_perm(self):
         with mock.patch('waliki.acl.WALIKI_ANONYMOUS_USER_PERMISSIONS', return_value=()):
             response = self.client.get(self.slide_url)

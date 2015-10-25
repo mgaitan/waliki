@@ -4,21 +4,23 @@ python:
   - "2.7"
   - "3.3"
   - "3.4"
+  - "3.5"
   - "pypy"
 
 env:
   - DJANGO=1.6.9
-  - DJANGO=1.7.7
-  - DJANGO=1.8
+  - DJANGO=1.7.10
+  - DJANGO=1.8.5
 
 # before_install:
 #  - sudo apt-get update && sudo apt-get install git
 
 install:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' || $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then easy_install configparser; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' || $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then pip install configparser; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION != '2.7' && $TRAVIS_PYTHON_VERSION != 'pypy' ]]; then pip install hovercraft; fi"
   - "pip install -r requirements-test.txt --use-mirrors"
   - "pip install -q Django==$DJANGO --use-mirrors"
-  - "pip install -e .[all] --use-mirrors"
+  - "pip install -e . --use-mirrors"
 
 # command to run tests using coverage, e.g. python setup.py test
 script: coverage run --source waliki runtests.py
