@@ -1,7 +1,4 @@
 
-Welcome to you new Waliki powered site
-======================================
-
 - **home**: https://github.com/mgaitan/waliki/
 - **demo**: http://waliki.pythonanywhere.com
 - **documentation**: http://waliki.rtfd.org

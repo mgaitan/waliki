@@ -8,6 +8,9 @@ Changelog
 
 - Slides view use the cache. Fix `#81 <https://github.com/mgaitan/waliki/issues/81>`__
 - Implemented an RSS feed listing lastest changes. It's part of `#32 <https://github.com/mgaitan/waliki/issues/32>`__
+- Added a `configurable "sanitize" <http://waliki.readthedocs.org/en/latest/settings.html#confval-WALIKI_SANITIZE_FUNCTION>`_ function.
+- Links to attachments doesn't relay on IDs by default (but it's backaward compatible).  `#96 <https://github.com/mgaitan/waliki/issues/32>`_
+- Added an optional "`breadcrumb <http://waliki.readthedocs.org/en/latest/settings.html#confval-WALIKI_SANITIZE_FUNCTION>`_ " hierarchical links for pages. `#110 <https://github.com/mgaitan/waliki/pull/110>`_
 
 
 0.5 (2015-04-12)
