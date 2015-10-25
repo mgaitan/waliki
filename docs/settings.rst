@@ -57,6 +57,8 @@ You can override any settings in your project's :file:`settings.py` file
 
 .. confval:: WALIKI_SANITIZE_FUNCTION
 
+    .. versionadded:: 0.6
+
     String pointing to a callable that receive html and return and return a sanitized version of it.
     Default ``'waliki.utils.sanitize'``, which just removes ``<script>`` tags.
 
@@ -92,6 +94,11 @@ You can override any settings in your project's :file:`settings.py` file
                 }
             }
         }
+
+
+.. confval:: WALIKI_BREADCRUMBS
+
+    If ``True``, show a breadcrumbs with links to "parent" pages. Default is ``False``
 
 
 .. confval:: WALIKI_PDF_INCLUDE_TITLE

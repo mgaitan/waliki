@@ -17,11 +17,11 @@ from . import settings
 def home(request):
     return detail(request, slug=settings.WALIKI_INDEX_SLUG)
 
-def compile_breadcrumbs(slug):
-    breadcrumbs = [(reverse('waliki_home'), 'Home'),]
-    if slug == 'home':
-        return breadcrumbs
 
+def compile_breadcrumbs(slug):
+    breadcrumbs = [(reverse('waliki_home'), _('Home')),]
+    if slug == settings.WALIKI_INDEX_SLUG:
+        return breadcrumbs
     slug_parts = slug.split('/')
     url = ''
     # for every string from start until the next slash (or end of string)
@@ -37,6 +37,7 @@ def compile_breadcrumbs(slug):
            title = part
         breadcrumbs.append(('/'+url, title))
     return breadcrumbs
+
 
 @permission_required('view_page')
 def detail(request, slug, raw=False):

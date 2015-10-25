@@ -11,9 +11,11 @@
 
 
 {% block header %}
-    {% if breadcrumbs %}
-        {% include 'waliki/breadcrumbs.html' %}
-    {% endif %}
+    {% block breadcrums %}
+      {% if breadcrumbs %}
+          {% include 'waliki/breadcrumbs.html' %}
+      {% endif %}
+    {% endblock breadcrums %}
 
     {% entry_point 'detail_pre_header' %}
 
