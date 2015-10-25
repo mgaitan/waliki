@@ -10,7 +10,7 @@ from sh import git, ErrorReturnCode, Command
 from collections import namedtuple
 
 
-git = git.bake("--no-pager")
+git = git.bake("--no-pager", _tty_out=False)
 Commit = namedtuple('Commit', ['hash', 'author_name', 'author_email', 'subject', 'date', 'date_relative', 'paths', 'diff'])
 
 
