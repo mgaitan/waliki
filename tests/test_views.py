@@ -195,7 +195,7 @@ class TestMove(TestCase):
         self.assertEqual(page.slug, 'another-page')
         self.assertEqual(page.path, 'another-page.rst')
         self.assertIn("hello test!", open(page.abspath).read())
-        page_moved_mock.assert_called_once()
+        self.assertEqual(page_moved_mock.send.call_count, 1)
 
     def test_success_post_ajax(self):
         with mock.patch('waliki.views.page_moved') as page_moved_mock:
@@ -207,7 +207,7 @@ class TestMove(TestCase):
         data = json.loads(response.content.decode('utf8'))
         self.assertEqual(data['redirect'], page.get_absolute_url())
         self.assertIn("hello test!", open(page.abspath).read())
-        page_moved_mock.assert_called_once()
+        self.assertEqual(page_moved_mock.send.call_count, 1)
 
     def test_can_move_to_nested_page(self):
         response = self.client.post(self.move_url, {'slug': 'another/nested/page'})
