@@ -11,6 +11,10 @@
 
 
 {% block header %}
+    {% if breadcrumbs %}
+        {% include 'waliki/breadcrumbs.html' %}
+    {% endif %}
+
     {% entry_point 'detail_pre_header' %}
 
     <div class="pull-right">
