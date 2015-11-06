@@ -1,0 +1,48 @@
+{% extends 'waliki/base.html' %}
+{% load i18n %}
+{% load tz %}
+
+{% block header %}
+    {% block title %}<h1>{% trans "Search" %}</h1>{% endblock title %}
+{% endblock header %}
+
+{% block content %}
+    <form method="get" class="form form-inline">
+        <div class="form-group">
+            <label for="{{ form.q.id_for_label }}">Search:</label>
+            <input class="form-control" type="text" name="{{ form.q.name }}" value="{{ query }}" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success" type="submit">Submit</button>
+        </div>
+
+        {% if query %}
+            <h2>{% trans "Results" %}</h2>
+
+            <table class="table table-striped">
+                {% for result in page.object_list %}
+                <tr>
+                    <td><a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a> ({{ result.object.slug }})</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>{% trans "There are no results" %}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            {% if page.has_previous or page.has_next %}
+                <nav>
+                  <ul class="pager">
+                    <li class="previous {% if not page.has_prev %}disabled{% endif %}"><a href="{% if page.has_prev %}{% url 'waliki_search' %}?q={query}&page={{ page.previous_page_number }}{% else %}#{% endif %}">{% trans "Previous" %}</a></li>
+                    <li class="next {% if not page.has_next %}disabled{% endif %}"><a href="{% if page.has_next %}{% url 'waliki_search' next %}?q={query}&page={{ page.next_page_number }}{% else %}#{% endif %}">{% trans "Next" %}</a></li>
+                  </ul>
+                </nav>
+            {% endif %}
+        {% endif %}
+    </form>
+
+</div>
+</div>
+
+{% endblock %}

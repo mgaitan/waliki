@@ -30,6 +30,7 @@ extras_require = {                                      # noqa
         'markdown': ['markdown'],
         'attachments': ['django-sendfile'],
         'pdf': ['rst2pdf'],
+        'search': ['django-haystack', 'Whoosh'],
         'slides': ['hovercraft']
     }
 

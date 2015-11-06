@@ -72,6 +72,7 @@ Add ``waliki`` and the optionals plugins to your INSTALLED_APPS::
         'waliki.git',           # optional but recommended
         'waliki.attachments',   # optional but recommended
         'waliki.pdf',           # optional
+        'waliki.search',        # optional, additional configuration required
         'waliki.slides',        # optional
         'waliki.togetherjs',    # optional
         ...
@@ -84,6 +85,17 @@ Include ``waliki.urls`` in your project's ``urls.py``. For example::
         url(r'^wiki/', include('waliki.urls')),
         ...
     )
+
+Configure search in your projects ``settings.py``.  For example::
+
+    HAYSTACK_CONNECTIONS = {
+      'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'search_index'),
+      },
+    }
+
+    HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 Sync your database::
 
