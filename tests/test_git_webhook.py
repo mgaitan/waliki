@@ -8,6 +8,7 @@ import json
 import os
 import shutil
 from sh import git
+git = git.bake("--no-pager", _tty_out=False)
 
 
 class TestGitWebhook(TestCase):

@@ -12,6 +12,8 @@ except ImportError:
 
 try:
     from sh import pandoc, echo
+    pandoc = pandoc.bake(_tty_out=False)
+    echo = echo.bake(_tty_out=False)
 except ImportError:
     pandoc = None
 

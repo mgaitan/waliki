@@ -3,6 +3,7 @@ import shutil
 import tempfile
 try:
     from sh import hovercraft
+    hovercraft = hovercraft.bake(_tty_out=False)
 except ImportError:
     hovercraft = None
 
