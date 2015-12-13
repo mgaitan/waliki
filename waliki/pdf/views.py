@@ -7,6 +7,8 @@ from waliki.settings import WALIKI_PDF_INCLUDE_TITLE
 from waliki.settings import WALIKI_PDF_RST2PDF_BIN
 from waliki.acl import permission_required
 
+rst2pdf = rst2pdf.bake(_tty_out=False)
+
 
 @permission_required('view_page')
 def pdf(request, slug):

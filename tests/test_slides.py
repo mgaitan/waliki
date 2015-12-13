@@ -14,6 +14,7 @@ from waliki.forms import MovePageForm, DeleteForm
 from .factories import PageFactory, UserFactory, ACLRuleFactory
 try:
     from sh import hovercraft
+    hovercraft = hovercraft.bake(_tty_out=False)
 except ImportError:
     hovercraft = False
 
