@@ -116,14 +116,24 @@ Sync your database::
    in your project's settings.
 
 
+
+Contribute
+----------
+
+This project is looking for contributors. If you have a feature you'd like to see implemented or a bug you'd liked fixed, the best and fastest way to make that happen is to implement it and submit it back upstream for consideration. All contributions will be given thorough consideration. 
+
+Everyone interacting in the Waliki project's codebases, issue trackers and mailing lists is expected to follow the `PyPA Code of Conduct`_.
+
+
 Why *Waliki* ?
 ----------------
 
 **Waliki** is an `Aymara <http://en.wikipedia.org/wiki/Aymara_language>`_ word that means *all right*, *fine*.
-
 It sounds a bit like *wiki*, has a meaningful sense and also plays with the idea of using a non-mainstream language [1]_ .
 
 And last but most important, it's a humble tribute to the president `Evo Morales <http://en.wikipedia.org/wiki/Evo_Morales>`_ and the Bolivian people.
 
+
 .. [1] *wiki* itself is a hawaiian word
 .. _moin2git: https://github.com/mgaitan/moin2git
+.. _`PyPA Code of Conduct`: https://www.pypa.io/en/latest/code-of-conduct/
