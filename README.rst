@@ -40,6 +40,7 @@ At a glance, Waliki has these features:
 * A very simple *per slug* `ACL system <http://waliki.readthedocs.org/en/latest/acl.html>`_
 * A nice `attachments manager <http://waliki.readthedocs.org/en/latest/attachments.html>`_ (that respects the permissions over the page)
 * Realtime `collaborative edition <http://waliki.readthedocs.org/en/latest/togetherjs.html>`_ via togetherJS
+* REST `API <http://waliki.readthedocs.org/en/latest/rest.html>`_
 * Wiki content embeddable in any django template (as a "`dummy CMS <http://waliki.readthedocs.org/en/latest/boxes.html>`_")
 * Few helpers to migrate content (particularly from MoinMoin, using moin2git_)
 * It `works <https://travis-ci.org/mgaitan/waliki>`_ with Python 2.7, 3.3, 3.4 or PyPy in Django 1.6 or newer
@@ -75,6 +76,7 @@ Add ``waliki`` and the optionals plugins to your INSTALLED_APPS::
         'waliki.search',        # optional, additional configuration required
         'waliki.slides',        # optional
         'waliki.togetherjs',    # optional
+        'waliki.rest',          # optional
         ...
     )
 
