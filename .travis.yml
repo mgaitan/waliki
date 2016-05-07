@@ -7,9 +7,9 @@ python:
   - "pypy"
 
 env:
-  - DJANGO=1.6.9
   - DJANGO=1.7.10
   - DJANGO=1.8.5
+  - DJANGO=1.9.6
 
 # before_install:
 #  - sudo apt-get update && sudo apt-get install git

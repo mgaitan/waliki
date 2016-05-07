@@ -42,7 +42,7 @@ At a glance, Waliki has these features:
 * Realtime `collaborative edition <http://waliki.readthedocs.org/en/latest/togetherjs.html>`_ via togetherJS
 * Wiki content embeddable in any django template (as a "`dummy CMS <http://waliki.readthedocs.org/en/latest/boxes.html>`_")
 * Few helpers to migrate content (particularly from MoinMoin, using moin2git_)
-* It `works <https://travis-ci.org/mgaitan/waliki>`_ with Python 2.7, 3.3, 3.4 or PyPy in Django 1.6 or newer
+* It `works <https://travis-ci.org/mgaitan/waliki>`_ with Python 2.7, 3.3, 3.4 or PyPy in Django 1.7 or newer
 
 It's easy to create a site powered by Waliki using the preconfigured project_ which is the same code that motorize the demo_.
 
