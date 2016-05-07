@@ -16,7 +16,7 @@ from waliki.models import Page
 from waliki.forms import PageForm
 from waliki.acl import permission_required
 from waliki import settings
-from . import Git
+from .models import Git
 from django.contrib.syndication.views import Feed
 
 
