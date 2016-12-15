@@ -1,3 +1,4 @@
+from django import VERSION
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from .models import Page
@@ -62,7 +63,11 @@ class NewPageForm(forms.ModelForm):
 
 
 class PageForm(forms.ModelForm):
-    raw = forms.CharField(label="", widget=forms.Textarea)
+    raw = forms.CharField(label="", widget=forms.Textarea,
+                          **({'strip': False}
+                                 if VERSION[0] > 1 or
+                                    VERSION[0] == 1 and VERSION[1] >= 9
+                              else {}))
     # Translators: log message
     message = forms.CharField(label=_('Log message'), max_length=200, required=False)
     extra_data = forms.CharField(widget=forms.HiddenInput, required=False)
