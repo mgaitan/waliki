@@ -15,9 +15,14 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 
     def __init__(self, filename=None, extensions=None, extension_configs=None):
+        self.extensions_ = extensions
+        self.extension_configs_ = extension_configs
         super(MarkdownMarkup, self).__init__(filename)
+
+    def _apply_extensions(self):
+        super(MarkdownMarkup, self)._apply_extensions()
         self.md.set_output_format('html5')
-        self.md.registerExtensions(extensions, extension_configs)
+        self.md.registerExtensions(self.extensions_, self.extension_configs_)
 
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
