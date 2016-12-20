@@ -3,6 +3,14 @@
 Changelog
 ---------
 
+0.6 (2016-12-19)
+++++++++++++++++
+
+- Fix compatibility with Django 1.9.x and Markup 2.x (thanks to `Oleg Girko`_ for the contribution)
+
+.. _Oleg Girko: https://github.com/OlegGirko
+
+
 0.6 (2015-10-25)
 +++++++++++++++++
 
