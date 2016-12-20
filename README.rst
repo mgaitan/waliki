@@ -42,7 +42,7 @@ At a glance, Waliki has these features:
 * Realtime `collaborative edition <http://waliki.readthedocs.org/en/latest/togetherjs.html>`_ via togetherJS
 * Wiki content embeddable in any django template (as a "`dummy CMS <http://waliki.readthedocs.org/en/latest/boxes.html>`_")
 * Few helpers to migrate content (particularly from MoinMoin, using moin2git_)
-* It `works <https://travis-ci.org/mgaitan/waliki>`_ with Python 2.7, 3.3, 3.4 or PyPy in Django 1.7 or newer
+* It `works <https://travis-ci.org/mgaitan/waliki>`_ with Python 2.7, 3.4 or PyPy in Django 1.8, 1.9 (and 1.10, most probably)
 
 It's easy to create a site powered by Waliki using the preconfigured project_ which is the same code that motorize the demo_.
 
@@ -120,7 +120,7 @@ Sync your database::
 Contribute
 ----------
 
-This project is looking for contributors. If you have a feature you'd like to see implemented or a bug you'd liked fixed, the best and fastest way to make that happen is to implement it and submit it back upstream for consideration. All contributions will be given thorough consideration. 
+This project is looking for contributors. If you have a feature you'd like to see implemented or a bug you'd liked fixed, the best and fastest way to make that happen is to implement it and submit it back upstream for consideration. All contributions will be given thorough consideration.
 
 Everyone interacting in the Waliki project's codebases, issue trackers and mailing lists is expected to follow the `PyPA Code of Conduct`_.
 
