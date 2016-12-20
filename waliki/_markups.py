@@ -15,9 +15,14 @@ class MarkdownMarkup(MarkdownMarkupBase):
 
 
     def __init__(self, filename=None, extensions=None, extension_configs=None):
+        self.extensions_ = extensions
+        self.extension_configs_ = extension_configs
         super(MarkdownMarkup, self).__init__(filename)
+
+    def _apply_extensions(self):
+        super(MarkdownMarkup, self)._apply_extensions()
         self.md.set_output_format('html5')
-        self.md.registerExtensions(extensions, extension_configs)
+        self.md.registerExtensions(self.extensions_, self.extension_configs_)
 
 
 class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
@@ -37,15 +42,17 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
 
         self.kwargs = kwargs
 
-    def publish_parts(self, text):
-        if 'rest_parts' in self._cache:
-            return self._cache['rest_parts']
-        parts = self._publish_parts(text, source_path=self.filename,
-                                    settings_overrides=self.overrides,
-                                    reader=self.reader, **self.kwargs)
-        if self._enable_cache:
-            self._cache['rest_parts'] = parts
-        return parts
+        def override_publish_parts(publish_parts):
+            def publish_parts_new(*args, **kwargs):
+                kwargs['reader'] = self.reader
+                kwargs.update(self.kwargs)
+                parts = publish_parts(*args, **kwargs)
+                parts['html_body'] = parts['body']
+                parts['stylesheet'] = ''
+                return parts
+            return publish_parts_new
+
+        self._publish_parts = override_publish_parts(self._publish_parts)
 
     def get_document_body(self, text):
         html = super(ReStructuredTextMarkup, self).get_document_body(text)

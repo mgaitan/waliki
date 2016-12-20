@@ -48,10 +48,10 @@ def _get_markup_settings(user_settings):
                     'writer_name': 'html5',
                     },
                 'Markdown': {
-                    'extensions': ['wikilinks', 'headerid'],
+                    'extensions': ['wikilinks', 'toc'],
                     'extension_configs': {
                         'wikilinks': {'build_url': get_url},
-                        'headerid': {'level': 2},
+                        'toc': {'baselevel': 2},
                     }
                 }
             }
