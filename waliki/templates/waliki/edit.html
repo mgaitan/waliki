@@ -112,12 +112,13 @@ $('#previewlink').on('click', function() {
   var $inputs = $form.find('input, textarea, button');
   var $pre = $('#preview');
   var bodycontent = editor.getValue();
+  var markup = $('input[name="markup"]').val();
   $inputs.prop('disabled', true);
   $pre.removeClass('alert').removeClass('alert-error').html('{% trans "Loading..." %}');
   $.ajax({
     url: "{% url 'waliki_preview' %}",
     type: "POST",
-    data: { text: bodycontent, markup: '{{ page.markup }}' },
+    data: { text: bodycontent, markup: markup },
     success: function(msg) {
       $pre.html(msg.html);
       {% if WALIKI_USE_MATHJAX %}
