@@ -86,21 +86,10 @@ Include ``waliki.urls`` in your project's ``urls.py``. For example::
         ...
     )
 
-Configure search in your projects ``settings.py``.  For example::
-
-    HAYSTACK_CONNECTIONS = {
-      'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'search_index'),
-      },
-    }
-
-    HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 Sync your database::
 
-    $ python manage.py migrate   # syncdb in django < 1.7
-
+    $ python manage.py migrate
 
 
 .. tip::
