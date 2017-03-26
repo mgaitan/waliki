@@ -22,24 +22,23 @@ SECRET_KEY = 'jk-=be97@zpbdrl6a89%e*b7x5#ir&8kb#o1@$u5u$10fp#w^l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = []
 
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    "django.core.context_processors.request",
-    "waliki.context_processors.settings"
-)
-
-
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [],
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'debug': DEBUG,
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+            "waliki.context_processors.settings"
+        ],
+    },
+}]
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -126,6 +125,7 @@ SENDFILE_BACKEND = 'sendfile.backends.simple'
 SENDFILE_ROOT = 'protected_downloads/protected'
 SENDFILE_URL = '/protected'
 WALIKI_LOGGED_USER_PERMISSIONS = ('view_page', 'add_page', 'change_page', 'delete_page')
+WALIKI_CACHE_TIMEOUT = 0
 
 GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-12345-6'
 
