@@ -3,10 +3,12 @@
 Changelog
 ---------
 
-0.8 (2017-03-26)
+0.8.1 (2017-03-26)
 ++++++++++++++++
 
-- Fix compatibiltiy with Django 1.10 (thangs to `Martí Bosch`_)
+- Fixed compatibiltiy with Django 1.10 (thangs to `Martí Bosch`_)
+- Fixed `#125 <https://github.com/mgaitan/waliki/issues/125>`__
+- Upgraded demo's setting to recent format
 - Added missing migration
 
 .. _Martí Bosch: https://github.com/martibosch
