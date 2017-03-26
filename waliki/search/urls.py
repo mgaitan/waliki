@@ -2,15 +2,24 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from haystack.forms import SearchForm
+import django
+try:
+    from django.conf.urls import patterns, url  # django 1.8, 1.9
+except ImportError:
+    from django.conf.urls import url
 
+from haystack.forms import SearchForm
 from waliki.search.views import WalikiSearchView
 
-try:
-    from django.conf.urls import patterns, url
-except ImportError:
-    from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('haystack.views',
-    url(r'^search$', WalikiSearchView(form_class=SearchForm), name='haystack_search'),
-)
+_pattern_list = [
+    url(r'^search$', WalikiSearchView(
+        form_class=SearchForm), name='haystack_search'),
+]
+
+if django.VERSION[:2] >= (1, 10):
+    urlpatterns = _pattern_list
+else:
+    urlpatterns = patterns('haystack.views',
+                           *_pattern_list
+                           )
