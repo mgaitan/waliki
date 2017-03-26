@@ -82,8 +82,6 @@ $("#move-form").submit(function(e) {
               $('#move-modal .modal-body').empty().append(data.data);
               $('#move-modal').modal('show');
 
-
-
           }
         });
 });
