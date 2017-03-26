@@ -14,20 +14,23 @@ else:
 class Command(BaseCommand):
     help = """Syncronize pages (and attachments) between files and the database"""
 
-    option_list = (
-        make_option('--extensions',
-                    dest='extensions',
-                    default=".rst, .md",
-                    help="Look for files with this extensions, separated by comma. Default: '.rst, .md'"),
-        make_option('--ignored_dirs',
-                    dest='ignored_dirs',
-                    default=".git",
-                    help="List of directories to ignore, separated by comman. Default: '.git'"),
-    ) + BaseCommand.option_list
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--extensions',
+            default=['.rst', '.md'],
+            nargs='+',
+            help="Look for files with this extensions"
+        )
+        parser.add_argument(
+            '--ignored_dirs',
+            default=['.git'],
+            nargs='+',
+            help="List of directories to ignore"
+        )
 
     def handle(self, *args, **options):
-        extensions = [ext.strip() for ext in options['extensions'].split(',')]
-        ignored_dirs = [d.strip() for d in options['ignored_dirs'].split(',')]
+        extensions = options['extensions']
+        ignored_dirs = options['ignored_dirs']
         for root, dirs, files in os.walk(WALIKI_DATA_DIR):
             [dirs.remove(d) for d in ignored_dirs if d in dirs]
             for filename in files:

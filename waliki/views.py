@@ -108,7 +108,7 @@ def move(request, slug):
 
     if request.is_ajax():
         data = render_to_string('waliki/generic_form.html', {'page': page, 'form': form},
-                                context_instance=RequestContext(request))
+                                request=request)
         return HttpResponse(json.dumps({'data': data}), content_type="application/json")
     return render(request, 'waliki/generic_form.html', {'page': page, 'form': form})
 
@@ -222,7 +222,7 @@ def delete(request, slug):
 
     if request.is_ajax():
         data = render_to_string('waliki/delete.html', {'page': page, 'form': form},
-                                context_instance=RequestContext(request))
+                                request=request)
         return HttpResponse(json.dumps({'data': data}), content_type="application/json")
     return render(request, 'waliki/delete.html', {'page': page, 'form': form})
 
@@ -244,7 +244,7 @@ def new(request):
 
     if request.is_ajax():
         data = render_to_string('waliki/generic_form.html', {'form': form},
-                                context_instance=RequestContext(request))
+                                request=request)
         return HttpResponse(json.dumps({'data': data}), content_type="application/json")
     return render(request, 'waliki/generic_form.html', {'form': form})
 

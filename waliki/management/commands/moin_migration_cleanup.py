@@ -118,37 +118,35 @@ def code(rst_content):
 
 class Command(BaseCommand):
     help = 'Cleanup filters for a moin2git import'
-
-    option_list = (
-        make_option('--limit-to',
-                    dest='slug',
-                    default='',
-                    help="optional namespace"),
-        make_option('--filters',
-                    dest='filters',
-                    default='all',
-                    help="comma separated list of filter functions to apply"),
-        make_option('--message',
-                    dest='message',
-                    default=_("RestructuredText clean up"),
-                    help="log message"),
-    ) + BaseCommand.option_list
-
-    def handle(self, *args, **options):
-        valid_filters = ['meta', 'links',
+    valid_filters = ['meta', 'links',
                          'attachments', 'directives',
                          'emojis', 'title', 'email', 'code', 'title_level']
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--limit-to',
+            dest='slug',
+            default='',
+            help="optional namespace"
+        )
+        parser.add_argument(
+            '--filters',
+            dest='filters',
+            nargs='+',
+            default=Command.valid_filters,
+            choices=Command.valid_filters,
+            help="comma separated list of filter functions to apply"
+        )
+        parser.add_argument(
+            '--message',
+            dest='message',
+            default=_("RestructuredText clean up"),
+            help="log message"
+        )
+
+    def handle(self, *args, **options):
         slug = options['slug']
         filters = options['filters']
-
-        if filters == 'all':
-            filters = valid_filters
-
-        else:
-            filters = [f.strip() for f in filters.split(',')]
-            if not set(filters).issubset(valid_filters):
-                valid = get_text_list(valid_filters, 'and')
-                raise CommandError("At least one filter is unknown. Valid filters are:\n    %s" % valid)
 
         if slug:
             pages = Page.objects.filter(slug__startswith=slug)
