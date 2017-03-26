@@ -3,7 +3,15 @@
 Changelog
 ---------
 
-0.6 (2016-12-19)
+0.8 (2017-03-26)
+++++++++++++++++
+
+- Fix compatibiltiy with Django 1.10 (thangs to `Martí Bosch`_)
+- Added missing migration
+
+.. _Martí Bosch: https://github.com/martibosch
+
+0.7 (2016-12-19)
 ++++++++++++++++
 
 - Fix compatibility with Django 1.9.x and Markup 2.x (thanks to `Oleg Girko`_ for the contribution)
