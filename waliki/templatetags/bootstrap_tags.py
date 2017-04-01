@@ -5,9 +5,7 @@
 
 from django import template
 from django.conf import settings
-from django.template import Context
 from django.template.loader import get_template
-
 
 register = template.Library()
 
@@ -35,10 +33,7 @@ def render_form(form):
     template = get_template("bootstrap/form.html")
     form = _preprocess_fields(form)
 
-    c = Context({
-        "form": form,
-    })
-    return template.render(c)
+    return template.render({"form": form})
 
 
 @register.filter
@@ -50,18 +45,16 @@ def as_bootstrap_inline(form):
         name = form.fields[field].widget.__class__.__name__.lower()
         if not name.startswith("radio") and not name.startswith("checkbox"):
             form.fields[field].widget.attrs["placeholder"] = form.fields[field].label
-
     css_classes = {
         "label": "sr-only",
         "single_container": "",
         "wrap": "",
     }
-
-    c = Context({
+    context = {
         "form": form,
         "css_classes": css_classes,
-    })
-    return template.render(c)
+    }
+    return template.render(contex)
 
 
 @register.filter
@@ -93,12 +86,11 @@ def as_bootstrap_horizontal(form, label_classes=""):
             )
             css_classes["single_container"] += offset_class + " " + wrap_class + " "
             css_classes["wrap"] += wrap_class + " "
-
-    c = Context({
+    context = {
         "form": form,
         "css_classes": css_classes,
-    })
-    return template.render(c)
+    }
+    return template.render(context)
 
 
 @register.filter
