@@ -3,8 +3,13 @@
 Changelog
 ---------
 
+0.9 (under dev)
+++++++++++++++++++
+
+- Added compatibility with Django 1.11
+
 0.8.1 (2017-03-26)
-++++++++++++++++
+++++++++++++++++++
 
 - Fixed compatibiltiy with Django 1.10 (thangs to `Martí Bosch`_)
 - Fixed `#125 <https://github.com/mgaitan/waliki/issues/125>`__
