@@ -35,7 +35,7 @@ def check_perms(perms, user, slug, raise_exception=False):
         return True
 
     # First check if the user has the permission (even anon users)
-    if user.has_perms(perms):
+    if user.has_perms(['waliki.%s' % p for p in perms]):
         return True
     # In case the 403 handler should be called raise the exception
     if raise_exception:
