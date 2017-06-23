@@ -72,7 +72,7 @@ def detail(request, slug, raw=False):
 def move(request, slug):
     page = get_object_or_404(Page, slug=slug)
     data = request.POST if request.method == 'POST' else None
-    form = MovePageForm(data, instance=page)
+    form = MovePageForm(data, instance=page, initial={'slug': page.slug})
     if request.method == 'POST' and form.is_valid():
         new_slug = form.cleaned_data['slug']
 
