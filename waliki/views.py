@@ -18,27 +18,6 @@ def home(request):
     return detail(request, slug=settings.WALIKI_INDEX_SLUG)
 
 
-def compile_breadcrumbs(slug):
-    breadcrumbs = [(reverse('waliki_home'), _('Home')),]
-    if slug == settings.WALIKI_INDEX_SLUG:
-        return breadcrumbs
-    slug_parts = slug.split('/')
-    url = ''
-    # for every string from start until the next slash (or end of string)
-    for part in slug_parts:
-        # if page exists, find url and title
-        # otherwise, grab url and title from slug
-        url = url + part
-        pages = Page.objects.filter(slug=url)
-        url = url + '/'
-        if pages:
-            title = pages[0].title
-        else:
-           title = part
-        breadcrumbs.append(('/'+url, title))
-    return breadcrumbs
-
-
 @permission_required('view_page')
 def detail(request, slug, raw=False):
 
@@ -63,8 +42,6 @@ def detail(request, slug, raw=False):
         raise Http404
 
     context = {'page': page, 'slug': slug}
-    if settings.WALIKI_BREADCRUMBS == True:
-        context['breadcrumbs'] = compile_breadcrumbs(slug)
     return render(request, 'waliki/detail.html', context)
 
 

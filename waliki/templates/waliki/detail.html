@@ -12,6 +12,7 @@
 
 {% block header %}
     {% block breadcrums %}
+      {% waliki_breadcrumbs page.slug|default:slug as breadcrumbs %}
       {% if breadcrumbs %}
           {% include 'waliki/breadcrumbs.html' %}
       {% endif %}
