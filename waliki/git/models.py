@@ -4,6 +4,7 @@ import re
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from django.utils.dateparse import parse_datetime
 from django.utils import six
 _
 from sh import git, ErrorReturnCode, Command
@@ -79,8 +80,8 @@ class Git(object):
         return there_were_changes
 
     def history(self, page):
-        GIT_COMMIT_FIELDS = ['commit', 'author', 'date', 'date_relative', 'message']
-        GIT_LOG_FORMAT = '%x1f'.join(['%h', '%an', '%ad', '%ar', '%s']) + '%x1e'
+        GIT_COMMIT_FIELDS = ['commit', 'author', 'date', 'date_relative', 'date_parsed', 'message']
+        GIT_LOG_FORMAT = '%x1f'.join(['%h', '%an', '%ad', '%ar', '%ai', '%s']) + '%x1e'
         output = git.log('--format=%s' % GIT_LOG_FORMAT, '--follow', '-z', '--shortstat', page.abspath)
         output = output.split('\n')
         history = []
@@ -97,7 +98,8 @@ class Git(object):
         max_changes = float(max([(v['insertion'] + v['deletion']) for v in history])) or 1.0
         for v in history:
             v.update({'insertion_relative': str((v['insertion'] / max_changes) * 100),
-                      'deletion_relative': str((v['deletion'] / max_changes) * 100)})
+                      'deletion_relative': str((v['deletion'] / max_changes) * 100),
+                      'date_parsed': parse_datetime('%s %s%s' % tuple(v['date_parsed'].split()))})
         return history
 
     def version(self, page, version):
