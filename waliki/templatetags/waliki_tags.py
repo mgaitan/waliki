@@ -1,8 +1,10 @@
 from django import template
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from waliki.acl import check_perms as check_perms_helper
 from waliki.models import Page
 from waliki.forms import PageForm
+from waliki import settings
 
 
 register = template.Library()
@@ -161,3 +163,27 @@ def waliki_box(context, slug, show_edit=True, *args, **kwargs):
         "form": form,
         "form_action": form_action,
     }
+
+
+@register.assignment_tag
+def waliki_breadcrumbs(slug):
+    if not settings.WALIKI_BREADCRUMBS:
+        return None
+    breadcrumbs = [(reverse('waliki_home'), _('Home')),]
+    if slug == settings.WALIKI_INDEX_SLUG:
+        return breadcrumbs
+    slug_parts = slug.split('/')
+    url = ''
+    # for every string from start until the next slash (or end of string)
+    for part in slug_parts:
+        # if page exists, find url and title
+        # otherwise, grab url and title from slug
+        url = url + part
+        pages = Page.objects.filter(slug=url)
+        url = url + '/'
+        if pages:
+            title = pages[0].title
+        else:
+           title = part
+        breadcrumbs.append(('/'+url, title))
+    return breadcrumbs
