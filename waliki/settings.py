@@ -3,7 +3,7 @@ from importlib import import_module
 import collections
 from django.conf import settings
 from .utils import get_url
-from waliki.rst2html5 import HTML5Writer
+from rst2html5_ import HTML5Writer
 try:
     from django.utils.module_loading import import_string
 except ImportError:

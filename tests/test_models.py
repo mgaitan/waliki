@@ -20,7 +20,7 @@ some rst markup
    <script>alert()</script>
 """
 
-rst_html = """\n    <h2>Title</h2>\n    <p>some rst markup</p>\n    \n"""
+rst_html = """\n    <h2>Title</h2>\n    <p>some rst markup</p>\n"""
 
 md = """
 # Hi
