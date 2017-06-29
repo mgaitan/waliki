@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from waliki.acl import check_perms as check_perms_helper
 from waliki.models import Page
 from waliki.forms import PageForm
+from waliki.utils import get_url
 from waliki import settings
 
 
@@ -185,5 +186,5 @@ def waliki_breadcrumbs(slug):
             title = pages[0].title
         else:
            title = part
-        breadcrumbs.append(('/'+url, title))
+        breadcrumbs.append((get_url(url), title))
     return breadcrumbs
