@@ -3,7 +3,6 @@ import sys
 from markups import (MarkdownMarkup as MarkdownMarkupBase,
                      TextileMarkup as TextileMarkupBase,
                      ReStructuredTextMarkup as ReStructuredTextMarkupBase)
-from pyquery import PyQuery
 from .utils import get_url
 from waliki.settings import WALIKI_AVAILABLE_MARKUPS
 
@@ -53,25 +52,6 @@ class ReStructuredTextMarkup(ReStructuredTextMarkupBase):
             return publish_parts_new
 
         self._publish_parts = override_publish_parts(self._publish_parts)
-
-    def get_document_body(self, text):
-        html = super(ReStructuredTextMarkup, self).get_document_body(text)
-        if not html:
-            return html
-
-        # Convert unknown links to internal wiki links.
-        # Examples:
-        #   Something_ will link to '/something'
-        #  `something great`_  to '/something-great'
-        #  `another thing <thing>`_  '/thing'
-        refs = [a.text[:-1] for a in PyQuery(html)('a.problematic') if not re.match(r'\|(.*)\|', a.text)]
-        # substitions =  [a.text[:-1] for a in PyQuery(html)('a.problematic') if re.match(r'\|(.*)\|', a.text)]
-        if refs:
-            refs = '\n'.join('.. _%s: %s' % (ref, get_url(ref))
-                             for ref in refs if get_url(ref))
-            html = super(ReStructuredTextMarkup, self).get_document_body(
-                        text + '\n\n' + refs)
-        return html
 
 
 class TextileMarkup(TextileMarkupBase):

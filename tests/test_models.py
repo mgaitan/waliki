@@ -20,7 +20,7 @@ some rst markup
    <script>alert()</script>
 """
 
-rst_html = """\n    <h2>Title</h2>\n    <p>some rst markup</p>\n    \n"""
+rst_html = """\n    <h2>Title</h2>\n    <p>some rst markup</p>\n"""
 
 md = """
 # Hi
@@ -81,12 +81,30 @@ class TestRestructuredText(TestCase):
         self.assertEqual(Page.preview('reStructuredText', rst), rst_html)
 
     def test_link_explicit(self):
-        with mock.patch('waliki._markups.get_url') as get_url:
-            get_url.return_value = 'xxx'
-            html = Page.preview('reStructuredText', 'a link_')
-        self.assertEqual(html, '\n    <p>a <a href="xxx">link</a></p>\n')
+        html = Page.preview('reStructuredText', 'a link_')
+        self.assertEqual(html, '\n    <p>a <a href="/link">link</a></p>\n')
 
-    def test_missing_text(self):
+    def test_link_indirect(self):
+        html = Page.preview('reStructuredText', 'a text_\n\n.. _text: link_')
+        self.assertEqual(html, '\n    <p>a <a href="/link">text</a></p>\n')
+
+    def test_link_indirect_anonymous(self):
+        html = Page.preview('reStructuredText', 'a `long text`__\n\n__ link_')
+        self.assertEqual(html, '\n    <p>a <a href="/link">long text</a></p>\n')
+
+    def test_link_indirect_embedded(self):
+        html = Page.preview('reStructuredText', ('a `long text <meep_>`_\n\n'
+                                                 '.. _meep: link_'))
+        self.assertEqual(html, '\n    <p>a <a href="/link">long text</a></p>\n')
+
+    def test_link_crossref(self):
+        html = Page.preview('reStructuredText', ('a crossref_\n\n'
+                                                 '.. _crossref:\n\n'
+                                                 'the crossref target'))
+        self.assertEqual(html, ('\n    <p>a <a href="#crossref">crossref</a></p>'
+                                '\n    <p id="crossref">the crossref target</p>\n'))
+
+    def test_link_invalid_slug(self):
         html = Page.preview('reStructuredText', '`***`_')
         self.assertIn('problematic', html)
 

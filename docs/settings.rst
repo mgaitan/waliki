@@ -83,7 +83,7 @@ You can override any settings in your project's :file:`settings.py` file
                 'syntax_highlight': 'short',
                 'halt_level': 5,
             },
-            'writer': HTML5Writer(),
+            'writer': WalikiHTML5Writer(),
             'writer_name': 'html5',
             },
         'Markdown': {
