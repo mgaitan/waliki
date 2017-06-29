@@ -3,7 +3,7 @@ from importlib import import_module
 import collections
 from django.conf import settings
 from .utils import get_url
-from rst2html5_ import HTML5Writer
+from .directives.writer import WalikiHTML5Writer
 try:
     from django.utils.module_loading import import_string
 except ImportError:
@@ -44,7 +44,7 @@ def _get_markup_settings(user_settings):
                         'syntax_highlight': 'short',
                         'halt_level': 5,
                     },
-                    'writer': HTML5Writer(),
+                    'writer': WalikiHTML5Writer(),
                     'writer_name': 'html5',
                     },
                 'Markdown': {
