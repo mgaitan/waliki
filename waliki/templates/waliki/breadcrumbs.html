@@ -1,10 +1,12 @@
 <ul class="breadcrumb">
-    {% for url, title in breadcrumbs %}
-        {% if not loop.last %}
-            <li><a href="{{ url }}">{{ title }}</a></li>
-        {% else %}
-            <li class="active">{{ title }}</li>
-        {% endif %}
+    {% for url, part, page in breadcrumbs %}
+        {% with title=page.title|default:part|default:_("Home") %}
+            {% if not forloop.last %}
+                <li><a href="{{ url }}">{{ title }}</a></li>
+            {% else %}
+                <li class="active">{{ title }}</li>
+            {% endif %}
+        {% endwith %}
     {% empty %}
     <li>/</li>
     {% endfor %}

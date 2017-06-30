@@ -170,7 +170,11 @@ def waliki_box(context, slug, show_edit=True, *args, **kwargs):
 def waliki_breadcrumbs(slug):
     if not settings.WALIKI_BREADCRUMBS:
         return None
-    breadcrumbs = [(reverse('waliki_home'), _('Home')),]
+    breadcrumbs = [(
+        reverse('waliki_home'),
+        None,
+        Page.objects.filter(slug=settings.WALIKI_INDEX_SLUG).first()
+    )]
     if slug == settings.WALIKI_INDEX_SLUG:
         return breadcrumbs
     slug_parts = slug.split('/')
@@ -180,11 +184,7 @@ def waliki_breadcrumbs(slug):
         # if page exists, find url and title
         # otherwise, grab url and title from slug
         url = url + part
-        pages = Page.objects.filter(slug=url)
+        page = Page.objects.filter(slug=url).first()
         url = url + '/'
-        if pages:
-            title = pages[0].title
-        else:
-           title = part
-        breadcrumbs.append((get_url(url), title))
+        breadcrumbs.append((get_url(url), part, page))
     return breadcrumbs
