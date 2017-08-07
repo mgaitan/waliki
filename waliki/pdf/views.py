@@ -1,5 +1,5 @@
 import tempfile
-from sh import rst2pdf
+from sh import Command
 from django.shortcuts import get_object_or_404
 from waliki.models import Page
 from waliki.utils import send_file
@@ -7,7 +7,7 @@ from waliki.settings import WALIKI_PDF_INCLUDE_TITLE
 from waliki.settings import WALIKI_PDF_RST2PDF_BIN
 from waliki.acl import permission_required
 
-rst2pdf = rst2pdf.bake(_tty_out=False)
+rst2pdf = Command(WALIKI_PDF_RST2PDF_BIN).bake(_tty_out=False)
 
 
 @permission_required('view_page')
@@ -24,8 +24,6 @@ def pdf(request, slug):
             infile = infile.name
     else:
         infile = page.abspath
-    if WALIKI_PDF_RST2PDF_BIN:
-        rst2pdf._path = WALIKI_PDF_RST2PDF_BIN.encode('utf8')
     rst2pdf(infile, o=outfile)
     filename = page.title.replace('/', '-').replace('..', '-')
     return send_file(outfile, filename="%s.pdf" % filename)
