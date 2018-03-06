@@ -1,4 +1,5 @@
 var editor = CodeMirror.fromTextArea(document.getElementById("id_raw"), cm_settings);
+$('#id_raw').removeAttr('required');
 
 $(document.body).on('click', '#markup_menu li', function(event) {
 
