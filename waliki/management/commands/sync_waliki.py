@@ -63,7 +63,7 @@ class Command(BaseCommand):
                     file = WALIKI_UPLOAD_TO(FakeAttachment(page), filename)
                     if page.attachments.filter(file=file):
                         continue
-                    attachment = Attachment.objects.create(page=page, file=file, filename=filename)
+                    attachment = Attachment.objects.create(page=page, file=file)
                     self.stdout.write('Created attachment %s for %s' % (attachment, page.slug))
 
             for attachment in Attachment.objects.all():
