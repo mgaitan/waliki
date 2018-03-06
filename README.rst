@@ -18,7 +18,7 @@
    :target: https://readthedocs.org/projects/waliki/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://pypip.in/wheel/waliki/badge.svg
+.. image:: https://img.shields.io/pypi/wheel/waliki.svg
     :target: https://pypi.python.org/pypi/waliki/
     :alt: Wheel Status
 
