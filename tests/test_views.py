@@ -5,9 +5,12 @@ from django.test import TestCase
 from waliki.models import Page
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
+from django.template import Template,Context
 from django import forms
 from waliki.models import Redirect
 from waliki.forms import MovePageForm, DeleteForm
+from waliki.templatetags.waliki_tags import waliki_breadcrumbs
+from waliki.settings import WALIKI_INDEX_SLUG
 
 from .factories import PageFactory, UserFactory, ACLRuleFactory
 
@@ -331,3 +334,36 @@ class TestDelete(TestCase):
         self.assertFalse(os.path.exists(path))
         self.assertFalse(Page.objects.filter(id=page2.id).exists())
         self.assertFalse(os.path.exists(page2_path))
+
+
+class TestBreadcrumbs(TestCase):
+    def setUp(self):
+        self.home = PageFactory(slug=WALIKI_INDEX_SLUG, title='')
+        self.page = PageFactory(slug='a-page', title='A page')
+
+    def test_templatetag(self):
+        with mock.patch('waliki.settings.WALIKI_BREADCRUMBS', return_value=True):
+            self.assertEqual(
+                waliki_breadcrumbs('a-page/subpage'),
+                [('/', None, self.home),
+                 ('/a-page', 'a-page', self.page),
+                 ('/a-page/subpage', 'subpage', None)]
+            )
+
+    def test_template(self):
+        with mock.patch('waliki.settings.WALIKI_BREADCRUMBS', return_value=True):
+            t = Template((
+                '{% spaceless %}'
+                '{% load waliki_tags %}'
+                '{% waliki_breadcrumbs page.slug|default:slug as breadcrumbs %}'
+                '{% include "waliki/breadcrumbs.html" %}'
+                '{% endspaceless %}'
+            ))
+            self.assertEqual(
+                t.render(Context({'slug': 'a-page/subpage'})),
+                ('<ul class="breadcrumb">'
+                 '<li><a href="/">Home</a></li>'
+                 '<li><a href="/a-page">A page</a></li>'
+                 '<li class="active">subpage</li>'
+                 '</ul>')
+            )
