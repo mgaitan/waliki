@@ -1,18 +1,17 @@
 from os import path
 import shutil
 import tempfile
-try:
-    from sh import hovercraft
-    hovercraft = hovercraft.bake(_tty_out=False)
-except ImportError:
-    hovercraft = None
-
+from sh import Command
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.core.cache import cache
 from waliki.models import Page
 from waliki.settings import WALIKI_CACHE_TIMEOUT
+from waliki.settings import WALIKI_SLIDES_HOVERCRAFT_BIN
 from waliki.acl import permission_required
+
+
+hovercraft = Command(WALIKI_SLIDES_HOVERCRAFT_BIN).bake(_tty_out=False)
 
 
 @permission_required('view_page')

@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.dateparse import parse_datetime
 from django.utils import six
 _
-from sh import git, ErrorReturnCode, Command
+from sh import ErrorReturnCode, Command
 from collections import namedtuple
 
 from waliki.signals import page_saved, page_preedit, page_moved
@@ -15,7 +15,7 @@ from waliki import settings
 from waliki.models import Page
 
 
-git = git.bake("--no-pager", _tty_out=False)
+git = Command(settings.WALIKI_GIT_BIN).bake("--no-pager", _tty_out=False)
 Commit = namedtuple('Commit', ['hash', 'author_name', 'author_email', 'subject', 'date', 'date_relative', 'paths', 'diff'])
 
 
