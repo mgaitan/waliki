@@ -1,9 +1,13 @@
 import json
 import os
 import mock
+from django import VERSION
 from django.test import TestCase
 from waliki.models import Page
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django import forms
 from waliki.models import Redirect

@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('file', models.FileField(upload_to=waliki.settings.WALIKI_UPLOAD_TO)),
-                ('page', models.ForeignKey(related_name='attachments', to='waliki.Page')),
+                ('page', models.ForeignKey(related_name='attachments', to='waliki.Page', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Attachment',

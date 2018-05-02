@@ -2,13 +2,17 @@ import json
 from django.utils import timezone
 
 from datetime import datetime
+from django import VERSION
 from django.templatetags.tz import localtime
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
 from django.core.management import call_command
 from django.http import HttpResponse
-from django.core.urlresolvers import reverse, reverse_lazy
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse, reverse_lazy
+else:
+    from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.encoding import smart_text
 from django.utils.six import StringIO, text_type
 from django.views.decorators.csrf import csrf_exempt

@@ -13,6 +13,7 @@ from collections import namedtuple
 from waliki.signals import page_saved, page_preedit, page_moved
 from waliki import settings
 from waliki.models import Page
+from waliki.utils import is_authenticated
 
 
 git = git.bake("--no-pager", _tty_out=False)
@@ -40,7 +41,7 @@ class Git(object):
             paths_to_commit.append(extra_path)
         kwargs = {}
         User = get_user_model()
-        if isinstance(author, User) and author.is_authenticated():
+        if isinstance(author, User) and is_authenticated(author):
             kwargs['author'] = u"%s <%s>" % (author.get_full_name() or author.username, author.email)
         elif isinstance(author, six.string_types):
             kwargs['author'] = author

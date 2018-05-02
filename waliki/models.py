@@ -3,11 +3,15 @@ import os
 import codecs
 import shutil
 import os.path
+from django import VERSION
 from django.db import models
 from django.db.models import Q
 from django.db.utils import IntegrityError
 from django.conf import settings
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 from django.utils.six import string_types
 from django.utils.translation import ugettext_lazy as _

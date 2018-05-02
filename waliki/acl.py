@@ -9,6 +9,7 @@ from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.six import string_types
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import resolve_url
+from waliki.utils import is_authenticated
 from .models import ACLRule
 from .settings import (WALIKI_ANONYMOUS_USER_PERMISSIONS,
                        WALIKI_LOGGED_USER_PERMISSIONS,
@@ -31,7 +32,7 @@ def check_perms(perms, user, slug, raise_exception=False):
     if perms.issubset(set(WALIKI_ANONYMOUS_USER_PERMISSIONS)):
         return True
 
-    if user.is_authenticated() and perms.issubset(set(WALIKI_LOGGED_USER_PERMISSIONS)):
+    if is_authenticated(user) and perms.issubset(set(WALIKI_LOGGED_USER_PERMISSIONS)):
         return True
 
     # First check if the user has the permission (even anon users)
@@ -61,7 +62,7 @@ def permission_required(perms, login_url=None, raise_exception=False, redirect_f
 
             if check_perms(perms, request.user, kwargs['slug'], raise_exception=raise_exception):
                 return view_func(request, *args, **kwargs)
-            if request.user.is_authenticated():
+            if is_authenticated(request.user):
                 if WALIKI_RENDER_403:
                     return render(request, 'waliki/403.html', kwargs, status=403)
                 else:

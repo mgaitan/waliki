@@ -6,11 +6,13 @@ from django.contrib.auth.decorators import user_passes_test
 
 from django.conf import settings
 
+from waliki.utils import is_authenticated
+
 def user_has_permission(user):
     if 'view_page' in settings.WALIKI_ANONYMOUS_USER_PERMISSIONS:
         return True
 
-    if user.is_authenticated() and user.is_active:
+    if is_authenticated(user) and user.is_active:
         return True
 
     return False

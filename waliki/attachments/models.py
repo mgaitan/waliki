@@ -1,19 +1,25 @@
 # -*- coding: utf-8 -*-
 import os.path
+from django import VERSION
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.six import text_type
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from waliki.models import Page
 from waliki.settings import WALIKI_UPLOAD_TO
 
 
 @python_2_unicode_compatible
 class Attachment(models.Model):
-    page = models.ForeignKey(Page, related_name='attachments')
+    page = models.ForeignKey(Page,
+                             on_delete=models.CASCADE,
+                             related_name='attachments')
     file = models.FileField(upload_to=WALIKI_UPLOAD_TO, max_length=300)
 
     class Meta:
