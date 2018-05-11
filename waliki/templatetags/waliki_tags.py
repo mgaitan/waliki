@@ -1,5 +1,9 @@
+from django import VERSION
 from django import template
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from waliki.acl import check_perms as check_perms_helper
 from waliki.models import Page

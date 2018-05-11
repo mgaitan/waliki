@@ -3,8 +3,12 @@ import os
 import shutil
 from sh import git
 from mock import patch, PropertyMock
+from django import VERSION
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from waliki.models import Page
 from waliki.git.models import Git
 from waliki.settings import WALIKI_DATA_DIR, WALIKI_COMMITTER_EMAIL, WALIKI_COMMITTER_NAME

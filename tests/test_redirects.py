@@ -1,5 +1,9 @@
+from django import VERSION
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from .factories import PageFactory, RedirectFactory
 
 

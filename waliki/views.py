@@ -1,11 +1,15 @@
 import json
+from django import VERSION
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from .models import Page, Redirect
 from .forms import PageForm, MovePageForm, DeleteForm, NewPageForm
 from .signals import page_saved, page_preedit, page_moved

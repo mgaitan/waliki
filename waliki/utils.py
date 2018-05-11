@@ -2,8 +2,12 @@ import os
 import re
 import mimetypes
 import unicodedata
+from django import VERSION
 from django.http import HttpResponse
-from django.core.urlresolvers import reverse
+if VERSION[:2] >= (1, 10):
+    from django.urls import reverse
+else:
+    from django.core.urlresolvers import reverse
 from django.utils.six import PY2
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
@@ -49,3 +53,10 @@ def send_file(path, filename=None, content_type=None):
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     response.write(open(path, "rb").read())
     return response
+
+if VERSION[:2] >= (1, 10):
+    def is_authenticated(user):
+        return user.is_authenticated
+else:
+    def is_authenticated(user):
+        return user.is_authenticated()
