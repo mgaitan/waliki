@@ -14,7 +14,7 @@ from .models import Page, Redirect
 from .forms import PageForm, MovePageForm, DeleteForm, NewPageForm
 from .signals import page_saved, page_preedit, page_moved
 from ._markups import get_all_markups
-from .acl import permission_required
+from .acl import permission_required, check_perms
 from . import settings
 
 
@@ -40,6 +40,8 @@ def detail(request, slug, raw=False):
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
         page = None
+        if not check_perms('add_page', request.user, slug):
+            raise Http404
     if raw and page:
         return HttpResponse(page.raw, content_type='text/plain; charset=utf-8')
     elif raw:

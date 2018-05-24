@@ -28,7 +28,10 @@
 
             {% block main_action %}
 
+            {% check_perms "edit_page" for request.user in slug as "can_edit" %}
+            {% if can_edit %}
             <a href="{% if page %}{% url 'waliki_edit' slug=page.slug|default:slug %}{% else %}#{% endif %}" class="btn btn-default {% if not page %}disabled{% endif %}">{% trans "Edit" %}</a>
+            {% endif %}
 
 
             {% endblock main_action %}
@@ -65,7 +68,10 @@
         {{ page.body|safe }}
     {% else %}
         <p>{% trans "This page doesn't exist yet." %}</p>
+        {% check_perms "edit_page" for request.user in slug as "can_edit" %}
+        {% if can_edit %}
         <p><form action="{% url 'waliki_edit' slug=page.slug|default:slug %}" method="post">{% csrf_token %}<button type="submit" class="btn btn-success">{% trans "Create it" %}</button></form></p>
+        {% endif %}
     {% endif %}
 
 
