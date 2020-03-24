@@ -98,7 +98,7 @@
           return "null";
         }
 
-        // Dot folowed by a non-word character should be considered an error.
+        // Dot followed by a non-word character should be considered an error.
         if (stream.match(/\.\W+/)) {
           return "error";
         } else if (stream.eat(".")) {
@@ -117,7 +117,7 @@
           return "null";
         }
 
-        // Pipe folowed by a non-word character should be considered an error.
+        // Pipe followed by a non-word character should be considered an error.
         if (stream.match(/\.\W+/)) {
           return "error";
         } else if (stream.eat("|")) {
@@ -197,7 +197,7 @@
           return "null";
         }
 
-        // Dot folowed by a non-word character should be considered an error.
+        // Dot followed by a non-word character should be considered an error.
         if (stream.match(/\.\W+/)) {
           return "error";
         } else if (stream.eat(".")) {
@@ -216,7 +216,7 @@
           return "null";
         }
 
-        // Pipe folowed by a non-word character should be considered an error.
+        // Pipe followed by a non-word character should be considered an error.
         if (stream.match(/\.\W+/)) {
           return "error";
         } else if (stream.eat("|")) {
